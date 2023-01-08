@@ -22,15 +22,15 @@ object CinemaRetrofitObject {
 }
 
 interface CinemaApi {
-@GET("films?&order=RATING&type=ALL&ratingFrom=5&ratingTo=10&yearFrom=1000&yearTo=3000&page=1")
+@GET("films?&order=RATING&type=ALL&ratingFrom=3&ratingTo=10&yearFrom=1000&yearTo=3000&page=1")
 @Headers("X-API-KEY: $apiKey")
 suspend fun getGenreWithCountryFilm(@Query("countries") countries:Int,@Query("genres") genres:Int): AllCinema
 
-@GET("films?&order=RATING&type=ALL&ratingFrom=5&ratingTo=10&yearFrom=1000&yearTo=3000&page=1")
+@GET("films?&order=RATING&type=ALL&ratingFrom=3&ratingTo=10&yearFrom=1000&yearTo=3000&page=1")
 @Headers("X-API-KEY: $apiKey")
 suspend fun getGenreFilm(@Query("genres") genres:Int): AllCinema
 
-@GET("films?&order=RATING&type=ALL&ratingFrom=5&ratingTo=10&yearFrom=1000&yearTo=3000&page=1")
+@GET("films?&order=RATING&type=ALL&ratingFrom=3&ratingTo=10&yearFrom=1000&yearTo=3000&page=1")
 @Headers("X-API-KEY: $apiKey")
 suspend fun getCountryFilm(@Query("countries") countries:Int): AllCinema
 

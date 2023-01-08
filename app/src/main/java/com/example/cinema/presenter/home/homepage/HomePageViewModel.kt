@@ -47,7 +47,11 @@ class HomePageViewModel @Inject constructor(
                     }
                 }
                 if (allCinema?.items?.isNotEmpty() == true){
-                    _state.value = HomePageState.Success(allCinema.items,nameGenre)
+                    if(allCinema.items.size>20){
+                        _state.value = HomePageState.Success(allCinema.items.subList(0,19), nameGenre)
+                    }else {
+                        _state.value = HomePageState.Success(allCinema.items, nameGenre)
+                    }
                     break
                 }
             }
