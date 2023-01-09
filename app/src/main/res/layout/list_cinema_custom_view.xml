@@ -29,7 +29,8 @@
             android:fontFamily="@font/graphik_medium"
             android:gravity="end"
             android:text="Все"
-            android:textColor="#3D3BFF" />
+            android:textColor="#3D3BFF"
+            android:visibility="gone" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

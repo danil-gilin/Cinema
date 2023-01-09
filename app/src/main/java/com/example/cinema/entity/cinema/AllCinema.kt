@@ -11,5 +11,5 @@ data class AllCinema(
     @Json(name = "total")
     val total: Int,
     @Json(name = "totalPages")
-    val totalPages: Int
+    val totalPages: Int?
 )

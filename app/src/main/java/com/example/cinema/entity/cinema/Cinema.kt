@@ -29,7 +29,7 @@ data class Cinema(
     @Json(name = "ratingKinopoisk")
     val ratingKinopoisk: Double?,
     @Json(name = "type")
-    val type: String,
+    val type: String?,
     @Json(name = "year")
     val year: Int?
 )

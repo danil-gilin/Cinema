@@ -27,6 +27,7 @@
                 android:id="@+id/gradient_img"
                 android:layout_width="100dp"
                 android:layout_height="150dp"
+                android:visibility="gone"
                 app:srcCompat="@drawable/gradient_cinema" />
 
             <ImageView
@@ -36,6 +37,7 @@
                 android:layout_gravity="bottom|right"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="10dp"
+                android:visibility="gone"
                 app:srcCompat="@drawable/cinema_seen" />
 
         </androidx.cardview.widget.CardView>
