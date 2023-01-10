@@ -1,4 +1,4 @@
-package com.example.cinema.presenter.home.homepage
+package com.example.cinema.presenter.home.homepage.home
 
 import javax.inject.Inject
 

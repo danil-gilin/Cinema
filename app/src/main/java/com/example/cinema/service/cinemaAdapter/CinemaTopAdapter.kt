@@ -1,6 +1,5 @@
-package com.example.cinema.service
+package com.example.cinema.service.cinemaAdapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cinema.databinding.AllCinemaItemBinding
 import com.example.cinema.databinding.CinemaItemBinding
+import com.example.cinema.databinding.CinemaItemFirstBinding
 import com.example.cinema.entity.cinemaTop.Film
 
-class CinemaTopAdapter: ListAdapter<Film, RecyclerView.ViewHolder>(CinemaTopDiffCallback()) {
+class CinemaTopAdapter(val onClickAllFilm: () -> Unit): ListAdapter<Film, RecyclerView.ViewHolder>(
+    CinemaTopDiffCallback()
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType== 0) {
@@ -23,9 +25,17 @@ class CinemaTopAdapter: ListAdapter<Film, RecyclerView.ViewHolder>(CinemaTopDiff
                     false
                 )
             )
-        } else {
+        }else if(viewType==1) {
             return AllCinemaTopViewHolder(
                 AllCinemaItemBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+        }else{
+            return CinemaFirstTopViewHolder(
+                CinemaItemFirstBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
@@ -53,19 +63,39 @@ class CinemaTopAdapter: ListAdapter<Film, RecyclerView.ViewHolder>(CinemaTopDiff
                     cinemaRating.visibility = View.GONE
                 }
             }
-        }else{
-            with(holder as AllCinemaTopViewHolder) {
+        }else  if (holder is AllCinemaTopViewHolder){
+            with(holder) {
                 holder.binding.root.setOnClickListener {
-                    Log.d("AllCinema","все работает")
+                    onClickAllFilm()
+                }
+            }
+        }else{
+            val item = getItem(position)
+            with(holder as CinemaFirstTopViewHolder) {
+                Glide.with(binding.cinemaFirstImg).load(item.posterUrlPreview).centerCrop().into(binding.cinemaFirstImg)
+                if (item.nameRu == null) {
+                    binding.cinemaFirstNameTxt.text = item.nameEn
+                } else {
+                    binding.cinemaFirstNameTxt.text = item.nameRu
+                }
+                if (item.genres.isNotEmpty()) {
+                    binding.cinemaFirstGenre.text = item.genres[0].genre
+                }
+                if (item.rating != null) {
+                    binding.cinemaRatingFirst.text = item.rating.toString()
+                } else{
+                    binding.cinemaRatingFirst.visibility = View.GONE
                 }
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount - 1 && itemCount >=20) {
+        return if (position == itemCount - 1 && itemCount >= 20) {
             1
-        }else{
+        }else if(position ==0) {
+            2
+        } else {
             0
         }
     }
@@ -74,6 +104,8 @@ class CinemaTopAdapter: ListAdapter<Film, RecyclerView.ViewHolder>(CinemaTopDiff
 class CinemaTopViewHolder(val binding: CinemaItemBinding): RecyclerView.ViewHolder(binding.root)
 
 class AllCinemaTopViewHolder(val binding: AllCinemaItemBinding): RecyclerView.ViewHolder(binding.root)
+
+class CinemaFirstTopViewHolder(val binding: CinemaItemFirstBinding): RecyclerView.ViewHolder(binding.root)
 
 class CinemaTopDiffCallback : DiffUtil.ItemCallback<Film>() {
     override fun areItemsTheSame(oldItem: Film, newItem: Film): Boolean {

@@ -1,4 +1,4 @@
-package com.example.cinema.service
+package com.example.cinema.service.onBoardingAdapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

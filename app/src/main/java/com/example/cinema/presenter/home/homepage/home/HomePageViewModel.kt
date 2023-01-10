@@ -1,12 +1,12 @@
-package com.example.cinema.presenter.home.homepage
+package com.example.cinema.presenter.home.homepage.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinema.domain.GetCinemaGenreUseCase
 import com.example.cinema.domain.GetGenreNameUseCase
 import com.example.cinema.entity.cinema.AllCinema
 import com.example.cinema.entity.cinemaTop.CinemaTop
+import com.example.cinema.entity.typeListFilm.TypeListFilm
 import kotlinx.coroutines.channels.Channel
 
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,22 +24,22 @@ class HomePageViewModel @Inject constructor(
     private val _state = MutableStateFlow<HomePageState>(HomePageState.Loading)
     val state = _state.asStateFlow()
 
-    private val _cinemaGenreChannel1 = Channel<Pair<String, AllCinema>> { }
+    private val _cinemaGenreChannel1 = Channel<Pair<TypeListFilm, AllCinema>> { }
     val cinemaGenreChannel1 = _cinemaGenreChannel1.receiveAsFlow()
 
-    private val _cinemaGenreChannel2 = Channel<Pair<String, AllCinema>> { }
+    private val _cinemaGenreChannel2 = Channel<Pair<TypeListFilm, AllCinema>> { }
     val cinemaGenreChannel2 = _cinemaGenreChannel2.receiveAsFlow()
 
-    private val _cinemaPremiers = Channel<Pair<String, AllCinema>> { }
+    private val _cinemaPremiers = Channel<Pair<TypeListFilm, AllCinema>> { }
     val cinemaPremiers = _cinemaPremiers.receiveAsFlow()
 
-    private val _cinemaSerial = Channel<Pair<String, AllCinema>> { }
+    private val _cinemaSerial = Channel<Pair<TypeListFilm, AllCinema>> { }
     val cinemaSerial = _cinemaSerial.receiveAsFlow()
 
-    private val _cinemaPopularFilm1 = Channel<Pair<String, CinemaTop>> { }
+    private val _cinemaPopularFilm1 = Channel<Pair<TypeListFilm, CinemaTop>> { }
     val cinemaPopularFilm1 = _cinemaPopularFilm1.receiveAsFlow()
 
-    private val _cinemaPopularFilm2 = Channel<Pair<String, CinemaTop>> { }
+    private val _cinemaPopularFilm2 = Channel<Pair<TypeListFilm, CinemaTop>> { }
     val cinemaPopularFilm2 = _cinemaPopularFilm2.receiveAsFlow()
 
     private val _test = Channel<String> { }
@@ -62,13 +62,14 @@ class HomePageViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getCinemaGenre(channel: Channel<Pair<String, AllCinema>>) {
+    private suspend fun getCinemaGenre(channel: Channel<Pair<TypeListFilm, AllCinema>>) {
         val genreName = getGenreNameUseCase.getGenreName()
         var genre = 0
         var country = 0
         var allCinema: AllCinema? = null
         var page = 10
         var nameGenre = ""
+        val typeListFilm = TypeListFilm(nameGenre)
         try {
             while (true) {
                 when ((0..100).random()) {
@@ -82,6 +83,8 @@ class HomePageViewModel @Inject constructor(
                         val tempPage = (1..page).random()
                         allCinema = getCinemaGenreUseCase.getCinemaGenre(genre + 1, tempPage)
                         nameGenre = genreName.genres[genre].genre
+                        typeListFilm.name = nameGenre
+                        typeListFilm.genreId = genre + 1
                     }
                     in 61..80 -> {
                         country = (0 until genreName.countries.size).random()
@@ -103,6 +106,9 @@ class HomePageViewModel @Inject constructor(
                             genre + 1,
                             tempPage
                         )
+                        typeListFilm.name = nameGenre
+                        typeListFilm.genreId = genre + 1
+                        typeListFilm.countryId = country + 1
                     }
                     in 81..100 -> {
                         country = (0 until genreName.countries.size).random()
@@ -114,13 +120,15 @@ class HomePageViewModel @Inject constructor(
                         val tempPage = (1..page).random()
                         allCinema = getCinemaGenreUseCase.getCountryCinema(country + 1, tempPage)
                         nameGenre = genreName.countries[country].country
+                        typeListFilm.name = nameGenre
+                        typeListFilm.countryId = country + 1
                     }
                 }
                 if (allCinema?.items?.isNotEmpty() == true) {
                     if (allCinema.items.size > 20) {
-                        channel.send(Pair(nameGenre, allCinema))
+                        channel.send(Pair(typeListFilm, allCinema))
                     } else {
-                        channel.send(Pair(nameGenre, allCinema))
+                        channel.send(Pair(typeListFilm, allCinema))
                     }
                     break
                 }
@@ -131,12 +139,11 @@ class HomePageViewModel @Inject constructor(
 
     private suspend fun getCinemaPremiers() {
         try {
-            val month =
-                Calendar.getInstance().getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH)
-                    ?.uppercase()
+            val month = Calendar.getInstance().getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH)?.uppercase()
             val year = Calendar.getInstance().get(Calendar.YEAR)
             val cinema = getCinemaGenreUseCase.getPremieresFilm(year, month!!)
-            _cinemaPremiers.send(Pair("Премьеры", cinema))
+            val typeListFilm = TypeListFilm("Премьеры",month=month,year=year)
+            _cinemaPremiers.send(Pair(typeListFilm, cinema))
         } catch (e: Exception) {
         }
     }
@@ -144,7 +151,7 @@ class HomePageViewModel @Inject constructor(
     private suspend fun getPopularFilm(
         type: String,
         genreName: String,
-        channel: Channel<Pair<String, CinemaTop>>
+        channel: Channel<Pair<TypeListFilm, CinemaTop>>
     ) {
         try {
             var page = 10
@@ -156,7 +163,8 @@ class HomePageViewModel @Inject constructor(
                         page = 1
                     }
                 } else {
-                    channel.send(Pair(genreName, cinema))
+                    val typeListFilm = TypeListFilm(genreName, topFilmType = type)
+                    channel.send(Pair(typeListFilm, cinema))
                     break
                 }
             }
@@ -175,7 +183,8 @@ class HomePageViewModel @Inject constructor(
                         page = 1
                     }
                 } else {
-                    _cinemaSerial.send(Pair("Сериалы", cinema))
+                    val typeListFilm = TypeListFilm("Сериалы", serial = true)
+                    _cinemaSerial.send(Pair(typeListFilm, cinema))
                     break
                 }
             }

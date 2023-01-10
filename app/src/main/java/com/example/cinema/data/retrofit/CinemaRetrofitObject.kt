@@ -10,7 +10,7 @@ import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.Query
 
-const val apiKey="518a1c18-031a-423c-92ea-dbdb897c776b"
+const val apiKey="f1877a5c-f583-454d-96e7-5d4f5a242426"
 const val baseUrl="https://kinopoiskapiunofficial.tech/api/v2.2/"
 
 object CinemaRetrofitObject {

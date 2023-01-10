@@ -12,7 +12,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.cinema.R
 import com.example.cinema.databinding.FragmentMainBinding
 import com.example.cinema.entity.OnBoardingItem
-import com.example.cinema.service.OnBoardingAdapter
+import com.example.cinema.service.onBoardingAdapter.OnBoardingAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,7 +37,7 @@ class MainFragment : Fragment() {
     private val viewModel: MainViewModel by viewModels{viewModelFactory}
     private lateinit var binding:FragmentMainBinding
 
-    val adapterVP=OnBoardingAdapter(list) // адаптер для ViewPager2
+    val adapterVP= OnBoardingAdapter(list) // адаптер для ViewPager2
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

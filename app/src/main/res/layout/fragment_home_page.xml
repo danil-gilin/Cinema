@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presenter.home.homepage.HomePageFragment">
+        tools:context=".presenter.home.homepage.home.HomePageFragment">
 
         <ImageView
             android:id="@+id/imageView"
@@ -24,7 +24,6 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="26dp"
             android:layout_marginTop="46dp"
             android:layout_marginBottom="84dp"
             android:orientation="vertical"

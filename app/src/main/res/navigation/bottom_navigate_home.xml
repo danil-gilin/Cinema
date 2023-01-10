@@ -3,11 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_navigate_home"
-    app:startDestination="@id/homePageFragment">
+    app:startDestination="@id/homePage">
 
-    <fragment
-        android:id="@+id/homePageFragment"
-        android:name="com.example.cinema.presenter.home.homepage.HomePageFragment"
-        android:label="fragment_home_page"
-        tools:layout="@layout/fragment_home_page" />
+    <navigation android:id="@+id/homePage"
+        app:startDestination="@id/homePageFragment">
+        <fragment
+            android:id="@+id/allFilmFragment"
+            android:name="com.example.cinema.presenter.home.homepage.allFilm.AllFilmFragment"
+            android:label="fragment_all_film"
+            tools:layout="@layout/fragment_all_film" />
+        <fragment
+            android:id="@+id/homePageFragment"
+            android:name="com.example.cinema.presenter.home.homepage.home.HomePageFragment"
+            android:label="fragment_home_page"
+            tools:layout="@layout/fragment_home_page" >
+            <action
+                android:id="@+id/action_homePageFragment_to_allFilmFragment"
+                app:destination="@id/allFilmFragment" />
+        </fragment>
+    </navigation>
 </navigation>

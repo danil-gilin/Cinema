@@ -5,22 +5,24 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cinema.databinding.ListCinemaCustomViewBinding
+
 import com.example.cinema.entity.cinema.Cinema
 import com.example.cinema.entity.cinemaTop.Film
-import com.example.cinema.service.CinemaAdapter
-import com.example.cinema.service.CinemaTopAdapter
+import com.example.cinema.entity.typeListFilm.TypeListFilm
+import com.example.cinema.service.cinemaAdapter.CinemaAdapter
+import com.example.cinema.service.cinemaAdapter.CinemaTopAdapter
 
 class ListCinemaCustomView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
-    val adapterCinema= CinemaAdapter()
-    val adapterCinemaTop= CinemaTopAdapter()
-
+    lateinit var typeListFilmLocal: TypeListFilm
+    var typeListFunction: ((TypeListFilm) -> Unit)?=null
+    val adapterCinemaTop= CinemaTopAdapter{onClick()}
+    val adapterCinema= CinemaAdapter{onClick()}
 
     lateinit var binding:ListCinemaCustomViewBinding
     init {
@@ -38,11 +40,12 @@ class ListCinemaCustomView @JvmOverloads constructor(
         }
     }
 
-    fun updategenre(genre: String) {
-        if(genre==""){
+    fun updategenre(typeListFilm: TypeListFilm) {
+        typeListFilmLocal=typeListFilm
+        if(typeListFilm.name==""){
             binding.genreName.text="Попробуйте"
         }else {
-            binding.genreName.text = genre[0].uppercase() + genre.substring(1)
+            binding.genreName.text = typeListFilm.name[0].uppercase() + typeListFilm.name.substring(1)
         }
     }
 
@@ -56,4 +59,14 @@ class ListCinemaCustomView @JvmOverloads constructor(
         }
     }
 
+    fun onClick(){
+        typeListFunction?.let { it(typeListFilmLocal) }
+    }
+
+    fun setClickAllFilm(onClickAllFilm: (TypeListFilm) -> Unit) {
+        typeListFunction=onClickAllFilm
+        binding.txtAllFilm.setOnClickListener {
+            onClickAllFilm(typeListFilmLocal)
+        }
+    }
 }
