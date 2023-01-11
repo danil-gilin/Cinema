@@ -2,6 +2,7 @@ package com.example.cinema.presenter.home.homepage.filmInfo
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -46,43 +47,32 @@ class FilmInfoFragment : Fragment() {
 
                     }
                     is FilmInfoState.Success -> {
-                        Glide.with(binding.filmFullImg).load(state.film.posterUrl).centerCrop()
-                            .into(binding.filmFullImg)
-                        if (state.film.logoUrl != null) {
-                            Glide.with(binding.posterImg).load(state.film.logoUrl).centerInside()
-                                .into(binding.posterImg)
-                            binding.posterImg.visibility = View.VISIBLE
+                        Log.d("idCinema", state.imgLogo.toString())
+                        if(state.imgLogo!=null){
+                            binding.posterImg.visibility=View.VISIBLE
+                            Glide.with(binding.posterImg).load(state.imgLogo).centerInside().into(binding.posterImg)
                         }
-                        if (state.film.nameRu != null) {
-                            binding.shortInfo1.text =
-                                "${state.film.ratingKinopoisk} ${state.film.nameRu}"
-                        } else if (state.film.nameEn != null) {
-                            binding.shortInfo1.text =
-                                "${state.film.ratingKinopoisk} ${state.film.nameEn}"
-                        } else {
-                            binding.shortInfo1.text =
-                                "${state.film.ratingKinopoisk} ${state.film.nameOriginal}"
+                        Glide.with(binding.filmFullImg).load(state.imgPreview).centerCrop().into(binding.filmFullImg)
+                        binding.shortInfo1.text = state.shotInfo1
+                        binding.shortInfo2.text = state.shotInfo2
+                        binding.shortInfo3.text = state.shotInfo3
+
+                        binding.rcActor.updateListActor(state.actorList,3)
+                        binding.rcActor.updateAllFilmBtn(state.actorList.second.size)
+                        binding.rcFilmWorker.updateListWorker(state.workerList,2)
+                        binding.rcFilmWorker.updateAllFilmBtn(state.workerList.second.size)
+                        if(state.galleryList.second.isEmpty()){
+                            binding.rcGallery.visibility=View.GONE
+                        }else{
+                            binding.rcGallery.updateListGallery(state.galleryList)
+                            binding.rcGallery.updateAllFilmBtn(state.galleryList.second.size)
                         }
-                        binding.shortInfo2.text =
-                            "${state.film.year}, ${state.film.genres?.get(0)?.genre}"
-                        //only number in string
-                        var filmLength = ""
-                        if (state.film.filmLength != null) {
-                            val hour = state.film.filmLength!! / 60
-                            val minute = state.film.filmLength % 60
-                            if (hour != 0) {
-                                filmLength = "${hour}ч ${minute}мин"
-                            } else {
-                                filmLength = "${minute}мин"
-                            }
-                            val age = state.film.ratingAgeLimits?.filter { it.isDigit() }
-                            binding.shortInfo3.text =
-                                "${state.film.countries?.get(0)?.country}, ${filmLength}, ${age}+"
-                        } else {
-                            val age = state.film.ratingAgeLimits?.filter { it.isDigit() }
-                            binding.shortInfo3.text =
-                                "${state.film.countries?.get(0)?.country}, ${age}+"
-                        }
+                       if(state.similarList.second.isEmpty()) {
+                           binding.rcFilm.visibility = View.GONE
+                       }else {
+                           binding.rcFilm.updateListSimilarFilm(state.similarList, state.genre)
+                           binding.rcFilm.updateAllFilmBtn(state.similarList.second.size)
+                       }
                     }
                     is FilmInfoState.Error -> {
 

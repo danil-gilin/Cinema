@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
@@ -25,13 +26,17 @@
             android:id="@+id/txt_all_film"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:layout_marginEnd="26dp"
             android:layout_weight="1"
+            android:drawablePadding="9dp"
+            android:drawingCacheQuality="low"
             android:fontFamily="@font/graphik_medium"
             android:gravity="end"
             android:text="Все"
             android:textColor="#3D3BFF"
-            android:visibility="gone" />
+            android:visibility="visible" />
+
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
