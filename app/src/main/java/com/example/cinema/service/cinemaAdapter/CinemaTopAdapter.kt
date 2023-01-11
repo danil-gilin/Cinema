@@ -12,7 +12,7 @@ import com.example.cinema.databinding.CinemaItemBinding
 import com.example.cinema.databinding.CinemaItemFirstBinding
 import com.example.cinema.entity.cinemaTop.Film
 
-class CinemaTopAdapter(val onClickAllFilm: () -> Unit): ListAdapter<Film, RecyclerView.ViewHolder>(
+class CinemaTopAdapter(val onClickAllFilm: () -> Unit,val clickFilm:(Int)->Unit): ListAdapter<Film, RecyclerView.ViewHolder>(
     CinemaTopDiffCallback()
 ) {
 
@@ -62,6 +62,9 @@ class CinemaTopAdapter(val onClickAllFilm: () -> Unit): ListAdapter<Film, Recycl
                 } else {
                     cinemaRating.visibility = View.GONE
                 }
+                root.setOnClickListener {
+                    clickFilm(item.filmId)
+                }
             }
         }else  if (holder is AllCinemaTopViewHolder){
             with(holder) {
@@ -85,6 +88,9 @@ class CinemaTopAdapter(val onClickAllFilm: () -> Unit): ListAdapter<Film, Recycl
                     binding.cinemaRatingFirst.text = item.rating.toString()
                 } else{
                     binding.cinemaRatingFirst.visibility = View.GONE
+                }
+                binding.root.setOnClickListener {
+                    clickFilm(item.filmId)
                 }
             }
         }

@@ -11,7 +11,11 @@
             android:id="@+id/allFilmFragment"
             android:name="com.example.cinema.presenter.home.homepage.allFilm.AllFilmFragment"
             android:label="fragment_all_film"
-            tools:layout="@layout/fragment_all_film" />
+            tools:layout="@layout/fragment_all_film" >
+            <action
+                android:id="@+id/action_allFilmFragment_to_filmInfoFragment"
+                app:destination="@id/filmInfoFragment" />
+        </fragment>
         <fragment
             android:id="@+id/homePageFragment"
             android:name="com.example.cinema.presenter.home.homepage.home.HomePageFragment"
@@ -20,6 +24,16 @@
             <action
                 android:id="@+id/action_homePageFragment_to_allFilmFragment"
                 app:destination="@id/allFilmFragment" />
+            <action
+                android:id="@+id/action_homePageFragment_to_filmInfoFragment"
+                app:destination="@id/filmInfoFragment" />
         </fragment>
+        <fragment
+            android:id="@+id/filmInfoFragment"
+            android:name="com.example.cinema.presenter.home.homepage.filmInfo.FilmInfoFragment"
+            android:label="fragment_film_info"
+            tools:layout="@layout/fragment_film_info" />
     </navigation>
+
+
 </navigation>

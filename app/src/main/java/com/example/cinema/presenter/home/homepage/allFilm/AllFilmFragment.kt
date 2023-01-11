@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.cinema.R
 import com.example.cinema.databinding.FragmentAllFilmBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.typeListFilm.TypeListFilm
@@ -32,8 +34,10 @@ class AllFilmFragment : Fragment() {
     private val viewModel: AllFilmViewModel by viewModels { factory }
     lateinit var binding: FragmentAllFilmBinding
     lateinit var typeListFilm: TypeListFilm
-     var adapterTop:CinemaTopPagginAdapter= CinemaTopPagginAdapter()
-     var adapter: CinemaPaggingAdapter= CinemaPaggingAdapter()
+     var adapterTop:CinemaTopPagginAdapter= CinemaTopPagginAdapter{onClickFilm(it)}
+     var adapter: CinemaPaggingAdapter= CinemaPaggingAdapter{onClickFilm(it)}
+
+
 
 
     override fun onCreateView(
@@ -80,5 +84,11 @@ class AllFilmFragment : Fragment() {
         binding.rcAllFilm.layoutManager=GridLayoutManager(context,2,GridLayoutManager.VERTICAL,false)
     }
 
+    private fun onClickFilm(id: Int) {
+        val bundle = Bundle()
+        Log.d("idCinema", "onClickInfoFilm: $id")
+        bundle.putInt(Constance.FILM_FILM_INFO_ID, id)
+        findNavController().navigate(R.id.action_allFilmFragment_to_filmInfoFragment, bundle)
+    }
 
 }

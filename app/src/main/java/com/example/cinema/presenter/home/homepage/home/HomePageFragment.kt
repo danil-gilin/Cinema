@@ -58,6 +58,7 @@ class HomePageFragment : Fragment() {
                 binding.cinemaList1.updateListCinema(it.second.items)
                 binding.cinemaList1.updategenre(it.first)
                 binding.cinemaList1.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
+                binding.cinemaList1.setClickInfoFilm{id->onClickInfoFilm(id)}
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
@@ -65,6 +66,7 @@ class HomePageFragment : Fragment() {
                 binding.cinemaList2.updateListCinema(it.second.items)
                 binding.cinemaList2.updategenre(it.first)
                 binding.cinemaList2.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
+                binding.cinemaList2.setClickInfoFilm{id->onClickInfoFilm(id)}
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
@@ -72,6 +74,7 @@ class HomePageFragment : Fragment() {
                 binding.cinemaList3.updateListCinema(it.second.items)
                 binding.cinemaList3.updategenre(it.first)
                 binding.cinemaList3.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
+                binding.cinemaList3.setClickInfoFilm{id->onClickInfoFilm(id)}
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
@@ -79,6 +82,7 @@ class HomePageFragment : Fragment() {
                 binding.cinemaList4.updateListCinemaTop(it.second.films)
                 binding.cinemaList4.updategenre(it.first)
                 binding.cinemaList4.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
+                binding.cinemaList4.setClickInfoFilm{id->onClickInfoFilm(id)}
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
@@ -86,6 +90,7 @@ class HomePageFragment : Fragment() {
                 binding.cinemaList5.updateListCinemaTop(it.second.films)
                 binding.cinemaList5.updategenre(it.first)
                 binding.cinemaList5.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
+                binding.cinemaList5.setClickInfoFilm{id->onClickInfoFilm(id)}
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
@@ -93,6 +98,7 @@ class HomePageFragment : Fragment() {
                 binding.cinemaList6.updateListCinema(it.second.items)
                 binding.cinemaList6.updategenre(it.first)
                 binding.cinemaList6.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
+                binding.cinemaList6.setClickInfoFilm{id->onClickInfoFilm(id)}
             }
         }
         return binding.root
@@ -102,5 +108,12 @@ class HomePageFragment : Fragment() {
         val bundle = Bundle()
         bundle.putParcelable(Constance.NAME_GENRE_ALL_FILM, typeListFilm)
         findNavController().navigate(R.id.action_homePageFragment_to_allFilmFragment, bundle)
+    }
+
+    fun onClickInfoFilm(id:Int) {
+        val bundle = Bundle()
+        Log.d("idCinema", "onClickInfoFilm: $id")
+        bundle.putInt(Constance.FILM_FILM_INFO_ID, id)
+        findNavController().navigate(R.id.action_homePageFragment_to_filmInfoFragment, bundle)
     }
 }

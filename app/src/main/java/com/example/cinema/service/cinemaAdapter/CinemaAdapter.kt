@@ -18,7 +18,7 @@ import com.example.cinema.databinding.CinemaItemFirstBinding
 import com.example.cinema.entity.cinema.Cinema
 
 
-class CinemaAdapter(val onClickAllFilm: () -> Unit) : ListAdapter<Cinema, ViewHolder>(
+class CinemaAdapter(val onClickAllFilm: () -> Unit,val clickFilm:(Int)->Unit) : ListAdapter<Cinema, ViewHolder>(
     CinemaDiffCallback()
 ) {
 
@@ -81,6 +81,9 @@ class CinemaAdapter(val onClickAllFilm: () -> Unit) : ListAdapter<Cinema, ViewHo
                 } else {
                     cinemaRating.visibility = View.GONE
                 }
+                root.setOnClickListener {
+                    clickFilm(item.kinopoiskId)
+                }
             }
         } else  if (holder is AllCinemaViewHolder){
             with(holder) {
@@ -104,6 +107,9 @@ class CinemaAdapter(val onClickAllFilm: () -> Unit) : ListAdapter<Cinema, ViewHo
                     binding.cinemaRatingFirst.text = item.ratingKinopoisk.toString()
                 } else{
                     binding.cinemaRatingFirst.visibility = View.GONE
+                }
+                binding.root.setOnClickListener {
+                    clickFilm(item.kinopoiskId)
                 }
             }
         }

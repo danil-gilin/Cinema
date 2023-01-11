@@ -2,12 +2,14 @@ package com.example.cinema.data.retrofit
 
 import com.example.cinema.entity.cinema.AllCinema
 import com.example.cinema.entity.cinemaTop.CinemaTop
+import com.example.cinema.entity.filmInfo.FilmInfo
 import com.example.cinema.entity.gener.GenreName
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 const val apiKey="f1877a5c-f583-454d-96e7-5d4f5a242426"
@@ -20,6 +22,7 @@ object CinemaRetrofitObject {
         .build()
 
     val cinemaApi: CinemaApi = retrofit.create(CinemaApi::class.java)
+    val cinemaFullInfoApi: CinemaFullInfoApi = retrofit.create(CinemaFullInfoApi::class.java)
 }
 
 interface CinemaApi {
@@ -51,4 +54,10 @@ suspend fun getPopularFilm(@Query("type") year:String="TOP_AWAIT_FILMS",@Query("
 @Headers("X-API-KEY: $apiKey")
 suspend fun getSerial(@Query("page") page:Int=1): AllCinema
 
+}
+
+interface CinemaFullInfoApi{
+    @GET("films/{filmId}")
+    @Headers("X-API-KEY: $apiKey")
+    suspend fun getFullInfo(@Path("filmId") filmId:Int): FilmInfo
 }

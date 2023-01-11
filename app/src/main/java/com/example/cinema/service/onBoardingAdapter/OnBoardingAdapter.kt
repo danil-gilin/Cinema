@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cinema.databinding.OneboardingItemBinding
-import com.example.cinema.entity.OnBoardingItem
+import com.example.cinema.entity.onBoardingItem.OnBoardingItem
 
 
 class OnBoardingAdapter(private val listOnBoarding:List<OnBoardingItem>) :RecyclerView.Adapter<OnBoardingViewHolder>(){

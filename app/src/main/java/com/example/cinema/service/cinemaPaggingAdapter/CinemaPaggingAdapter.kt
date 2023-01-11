@@ -19,7 +19,7 @@ import com.example.cinema.databinding.CinemaItemFirst2Binding
 import com.example.cinema.entity.cinema.Cinema
 import com.example.cinema.entity.typeListFilm.TypeListFilm
 
-class CinemaPaggingAdapter(): PagingDataAdapter<Cinema, RecyclerView.ViewHolder>(CinemaPaggingDiffCallback()) {
+class CinemaPaggingAdapter(val clickFilm:(Int)->Unit): PagingDataAdapter<Cinema, RecyclerView.ViewHolder>(CinemaPaggingDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when(viewType) {
@@ -73,6 +73,9 @@ class CinemaPaggingAdapter(): PagingDataAdapter<Cinema, RecyclerView.ViewHolder>
                 } else {
                     cinemaRating2.visibility = View.GONE
                 }
+                root.setOnClickListener {
+                    clickFilm(item.kinopoiskId)
+                }
             }
         }else if(holder is CinemaPaggingFirstViewHolder){
             val item = getItem(position)
@@ -90,6 +93,9 @@ class CinemaPaggingAdapter(): PagingDataAdapter<Cinema, RecyclerView.ViewHolder>
                     cinemaRating2First.text = item.ratingKinopoisk.toString()
                 } else {
                     cinemaRating2First.visibility = View.GONE
+                }
+                root.setOnClickListener {
+                    clickFilm(item.kinopoiskId)
                 }
             }
         }

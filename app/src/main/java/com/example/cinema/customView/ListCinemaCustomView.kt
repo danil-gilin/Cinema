@@ -21,8 +21,9 @@ class ListCinemaCustomView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
     lateinit var typeListFilmLocal: TypeListFilm
     var typeListFunction: ((TypeListFilm) -> Unit)?=null
-    val adapterCinemaTop= CinemaTopAdapter{onClick()}
-    val adapterCinema= CinemaAdapter{onClick()}
+    var filmInfoFunction: ((Int) -> Unit)?=null
+    val adapterCinemaTop= CinemaTopAdapter({onClick()}, {onClickFilm(it)})
+    val adapterCinema= CinemaAdapter({onClick()}, {onClickFilm(it)})
 
     lateinit var binding:ListCinemaCustomViewBinding
     init {
@@ -63,10 +64,18 @@ class ListCinemaCustomView @JvmOverloads constructor(
         typeListFunction?.let { it(typeListFilmLocal) }
     }
 
+    fun onClickFilm(id:Int){
+        filmInfoFunction?.let { it(id) }
+    }
+
     fun setClickAllFilm(onClickAllFilm: (TypeListFilm) -> Unit) {
         typeListFunction=onClickAllFilm
         binding.txtAllFilm.setOnClickListener {
             onClickAllFilm(typeListFilmLocal)
         }
+    }
+
+    fun setClickInfoFilm(onClickFilmId: (Int) -> Unit) {
+        filmInfoFunction=onClickFilmId
     }
 }

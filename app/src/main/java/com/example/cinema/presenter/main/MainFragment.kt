@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.cinema.R
 import com.example.cinema.databinding.FragmentMainBinding
-import com.example.cinema.entity.OnBoardingItem
+import com.example.cinema.entity.onBoardingItem.OnBoardingItem
 import com.example.cinema.service.onBoardingAdapter.OnBoardingAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -56,11 +56,16 @@ class MainFragment : Fragment() {
             }
         }
 
+
         binding.onBoarding.adapter=adapterVP
         binding.onBoarding.disableOverscroll()
         TabLayoutMediator(binding.dotsIndicator, binding.onBoarding) { tab: TabLayout.Tab, position: Int ->
         tab.view.isClickable=false
         }.attach()
+
+        binding.skipp.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment_to_homeFragment)
+        }
 
         return binding.root
     }
