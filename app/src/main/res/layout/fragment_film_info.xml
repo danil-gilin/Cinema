@@ -136,6 +136,54 @@
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@+id/cardView">
 
+            <LinearLayout
+                android:id="@+id/linear_serila_info"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="26dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/graphik_medium"
+                        android:text="Сезоны и серии"
+                        android:textColor="#272727"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/graphik_regular"
+                        android:gravity="end"
+                        android:text="Все"
+                        android:textColor="#3D3BFF"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/sesson_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/graphik_regular"
+                    android:text="1 сезон, 7 серий"
+                    android:textColor="#838391"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
             <com.example.cinema.customView.ListCinemaCustomView
                 android:id="@+id/rc_actor"
                 android:layout_width="match_parent"

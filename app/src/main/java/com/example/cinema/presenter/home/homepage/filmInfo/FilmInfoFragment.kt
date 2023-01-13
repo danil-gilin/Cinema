@@ -73,6 +73,12 @@ class FilmInfoFragment : Fragment() {
                            binding.rcFilm.updateListSimilarFilm(state.similarList, state.genre)
                            binding.rcFilm.updateAllFilmBtn(state.similarList.second.size)
                        }
+
+                        if(state.infoSerial!=null){
+                            binding.sessonInfo.text=state.infoSerial
+                        }else{
+                            binding.linearSerilaInfo.visibility=View.GONE
+                        }
                     }
                     is FilmInfoState.Error -> {
 

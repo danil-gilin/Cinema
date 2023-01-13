@@ -10,13 +10,14 @@ sealed class FilmInfoState {
         val shotInfo1: String,
         val shotInfo2: String,
         val shotInfo3: String,
-        val imgPreview:String,
+        val imgPreview: String,
         val imgLogo: String?,
-        val actorList:Pair<String,List<ActorAndWorker>>,
-        val workerList:Pair<String,List<ActorAndWorker>>,
-        val galleryList:Pair<String,List<GalleryItem>>,
-        val similarList:Pair<String,List<SimilarItem>>,
-        val genre:String,
+        val actorList: Pair<String, List<ActorAndWorker>>,
+        val workerList: Pair<String, List<ActorAndWorker>>,
+        val galleryList: Pair<String, List<GalleryItem>>,
+        val similarList: Pair<String, List<SimilarItem>>,
+        val genre: String,
+        val infoSerial: String?,
     ) : FilmInfoState()
     data class Error(val error: String) : FilmInfoState()
 }

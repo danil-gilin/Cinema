@@ -41,13 +41,40 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
 
                 //short 2
                 short_info_2 += "${film.year},"
+                var infoSerial: String? = null
                 if (film.serial) {
-                    getFilmFullInfo.getSerialInfo(id).items?.size.let {
-                        if (it != null && it == 1) {
+                    val infoSerialItem = getFilmFullInfo.getSerialInfo(id)
+                    infoSerialItem.items?.size.let {
+                        if (it != null && it.toString() in TenNumber) {
+                            Log.d("SessonName", "${it} ${it.toString() in "10".."20"} 1")
+                            short_info_2 += " ${it} сезонов,"
+                            infoSerial = "${it} сезонов,"
+                        } else if (it.toString().last() == '1') {
+                            Log.d("SessonName", "2")
                             short_info_2 += " ${it} сезон,"
-                        } else {
+                            infoSerial = "${it} сезон,"
+                        } else if (it.toString().last() in '2'..'4') {
+                            Log.d("SessonName", "3")
                             short_info_2 += " ${it} сезона,"
+                            infoSerial = "${it} сезона,"
+                        } else if (it.toString().last() in '5'..'9') {
+                            Log.d("SessonName", "4")
+                            short_info_2 += " ${it} сезонов,"
+                            infoSerial = "${it} сезонов,"
                         }
+                    }
+                    var sumEpisod = 0
+                    infoSerialItem.items.forEach {
+                        sumEpisod += it.episodes.size
+                    }
+                    if (sumEpisod != null && sumEpisod.toString() in TenNumber) {
+                        infoSerial += " ${sumEpisod} серий"
+                    } else if (sumEpisod.toString().last() == '1') {
+                        infoSerial += " ${sumEpisod} серия"
+                    } else if (sumEpisod.toString().last() in '2'..'4') {
+                        infoSerial += " ${sumEpisod} серии"
+                    } else if (sumEpisod.toString().last() in '5'..'0') {
+                        infoSerial += " ${sumEpisod} серий"
                     }
                 }
                 if (film.genres != null) {
@@ -92,8 +119,10 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                 val listActorAndWorker = getFilmFullInfo.getActorAndWorker(id)
                 val listGallery = getFilmFullInfo.getGalerryFilm(id)
                 val listSimilar = getFilmFullInfo.getSimilarFilms(id)
-                var x=listActorAndWorker.filter{ it.professionKey != "ACTOR"&&(it.nameRu!=""||it.nameEn!="" )}.toString()
-                Log.d("ListWorker",x)
+                var x =
+                    listActorAndWorker.filter { it.professionKey != "ACTOR" && (it.nameRu != "" || it.nameEn != "") }
+                        .toString()
+                Log.d("ListWorker", x)
 
                 _state.value = FilmInfoState.Success(
                     short_info_1,
@@ -101,16 +130,20 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                     short_info_3,
                     film.posterUrlPreview,
                     film.logoUrl,
-                    ("В фильме снимались" to listActorAndWorker.filter { it.professionKey == "ACTOR"&&(it.nameRu!=""||it.nameEn!="") }),
-                    ("Над фильмом работали" to listActorAndWorker.filter { it.professionKey != "ACTOR"&&(it.nameRu!=""||it.nameEn!="" )}),
+                    ("В фильме снимались" to listActorAndWorker.filter { it.professionKey == "ACTOR" && (it.nameRu != "" || it.nameEn != "") }),
+                    ("Над фильмом работали" to listActorAndWorker.filter { it.professionKey != "ACTOR" && (it.nameRu != "" || it.nameEn != "") }),
                     ("Галерея" to listGallery.items),
                     ("Похожие фильмы" to listSimilar.items),
                     film.genres?.get(0)?.genre ?: "",
+                    infoSerial,
                 )
-
             }
         } catch (e: Exception) {
             _state.value = FilmInfoState.Error(e.message.toString())
         }
+    }
+
+    companion object {
+        private val TenNumber = listOf<String>("10", "11", "12", "13", "14", "15", "16", "17", "18", "19")
     }
 }
