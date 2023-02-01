@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SimpleAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -14,6 +15,7 @@ import com.example.cinema.R
 import com.example.cinema.databinding.FragmentAllFilmBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.typeListFilm.TypeListFilm
+import com.example.cinema.service.adapterForFullFilmInfo.SimilarAdapter
 import com.example.cinema.service.cinemaPaggingAdapter.CinemaPaggingAdapter
 import com.example.cinema.service.cinemaPaggingAdapter.CinemaTopPagginAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,8 +65,13 @@ class AllFilmFragment : Fragment() {
 
         viewModel.typeListTop?.onEach {
             Log.d("pagedCinema",it.toString())
-
             adapterTop.submitData(it)
+        }?.launchIn(viewLifecycleOwner.lifecycleScope)
+
+        viewModel.semilarFilm?.onEach {
+            val adapterSemillarFilm= SimilarAdapter(it.first,{onClickFilm(it)}, allFilmFlag = true)
+            adapterSemillarFilm.submitList(it.second)
+            binding.rcAllFilm.adapter=adapterSemillarFilm
         }?.launchIn(viewLifecycleOwner.lifecycleScope)
 
 
@@ -78,7 +85,7 @@ class AllFilmFragment : Fragment() {
     fun initrc(){
         if(typeListFilm.topFilmType!=null){
             binding.rcAllFilm.adapter=adapterTop
-        }else{
+        }else if(typeListFilm.semilarFilmId==null){
             binding.rcAllFilm.adapter=adapter
         }
         binding.rcAllFilm.layoutManager=GridLayoutManager(context,2,GridLayoutManager.VERTICAL,false)

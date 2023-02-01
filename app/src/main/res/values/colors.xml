@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue_shadow">#0F3D3BFF</color>
+    <color name="chip_ripple">#272727</color>
 </resources>
+

@@ -10,7 +10,8 @@ import com.example.cinema.databinding.GalerryItemBinding
 import com.example.cinema.databinding.GalerryItemFirstBinding
 import com.example.cinema.entity.galleryFilm.GalleryItem
 
-class GalleryAdapter : ListAdapter<GalleryItem,RecyclerView.ViewHolder>(GalleryDiffUtil()) {
+
+class GalleryAdapter(val function: (() -> Unit)?) : ListAdapter<GalleryItem,RecyclerView.ViewHolder>(GalleryDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when(viewType){
             1->{
@@ -27,12 +28,22 @@ class GalleryAdapter : ListAdapter<GalleryItem,RecyclerView.ViewHolder>(GalleryD
         when(holder){
             is GalleryViewHolder->{
                 with(holder.binding){
-                    Glide.with(holder.binding.imgGallery).load(item.imageUrl).centerInside().into(holder.binding.imgGallery)
+                    Glide.with(imgGallery).load(item.imageUrl).centerCrop().into(imgGallery)
+                    if(function!=null) {
+                        root.setOnClickListener {
+                            function?.invoke()
+                        }
+                    }
                 }
             }
             is GalleryViewFirstHolder->{
                 with(holder.binding){
-                    Glide.with(holder.binding.imgGalleryFirst).load(item.imageUrl).centerInside().into(holder.binding.imgGalleryFirst)
+                    Glide.with(imgGalleryFirst).load(item.imageUrl).centerCrop().into(imgGalleryFirst)
+                    if(function!=null) {
+                        root.setOnClickListener {
+                            function?.invoke()
+                        }
+                    }
                 }
             }
         }

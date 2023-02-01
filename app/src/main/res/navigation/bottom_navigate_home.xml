@@ -30,10 +30,39 @@
         </fragment>
         <fragment
             android:id="@+id/filmInfoFragment"
-            android:name="com.example.cinema.presenter.home.homepage.filmInfo.FilmInfoFragment"
+            android:name="com.example.cinema.presenter.home.homepage.filmInfo.filmInfoAll.FilmInfoFragment"
             android:label="fragment_film_info"
-            tools:layout="@layout/fragment_film_info" />
+            tools:layout="@layout/fragment_film_info" >
+            <action
+                android:id="@+id/action_filmInfoFragment_self"
+                app:destination="@id/filmInfoFragment" />
+            <action
+                android:id="@+id/action_filmInfoFragment_to_allFilmFragment"
+                app:destination="@id/allFilmFragment" />
+            <action
+                android:id="@+id/action_filmInfoFragment_to_filmGallery"
+                app:destination="@id/filmGallery" />
+            <action
+                android:id="@+id/action_filmInfoFragment_to_fullScreenImgFragment"
+                app:destination="@id/fullScreenImgFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/filmGallery"
+            android:name="com.example.cinema.presenter.home.homepage.filmInfo.filmGallery.FilmGallery"
+            android:label="fragment_film_gallery"
+            tools:layout="@layout/fragment_film_gallery" >
+            <action
+                android:id="@+id/action_filmGallery_to_fullScreenImgFragment"
+                app:destination="@id/fullScreenImgFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/fullScreenImgFragment"
+            android:name="com.example.cinema.presenter.home.homepage.filmInfo.fullScreenImg.FullScreenImgFragment"
+            android:label="FullScreenImgFragment"
+            tools:layout="@layout/fragment_full_screen_img"
+            />
     </navigation>
+
 
 
 </navigation>

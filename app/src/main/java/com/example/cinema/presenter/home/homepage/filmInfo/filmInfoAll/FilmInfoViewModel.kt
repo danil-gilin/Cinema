@@ -1,4 +1,4 @@
-package com.example.cinema.presenter.home.homepage.filmInfo
+package com.example.cinema.presenter.home.homepage.filmInfo.filmInfoAll
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -124,6 +124,9 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                         .toString()
                 Log.d("ListWorker", x)
 
+                var filmDescription:String= film.description ?: ""
+                var filmShortDescription:String= film.shortDescription ?: ""
+
                 _state.value = FilmInfoState.Success(
                     short_info_1,
                     short_info_2,
@@ -136,6 +139,8 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                     ("Похожие фильмы" to listSimilar.items),
                     film.genres?.get(0)?.genre ?: "",
                     infoSerial,
+                    filmDescription,
+                    filmShortDescription
                 )
             }
         } catch (e: Exception) {

@@ -1,4 +1,4 @@
-package com.example.cinema.presenter.home.homepage.filmInfo
+package com.example.cinema.presenter.home.homepage.filmInfo.filmInfoAll
 
 import com.example.cinema.entity.actorAndWorker.ActorAndWorker
 import com.example.cinema.entity.galleryFilm.GalleryItem
@@ -18,6 +18,8 @@ sealed class FilmInfoState {
         val similarList: Pair<String, List<SimilarItem>>,
         val genre: String,
         val infoSerial: String?,
+        val filmDescription: String,
+        val filmShortDescription: String,
     ) : FilmInfoState()
     data class Error(val error: String) : FilmInfoState()
 }

@@ -28,11 +28,12 @@ class ListCinemaCustomView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
     lateinit var typeListFilmLocal: TypeListFilm
+    var galleryFunction:(() -> Unit)?=null
     var typeListFunction: ((TypeListFilm) -> Unit)?=null
     var filmInfoFunction: ((Int) -> Unit)?=null
     val adapterCinemaTop= CinemaTopAdapter({onClick()}, {onClickFilm(it)})
     val adapterCinema= CinemaAdapter({onClick()}, {onClickFilm(it)})
-    val adapterGallery=GalleryAdapter()
+
 
     lateinit var binding:ListCinemaCustomViewBinding
     init {
@@ -93,14 +94,18 @@ class ListCinemaCustomView @JvmOverloads constructor(
         adapterActorAndWorker.submitList(listWorker.second)
         binding.genreName.text=listWorker.first
     }
+
     fun updateListGallery(listGallery:Pair<String,List<GalleryItem>>){
+        val adapterGallery=GalleryAdapter(){onClickGallery()}
         binding.rcCinemaList.adapter=adapterGallery
         binding.rcCinemaList.layoutManager=LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
         adapterGallery.submitList(listGallery.second)
         binding.genreName.text=listGallery.first
     }
+
+
     fun updateListSimilarFilm(listSimilarFilm:Pair<String,List<SimilarItem>>,genre:String){
-        val adapterSimilar=SimilarAdapter(genre)
+        val adapterSimilar=SimilarAdapter(genre, { it->onClickFilm(it) })
         binding.rcCinemaList.adapter=adapterSimilar
         binding.rcCinemaList.layoutManager=LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
         adapterSimilar.submitList(listSimilarFilm.second)
@@ -116,6 +121,10 @@ class ListCinemaCustomView @JvmOverloads constructor(
         filmInfoFunction?.let { it(id) }
     }
 
+    fun onClickGallery(){
+        galleryFunction?.let { it() }
+    }
+
     fun setClickAllFilm(onClickAllFilm: (TypeListFilm) -> Unit) {
         typeListFunction=onClickAllFilm
         binding.txtAllFilm.setOnClickListener {
@@ -125,5 +134,15 @@ class ListCinemaCustomView @JvmOverloads constructor(
 
     fun setClickInfoFilm(onClickFilmId: (Int) -> Unit) {
         filmInfoFunction=onClickFilmId
+    }
+
+    fun allGalleryClick(onClickAllGallery: () -> Unit) {
+        binding.txtAllFilm.setOnClickListener {
+            onClickAllGallery()
+        }
+    }
+
+    fun clickGallery(onClickGallery: () -> Unit) {
+        galleryFunction=onClickGallery
     }
 }

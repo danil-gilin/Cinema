@@ -1,4 +1,4 @@
-package com.example.cinema.presenter.home.homepage.filmInfo
+package com.example.cinema.presenter.home.homepage.filmInfo.filmInfoAll
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

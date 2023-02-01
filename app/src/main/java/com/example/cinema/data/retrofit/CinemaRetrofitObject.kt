@@ -16,7 +16,12 @@ import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-const val apiKey="518a1c18-031a-423c-92ea-dbdb897c776b"
+//518a1c18-031a-423c-92ea-dbdb897c776b
+//a16112fd-a6d3-480c-a1bc-7ece0ea36df5
+//f1877a5c-f583-454d-96e7-5d4f5a242426
+//6a2d7029-a0b8-4c64-8469-25bf56208176
+//543764a7-ddaa-498c-9bbb-a6d2393a6c88
+const val apiKey="543764a7-ddaa-498c-9bbb-a6d2393a6c88"
 const val baseUrl="https://kinopoiskapiunofficial.tech/api/"
 
 object CinemaRetrofitObject {
@@ -57,7 +62,6 @@ suspend fun getPopularFilm(@Query("type") year:String="TOP_AWAIT_FILMS",@Query("
 @GET("v2.2/films?order=RATING&type=TV_SERIES&ratingFrom=0&ratingTo=10&yearFrom=1000&yearTo=3000")
 @Headers("X-API-KEY: $apiKey")
 suspend fun getSerial(@Query("page") page:Int=1): AllCinema
-
 }
 
 interface CinemaFullInfoApi{
@@ -80,4 +84,8 @@ interface CinemaFullInfoApi{
     @GET("v2.2/films/{filmId}/similars")
     @Headers("X-API-KEY: $apiKey")
     suspend fun getListSimilarFilm(@Path("filmId") filmId:Int):SimilarFilm
+
+    @GET("v2.2/films/{filmId}/images")
+    @Headers("X-API-KEY: $apiKey")
+    suspend fun getListGalleryType(@Path("filmId") filmId:Int,@Query("type") type:String):GalleryFilm
 }

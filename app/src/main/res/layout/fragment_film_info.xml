@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="185dp"
-        tools:context=".presenter.home.homepage.filmInfo.FilmInfoFragment">
+        tools:context=".presenter.home.homepage.filmInfo.filmInfoAll.FilmInfoFragment">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
@@ -135,6 +135,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@+id/cardView">
+
+            <TextView
+                android:id="@+id/film_full_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/graphik_regular"
+                android:ellipsize="end"
+
+                android:text="Молодые москвичи бегут от своих проблем
+                в русскую глушь. Мистическая утопия Дмитрия Глуховского  \n \nСтолкнувшись с неразрешимыми проблемами, пять молодых москвичей убегают в монастырь неподалеку от полузаброшенной деревни Топи. Они воспринимают rtrtrgfdgdsfgfdsg"
+                android:textColor="#272727"
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:id="@+id/linear_serila_info"

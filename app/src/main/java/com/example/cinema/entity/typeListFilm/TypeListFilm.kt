@@ -12,4 +12,5 @@ data class TypeListFilm(
     var year:Int?=null,
     var month:String?=null,
     var serial:Boolean?=null,
+    var semilarFilmId:Int?=null,
 ): Parcelable
