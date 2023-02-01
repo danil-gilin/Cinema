@@ -24,27 +24,27 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                 var short_info_3 = ""
                 val film = getFilmFullInfo.getFilmInfo(id)
                 //short 1
-                if (film.ratingKinopoisk != null) {
+                if (film?.ratingKinopoisk != null) {
                     short_info_1 += film.ratingKinopoisk
-                } else if (film.ratingImdb != null) {
+                } else if (film?.ratingImdb != null) {
                     short_info_1 += film.ratingImdb
-                } else if (film.ratingFilmCritics != null) {
+                } else if (film?.ratingFilmCritics != null) {
                     short_info_1 += film.ratingFilmCritics
                 }
-                if (film.nameRu != null) {
+                if (film?.nameRu != null) {
                     short_info_1 += " ${film.nameRu}"
-                } else if (film.nameEn != null) {
+                } else if (film?.nameEn != null) {
                     short_info_1 += " ${film.nameEn}"
-                } else if (film.nameOriginal != null) {
+                } else if (film?.nameOriginal != null) {
                     short_info_1 += " ${film.nameOriginal}"
                 }
 
                 //short 2
-                short_info_2 += "${film.year},"
+                short_info_2 += "${film?.year},"
                 var infoSerial: String? = null
-                if (film.serial) {
+                if (film?.serial == true) {
                     val infoSerialItem = getFilmFullInfo.getSerialInfo(id)
-                    infoSerialItem.items?.size.let {
+                    infoSerialItem?.items?.size.let {
                         if (it != null && it.toString() in TenNumber) {
                             Log.d("SessonName", "${it} ${it.toString() in "10".."20"} 1")
                             short_info_2 += " ${it} сезонов,"
@@ -64,7 +64,7 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                         }
                     }
                     var sumEpisod = 0
-                    infoSerialItem.items.forEach {
+                    infoSerialItem?.items?.forEach {
                         sumEpisod += it.episodes.size
                     }
                     if (sumEpisod != null && sumEpisod.toString() in TenNumber) {
@@ -77,7 +77,7 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                         infoSerial += " ${sumEpisod} серий"
                     }
                 }
-                if (film.genres != null) {
+                if (film?.genres != null) {
                     film.genres.forEachIndexed { index, genre ->
                         if (index == 2) {
                             short_info_2 += " ${genre.genre}"
@@ -93,10 +93,10 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
 
 
                 //short 3
-                if (film.countries != null) {
+                if (film?.countries != null) {
                     short_info_3 += " ${film.countries[0].country},"
                 }
-                if (film.filmLength != null) {
+                if (film?.filmLength != null) {
                     val hours = film.filmLength / 60
                     val minutes = film.filmLength % 60
                     if (film.ratingAgeLimits == null) {
@@ -113,31 +113,31 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                         }
                     }
                 }
-                if (film.ratingAgeLimits != null) {
+                if (film?.ratingAgeLimits != null) {
                     short_info_3 += " ${film.ratingAgeLimits.filter { it.isDigit() }}+"
                 }
                 val listActorAndWorker = getFilmFullInfo.getActorAndWorker(id)
                 val listGallery = getFilmFullInfo.getGalerryFilm(id)
                 val listSimilar = getFilmFullInfo.getSimilarFilms(id)
                 var x =
-                    listActorAndWorker.filter { it.professionKey != "ACTOR" && (it.nameRu != "" || it.nameEn != "") }
+                    listActorAndWorker?.filter { it.professionKey != "ACTOR" && (it.nameRu != "" || it.nameEn != "") }
                         .toString()
                 Log.d("ListWorker", x)
 
-                var filmDescription:String= film.description ?: ""
-                var filmShortDescription:String= film.shortDescription ?: ""
+                var filmDescription:String= film?.description ?: ""
+                var filmShortDescription:String= film?.shortDescription ?: ""
 
                 _state.value = FilmInfoState.Success(
                     short_info_1,
                     short_info_2,
                     short_info_3,
-                    film.posterUrlPreview,
-                    film.logoUrl,
-                    ("В фильме снимались" to listActorAndWorker.filter { it.professionKey == "ACTOR" && (it.nameRu != "" || it.nameEn != "") }),
-                    ("Над фильмом работали" to listActorAndWorker.filter { it.professionKey != "ACTOR" && (it.nameRu != "" || it.nameEn != "") }),
-                    ("Галерея" to listGallery.items),
-                    ("Похожие фильмы" to listSimilar.items),
-                    film.genres?.get(0)?.genre ?: "",
+                    film?.posterUrlPreview ?: "",
+                    film?.logoUrl,
+                    ("В фильме снимались" to (listActorAndWorker?.filter { it.professionKey == "ACTOR" && (it.nameRu != "" || it.nameEn != "") }?:emptyList())),
+                    ("Над фильмом работали" to( listActorAndWorker?.filter { it.professionKey != "ACTOR" && (it.nameRu != "" || it.nameEn != "") } ?:emptyList())),
+                    ("Галерея" to (listGallery?.items ?:emptyList()) ),
+                    ("Похожие фильмы" to (listSimilar?.items ?:emptyList())),
+                    film?.genres?.get(0)?.genre ?: "",
                     infoSerial,
                     filmDescription,
                     filmShortDescription

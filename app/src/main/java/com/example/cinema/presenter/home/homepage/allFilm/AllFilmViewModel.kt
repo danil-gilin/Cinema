@@ -42,8 +42,8 @@ class AllFilmViewModel @Inject constructor(private val getFilmFullInfo: GetFilmF
                 } else {
                     if (typeListFilm.semilarFilmId != null) {
                       val semiralFilmList=  getFilmFullInfo.getSimilarFilms(typeListFilm.semilarFilmId!!)
-                        val genre=getFilmFullInfo.getFilmInfo(typeListFilm.semilarFilmId!!).genres?.first()!!.genre
-                        _semilarFilm.send((genre to semiralFilmList.items))
+                        val genre=getFilmFullInfo.getFilmInfo(typeListFilm.semilarFilmId!!)?.genres?.first()!!.genre
+                        _semilarFilm.send((genre to semiralFilmList!!.items))
                     } else {
                         pagedCinema = Pager(
                             config = PagingConfig(pageSize = 20),

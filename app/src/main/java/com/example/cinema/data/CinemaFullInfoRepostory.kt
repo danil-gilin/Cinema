@@ -1,23 +1,53 @@
 package com.example.cinema.data
 
 import com.example.cinema.data.retrofit.CinemaRetrofitObject
+import com.example.cinema.entity.actorAndWorker.ActorAndWorker
 import com.example.cinema.entity.allGallery.GalleryAllFilm
 import com.example.cinema.entity.filmInfo.FilmInfo
+import com.example.cinema.entity.galleryFilm.GalleryFilm
 import com.example.cinema.entity.serialInfo.InfoSeasons
+import com.example.cinema.entity.similarFilm.SimilarFilm
 import javax.inject.Inject
 
 class CinemaFullInfoRepostory @Inject constructor() {
-   suspend fun getFilmFullInfo(id:Int):FilmInfo{
-     return CinemaRetrofitObject.cinemaFullInfoApi.getFullInfo(id)
+   suspend fun getFilmFullInfo(id:Int):FilmInfo?{
+       try {
+           return CinemaRetrofitObject.cinemaFullInfoApi.getFullInfo(id)
+       }catch (e:Exception){
+           return null
+       }
+
     }
 
-    suspend fun getInfoForSerial(id:Int): InfoSeasons {
-        return CinemaRetrofitObject.cinemaFullInfoApi.getInfoForSerial(id)
+    suspend fun getInfoForSerial(id:Int): InfoSeasons? {
+        try {
+            return CinemaRetrofitObject.cinemaFullInfoApi.getInfoForSerial(id)
+        }catch (e:Exception){
+            return null
+        }
     }
 
-    suspend fun getActorAndWroker(id: Int)=CinemaRetrofitObject.cinemaFullInfoApi.getListActor(id)
-    suspend fun getGallery(id: Int)=CinemaRetrofitObject.cinemaFullInfoApi.getListGallery(id)
-    suspend fun getSimilarFilm(id: Int)=CinemaRetrofitObject.cinemaFullInfoApi.getListSimilarFilm(id)
+    suspend fun getActorAndWroker(id: Int): List<ActorAndWorker>? {
+        try {
+            return  CinemaRetrofitObject.cinemaFullInfoApi.getListActor(id)
+        }catch (e:Exception){
+            return null
+        }
+    }
+    suspend fun getGallery(id: Int): GalleryFilm? {
+        try {
+            return CinemaRetrofitObject.cinemaFullInfoApi.getListGallery(id)
+        }catch (e:Exception){
+            return null
+        }
+    }
+    suspend fun getSimilarFilm(id: Int): SimilarFilm? {
+        try {
+            return  CinemaRetrofitObject.cinemaFullInfoApi.getListSimilarFilm(id)
+        }catch (e:Exception){
+            return null
+        }
+    }
 
 
     suspend  fun getFilmGallery(idFilm: Int): GalleryAllFilm {

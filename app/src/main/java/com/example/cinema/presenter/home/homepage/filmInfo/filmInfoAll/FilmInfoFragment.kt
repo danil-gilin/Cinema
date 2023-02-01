@@ -48,6 +48,7 @@ class FilmInfoFragment : Fragment() {
         arguments.let {
             idFilm = it?.getInt(Constance.FILM_FILM_INFO_ID)
             typeListFilm= TypeListFilm("Похожие фильмы", semilarFilmId = idFilm)
+            Log.d("idCinema", idFilm.toString())
             viewModel.getFilm(idFilm!!)
         }
 
@@ -68,10 +69,19 @@ class FilmInfoFragment : Fragment() {
                         binding.shortInfo2.text = state.shotInfo2
                         binding.shortInfo3.text = state.shotInfo3
 
-                        binding.rcActor.updateListActor(state.actorList,3)
-                        binding.rcActor.updateAllFilmBtn(state.actorList.second.size)
-                        binding.rcFilmWorker.updateListWorker(state.workerList,2)
-                        binding.rcFilmWorker.updateAllFilmBtn(state.workerList.second.size)
+                        if(state.actorList.second.isEmpty()) {
+                            binding.rcActor.visibility = View.GONE
+                        }else{
+                            binding.rcActor.updateListActor(state.actorList,3)
+                            binding.rcActor.updateAllFilmBtn(state.actorList.second.size)
+                        }
+
+                        if(state.workerList.second.isEmpty()) {
+                            binding.rcFilmWorker.visibility = View.GONE
+                        }else {
+                            binding.rcFilmWorker.updateListWorker(state.workerList, 2)
+                            binding.rcFilmWorker.updateAllFilmBtn(state.workerList.second.size)
+                        }
 
 
 
