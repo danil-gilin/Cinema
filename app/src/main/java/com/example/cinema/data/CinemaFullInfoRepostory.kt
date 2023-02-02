@@ -5,6 +5,7 @@ import com.example.cinema.entity.actorAndWorker.ActorAndWorker
 import com.example.cinema.entity.allGallery.GalleryAllFilm
 import com.example.cinema.entity.filmInfo.FilmInfo
 import com.example.cinema.entity.galleryFilm.GalleryFilm
+import com.example.cinema.entity.galleryFilm.GalleryItem
 import com.example.cinema.entity.serialInfo.InfoSeasons
 import com.example.cinema.entity.similarFilm.SimilarFilm
 import javax.inject.Inject
@@ -51,17 +52,25 @@ class CinemaFullInfoRepostory @Inject constructor() {
 
 
     suspend  fun getFilmGallery(idFilm: Int): GalleryAllFilm {
-        var listGallery=GalleryAllFilm(null,null,null,null,null,null,null,null,null)
-        listGallery.still= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[0]).items
-        listGallery.shooting= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[1]).items
-        listGallery.poster= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[2]).items
-        listGallery.fanArt= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[3]).items
-        listGallery.promo= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[4]).items
-        listGallery.concept= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[5]).items
-        listGallery.wallpaper= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[6]).items
-        listGallery.cover= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[7]).items
-        listGallery.screenshot= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[8]).items
+        var listGallery=GalleryAllFilm(0,0,0,0,0,0,0,0,0)
+        listGallery.still= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[0]).total
+        listGallery.shooting= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[1]).total
+        listGallery.poster= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[2]).total
+        listGallery.fanArt= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[3]).total
+        listGallery.promo= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[4]).total
+        listGallery.concept= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[5]).total
+        listGallery.wallpaper= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[6]).total
+        listGallery.cover= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[7]).total
+        listGallery.screenshot= CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,nameTypeGallery[8]).total
         return listGallery
+    }
+
+    suspend fun getFilmGalleryType(idFilm: Int,type:String,page:Int): List<GalleryItem>? {
+        try {
+            return CinemaRetrofitObject.cinemaFullInfoApi.getListGalleryType(idFilm,type,page).items
+        }catch (e:Exception){
+            return null
+        }
     }
 
 

@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +15,7 @@ import com.example.cinema.databinding.AllGalleryItemBigBinding
 import com.example.cinema.databinding.AllGalleryItemBinding
 import com.example.cinema.entity.galleryFilm.GalleryItem
 
-class AdapterAllGallery(private val clickImg:(String,ImageView)->Unit):ListAdapter<GalleryItem,ViewHolder>(GalleryAllDiffUtil()) {
+class AdapterAllGallery(private val clickImg:(String,ImageView)->Unit): PagingDataAdapter<GalleryItem, ViewHolder>(GalleryAllDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         when(viewType){
             1->{
@@ -32,18 +33,18 @@ class AdapterAllGallery(private val clickImg:(String,ImageView)->Unit):ListAdapt
             is GalleryAllViewHolder->{
                 with(holder.binding){
                     galleryAllImg.transitionName="img${position}"
-                    Glide.with(galleryAllImg).load(item.imageUrl).centerCrop().into(galleryAllImg)
+                    Glide.with(galleryAllImg).load(item?.imageUrl).centerCrop().into(galleryAllImg)
                     galleryAllImg.setOnClickListener {
-                        clickImg(item.imageUrl,galleryAllImg)
+                        item?.imageUrl?.let { it1 -> clickImg(it1,galleryAllImg) }
                     }
                 }
             }
             is GalleryAll2ViewHolder->{
                 with(holder.binding){
                     galleryAllImgBig.transitionName="img${position}"
-                    Glide.with(galleryAllImgBig).load(item.imageUrl).centerCrop().into(galleryAllImgBig)
+                    Glide.with(galleryAllImgBig).load(item?.imageUrl).centerCrop().into(galleryAllImgBig)
                     galleryAllImgBig.setOnClickListener {
-                        clickImg(item.imageUrl,galleryAllImgBig)
+                        item?.imageUrl?.let { it1 -> clickImg(it1,galleryAllImgBig) }
                     }
                 }
             }

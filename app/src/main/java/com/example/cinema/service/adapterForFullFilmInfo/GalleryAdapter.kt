@@ -2,6 +2,7 @@ package com.example.cinema.service.adapterForFullFilmInfo
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +12,7 @@ import com.example.cinema.databinding.GalerryItemFirstBinding
 import com.example.cinema.entity.galleryFilm.GalleryItem
 
 
-class GalleryAdapter(val function: (() -> Unit)?) : ListAdapter<GalleryItem,RecyclerView.ViewHolder>(GalleryDiffUtil()) {
+class GalleryAdapter(val function: ((String, ImageView) -> Unit)?) : ListAdapter<GalleryItem,RecyclerView.ViewHolder>(GalleryDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when(viewType){
             1->{
@@ -29,9 +30,10 @@ class GalleryAdapter(val function: (() -> Unit)?) : ListAdapter<GalleryItem,Recy
             is GalleryViewHolder->{
                 with(holder.binding){
                     Glide.with(imgGallery).load(item.imageUrl).centerCrop().into(imgGallery)
+                    imgGallery.transitionName="img${position}"
                     if(function!=null) {
                         root.setOnClickListener {
-                            function?.invoke()
+                            function?.invoke(item.imageUrl, imgGallery)
                         }
                     }
                 }
@@ -39,9 +41,10 @@ class GalleryAdapter(val function: (() -> Unit)?) : ListAdapter<GalleryItem,Recy
             is GalleryViewFirstHolder->{
                 with(holder.binding){
                     Glide.with(imgGalleryFirst).load(item.imageUrl).centerCrop().into(imgGalleryFirst)
+                    imgGalleryFirst.transitionName="img${position}"
                     if(function!=null) {
                         root.setOnClickListener {
-                            function?.invoke()
+                            function?.invoke(item.imageUrl, imgGalleryFirst)
                         }
                     }
                 }

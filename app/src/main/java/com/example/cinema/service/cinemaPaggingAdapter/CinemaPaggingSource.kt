@@ -37,7 +37,7 @@ class CinemaPaggingSource(private val typeListFilm: TypeListFilm):PagingSource<I
                     LoadResult.Page(
                         data = it.items,
                         prevKey = null,
-                        nextKey = if (page>0) null else page + 1
+                        nextKey = if (it.items.isEmpty()) null else page + 1
                     )
                 },
                 onFailure = {
@@ -45,9 +45,6 @@ class CinemaPaggingSource(private val typeListFilm: TypeListFilm):PagingSource<I
                 }
             )
         }
-
-
-
 
        return kotlin.runCatching {
            apiFunction

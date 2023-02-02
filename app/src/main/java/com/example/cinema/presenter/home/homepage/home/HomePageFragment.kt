@@ -27,6 +27,7 @@ class HomePageFragment : Fragment() {
     lateinit var viewModelFactory: HomePageFactory
 
     private val viewModel: HomePageViewModel by viewModels { viewModelFactory }
+    private var flagGetFilm=true
     private lateinit var binding: FragmentHomePageBinding
 
     override fun onCreateView(
@@ -34,8 +35,10 @@ class HomePageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomePageBinding.inflate(inflater)
-        viewModel.getCinema()
-
+        if (flagGetFilm){
+            viewModel.getCinema()
+            flagGetFilm=false
+        }
 
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.state.collect { state ->
@@ -44,7 +47,7 @@ class HomePageFragment : Fragment() {
 
                     }
                     is HomePageState.Success -> {
-
+                            updateListsFilm(state)
                     }
                     is HomePageState.Error -> {
 
@@ -52,56 +55,53 @@ class HomePageFragment : Fragment() {
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.cinemaGenreChannel1.collect {
-                Log.d("MyCinema", "onCreateView: $it")
-                binding.cinemaList1.updateListCinema(it.second.items)
-                binding.cinemaList1.updategenre(it.first)
+
+
+        return binding.root
+    }
+
+    fun updateListsFilm(state: HomePageState.Success) {
+
+                binding.cinemaList1.updateListCinema(state.genreCinema1!!.second.items)
+                binding.cinemaList1.updategenre(state.genreCinema1!!.first)
                 binding.cinemaList1.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
                 binding.cinemaList1.setClickInfoFilm{id->onClickInfoFilm(id)}
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.cinemaGenreChannel2.collect {
-                binding.cinemaList2.updateListCinema(it.second.items)
-                binding.cinemaList2.updategenre(it.first)
+
+
+                binding.cinemaList2.updateListCinema(state.genreCinema2!!.second.items)
+                binding.cinemaList2.updategenre(state.genreCinema2!!.first)
                 binding.cinemaList2.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
                 binding.cinemaList2.setClickInfoFilm{id->onClickInfoFilm(id)}
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.cinemaPremiers.collect {
-                binding.cinemaList3.updateListCinema(it.second.items)
-                binding.cinemaList3.updategenre(it.first)
+
+
+
+                binding.cinemaList3.updateListCinema(state.premiers!!.second.items)
+                binding.cinemaList3.updategenre(state.premiers.first)
                 binding.cinemaList3.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
                 binding.cinemaList3.setClickInfoFilm{id->onClickInfoFilm(id)}
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.cinemaPopularFilm1.collect {
-                binding.cinemaList4.updateListCinemaTop(it.second.films)
-                binding.cinemaList4.updategenre(it.first)
+
+
+
+                binding.cinemaList4.updateListCinemaTop(state.popular!!.second.films)
+                binding.cinemaList4.updategenre(state.popular!!.first)
                 binding.cinemaList4.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
                 binding.cinemaList4.setClickInfoFilm{id->onClickInfoFilm(id)}
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.cinemaPopularFilm2.collect {
-                binding.cinemaList5.updateListCinemaTop(it.second.films)
-                binding.cinemaList5.updategenre(it.first)
+
+
+
+
+                binding.cinemaList5.updateListCinemaTop(state.popular1!!.second.films)
+                binding.cinemaList5.updategenre(state.popular1!!.first)
                 binding.cinemaList5.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
                 binding.cinemaList5.setClickInfoFilm{id->onClickInfoFilm(id)}
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.cinemaSerial.collect {
-                binding.cinemaList6.updateListCinema(it.second.items)
-                binding.cinemaList6.updategenre(it.first)
+
+
+
+                binding.cinemaList6.updateListCinema(state.serial!!.second.items)
+                binding.cinemaList6.updategenre(state.serial!!.first)
                 binding.cinemaList6.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
                 binding.cinemaList6.setClickInfoFilm{id->onClickInfoFilm(id)}
-            }
-        }
-        return binding.root
+
     }
 
     fun onClickAllFilm(typeListFilm: TypeListFilm) {

@@ -1,5 +1,6 @@
 package com.example.cinema.presenter.home.homepage.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinema.domain.GetCinemaGenreUseCase
@@ -7,12 +8,14 @@ import com.example.cinema.domain.GetGenreNameUseCase
 import com.example.cinema.entity.cinema.AllCinema
 import com.example.cinema.entity.cinemaTop.CinemaTop
 import com.example.cinema.entity.typeListFilm.TypeListFilm
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject
@@ -47,22 +50,23 @@ class HomePageViewModel @Inject constructor(
 
     fun getCinema() {
         viewModelScope.launch {
-        try {
-            _state.value = HomePageState.Loading
-            getCinemaGenre(_cinemaGenreChannel1)
-            getCinemaGenre(_cinemaGenreChannel2)
-            getCinemaPremiers()
-            getSerial()
-            getPopularFilm("TOP_250_BEST_FILMS", "ТОП 250", _cinemaPopularFilm1)
-            getPopularFilm("TOP_AWAIT_FILMS", "Топ ожидаемых", _cinemaPopularFilm2)
-            _state.value = HomePageState.Success
-        }catch (e: Exception){
-            _state.value = HomePageState.Error("Придумайте название \n для вашей новой коллекции |")
-        }
+            try {
+                _state.value = HomePageState.Loading
+                val genreCinema1 = getCinemaGenre(_cinemaGenreChannel1)
+                val genreCinema2 = getCinemaGenre(_cinemaGenreChannel2)
+                val premiers = getCinemaPremiers()
+                val serial = getSerial()
+                val popular = getPopularFilm("TOP_250_BEST_FILMS", "ТОП 250", _cinemaPopularFilm1)
+                val popular1 = getPopularFilm("TOP_AWAIT_FILMS", "Топ ожидаемых", _cinemaPopularFilm2)
+                _state.value = HomePageState.Success(genreCinema1,genreCinema2,premiers,serial,popular,popular1)
+            } catch (e: Exception) {
+                _state.value =
+                    HomePageState.Error("Придумайте название \n для вашей новой коллекции |")
+            }
         }
     }
 
-    private suspend fun getCinemaGenre(channel: Channel<Pair<TypeListFilm, AllCinema>>) {
+    suspend fun getCinemaGenre(channel: Channel<Pair<TypeListFilm, AllCinema>>): Pair<TypeListFilm, AllCinema>? {
         val genreName = getGenreNameUseCase.getGenreName()
         var genre = 0
         var country = 0
@@ -118,7 +122,8 @@ class HomePageViewModel @Inject constructor(
                             page = 1
                         }
                         val tempPage = (1..page).random()
-                        allCinema = getCinemaGenreUseCase.getCountryCinema(country + 1, tempPage)
+                        allCinema =
+                            getCinemaGenreUseCase.getCountryCinema(country + 1, tempPage)
                         nameGenre = genreName.countries[country].country
                         typeListFilm.name = nameGenre
                         typeListFilm.countryId = country + 1
@@ -126,33 +131,40 @@ class HomePageViewModel @Inject constructor(
                 }
                 if (allCinema?.items?.isNotEmpty() == true) {
                     if (allCinema.items.size > 20) {
-                        channel.send(Pair(typeListFilm, allCinema))
+                        return Pair(typeListFilm, allCinema)
+                        // channel.send(Pair(typeListFilm, allCinema))
                     } else {
-                        channel.send(Pair(typeListFilm, allCinema))
+                        return Pair(typeListFilm, allCinema)
+                        // channel.send(Pair(typeListFilm, allCinema))
                     }
                     break
                 }
             }
         } catch (e: Exception) {
+            return null
         }
     }
 
-    private suspend fun getCinemaPremiers() {
+    suspend fun getCinemaPremiers(): Pair<TypeListFilm, AllCinema>? {
         try {
-            val month = Calendar.getInstance().getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH)?.uppercase()
+            val month = Calendar.getInstance()
+                .getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH)?.uppercase()
             val year = Calendar.getInstance().get(Calendar.YEAR)
             val cinema = getCinemaGenreUseCase.getPremieresFilm(year, month!!)
-            val typeListFilm = TypeListFilm("Премьеры",month=month,year=year)
-            _cinemaPremiers.send(Pair(typeListFilm, cinema))
+            val typeListFilm = TypeListFilm("Премьеры", month = month, year = year)
+            return Pair(typeListFilm, cinema)
+            // _cinemaPremiers.send(Pair(typeListFilm, cinema))
         } catch (e: Exception) {
+            return null
         }
     }
 
-    private suspend fun getPopularFilm(
+    suspend fun getPopularFilm(
         type: String,
         genreName: String,
         channel: Channel<Pair<TypeListFilm, CinemaTop>>
-    ) {
+    ): Pair<TypeListFilm, CinemaTop>? {
+
         try {
             var page = 10
             while (true) {
@@ -164,15 +176,18 @@ class HomePageViewModel @Inject constructor(
                     }
                 } else {
                     val typeListFilm = TypeListFilm(genreName, topFilmType = type)
-                    channel.send(Pair(typeListFilm, cinema))
+                    return Pair(typeListFilm, cinema)
+                    //channel.send(Pair(typeListFilm, cinema))
                     break
                 }
             }
         } catch (e: Exception) {
+            return null
         }
+
     }
 
-    private suspend fun getSerial() {
+    private suspend fun getSerial(): Pair<TypeListFilm, AllCinema>? {
         try {
             var page = 10
             while (true) {
@@ -184,11 +199,13 @@ class HomePageViewModel @Inject constructor(
                     }
                 } else {
                     val typeListFilm = TypeListFilm("Сериалы", serial = true)
-                    _cinemaSerial.send(Pair(typeListFilm, cinema))
+                    return Pair(typeListFilm, cinema)
+                    // _cinemaSerial.send(Pair(typeListFilm, cinema))
                     break
                 }
             }
         } catch (e: Exception) {
+            return null
         }
     }
 }

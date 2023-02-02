@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.cinema.R
@@ -38,6 +39,7 @@ class FilmInfoFragment : Fragment() {
     private var isCollapsed: Boolean = INITIAL_IS_COLLAPSED
     private var maxLinesTxtView=0
     private var idFilm:Int?=0
+    private var textFilmDescription=""
     private lateinit var typeListFilm: TypeListFilm
 
     override fun onCreateView(
@@ -46,10 +48,12 @@ class FilmInfoFragment : Fragment() {
     ): View? {
         binding = FragmentFilmInfoBinding.inflate(inflater)
         arguments.let {
-            idFilm = it?.getInt(Constance.FILM_FILM_INFO_ID)
-            typeListFilm= TypeListFilm("Похожие фильмы", semilarFilmId = idFilm)
-            Log.d("idCinema", idFilm.toString())
-            viewModel.getFilm(idFilm!!)
+            if (idFilm == 0) {
+                idFilm = it?.getInt(Constance.FILM_FILM_INFO_ID)
+                typeListFilm= TypeListFilm("Похожие фильмы", semilarFilmId = idFilm)
+                Log.d("idCinema", idFilm.toString())
+                viewModel.getFilm(idFilm!!)
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
@@ -96,6 +100,14 @@ class FilmInfoFragment : Fragment() {
                             }
                             binding.rcGallery.updateListGallery(state.galleryList)
                             binding.rcGallery.updateAllFilmBtn(state.galleryList.second.size)
+                            binding.rcGallery.clickGallery { url, imageView ->
+                                val bundle=Bundle()
+                                bundle.putString(Constance.FULL_SCREEN_IMG_URL_IMG, url)
+                                val extras = FragmentNavigatorExtras(
+                                    imageView to "Transition_img_full_screen"
+                                )
+                                findNavController().navigate(R.id.action_filmInfoFragment_to_fullScreenImgFragment, bundle,null,extras)
+                            }
                         }
 
 
@@ -124,15 +136,25 @@ class FilmInfoFragment : Fragment() {
                             binding.linearSerilaInfo.visibility=View.GONE
                         }
 
+                        if(state.filmShortDescription.isNotEmpty()){
+                            textFilmDescription=state.filmShortDescription
+                            if (state.filmDescription.isNotEmpty()){
+                                textFilmDescription=textFilmDescription+'\n'+'\n'+state.filmDescription
+                            }
+                        }else{
+                            textFilmDescription=state.filmDescription
+                        }
+
                         //информация о фильме
                         if(state.filmShortDescription.length +state.filmDescription.length <250){
-                            binding.filmFullDescription.text=state.filmShortDescription+'\n'+'\n'+state.filmDescription
+                            binding.filmFullDescription.text=textFilmDescription
                             if(state.filmDescription.isEmpty() && state.filmShortDescription.isEmpty()) {
                                 binding.filmFullDescription.visibility = View.GONE
                             }
+
                         }else{
                             binding.filmFullDescription.filters= arrayOf(*binding.filmFullDescription.filters,InputFilter.LengthFilter(253))
-                            val sb : SpannableStringBuilder = SpannableStringBuilder(state.filmShortDescription+'\n'+'\n'+state.filmDescription)
+                            val sb : SpannableStringBuilder = SpannableStringBuilder(textFilmDescription)
                             val bss = StyleSpan(Typeface.BOLD)
                             val sbShort=SpannableStringBuilder(sb.take(250).toString()+"...")
                             sbShort.setSpan(bss, 0, state.filmShortDescription.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)

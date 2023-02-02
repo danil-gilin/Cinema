@@ -21,7 +21,8 @@ import retrofit2.http.Query
 //f1877a5c-f583-454d-96e7-5d4f5a242426
 //6a2d7029-a0b8-4c64-8469-25bf56208176
 //543764a7-ddaa-498c-9bbb-a6d2393a6c88
-const val apiKey="543764a7-ddaa-498c-9bbb-a6d2393a6c88"
+//02313c45-a6f6-47aa-9eb8-ea784b9b67f0
+const val apiKey="02313c45-a6f6-47aa-9eb8-ea784b9b67f0"
 const val baseUrl="https://kinopoiskapiunofficial.tech/api/"
 
 object CinemaRetrofitObject {
@@ -87,5 +88,5 @@ interface CinemaFullInfoApi{
 
     @GET("v2.2/films/{filmId}/images")
     @Headers("X-API-KEY: $apiKey")
-    suspend fun getListGalleryType(@Path("filmId") filmId:Int,@Query("type") type:String):GalleryFilm
+    suspend fun getListGalleryType(@Path("filmId") filmId:Int,@Query("type") type:String,@Query("page") page:Int=1):GalleryFilm
 }

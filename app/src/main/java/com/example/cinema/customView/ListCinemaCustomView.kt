@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +29,7 @@ class ListCinemaCustomView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
     lateinit var typeListFilmLocal: TypeListFilm
-    var galleryFunction:(() -> Unit)?=null
+    var galleryFunction:((String,ImageView) -> Unit)?=null
     var typeListFunction: ((TypeListFilm) -> Unit)?=null
     var filmInfoFunction: ((Int) -> Unit)?=null
     val adapterCinemaTop= CinemaTopAdapter({onClick()}, {onClickFilm(it)})
@@ -96,7 +97,7 @@ class ListCinemaCustomView @JvmOverloads constructor(
     }
 
     fun updateListGallery(listGallery:Pair<String,List<GalleryItem>>){
-        val adapterGallery=GalleryAdapter(){onClickGallery()}
+        val adapterGallery=GalleryAdapter(){url,img->onClickGallery(url,img)}
         binding.rcCinemaList.adapter=adapterGallery
         binding.rcCinemaList.layoutManager=LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
         adapterGallery.submitList(listGallery.second)
@@ -121,8 +122,8 @@ class ListCinemaCustomView @JvmOverloads constructor(
         filmInfoFunction?.let { it(id) }
     }
 
-    fun onClickGallery(){
-        galleryFunction?.let { it() }
+    fun onClickGallery(imgUrl:String,view:ImageView){
+        galleryFunction.let { it?.invoke(imgUrl,view) }
     }
 
     fun setClickAllFilm(onClickAllFilm: (TypeListFilm) -> Unit) {
@@ -142,7 +143,7 @@ class ListCinemaCustomView @JvmOverloads constructor(
         }
     }
 
-    fun clickGallery(onClickGallery: () -> Unit) {
+    fun clickGallery(onClickGallery: (String,ImageView) -> Unit) {
         galleryFunction=onClickGallery
     }
 }

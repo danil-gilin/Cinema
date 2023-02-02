@@ -30,6 +30,8 @@ import com.example.cinema.entity.allGallery.GalleryAllFilm
 import com.example.cinema.service.adapterAllGallery.AdapterAllGallery
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 
@@ -39,6 +41,7 @@ class FilmGallery : Fragment() {
     companion object {
         fun newInstance() = FilmGallery()
         val nameTypeGallery= listOf("Кадры", "Со съемок", "Постеры", "Фанарты", "Промо", "Концепция", "Обои", "Обложка", "Скриншот")
+        val nameTypeGalleryEng= listOf("STILL","SHOOTING","POSTER","FAN_ART","PROMO","CONCEPT","WALLPAPER","COVER","SCREENSHOT")
     }
 
     @Inject
@@ -62,7 +65,7 @@ class FilmGallery : Fragment() {
         arguments.let {
             if (idFilm==0){
             idFilm = it?.getInt(Constance.FILM_GALLERY_ID_FILM)
-            viewModel.getFilmGalery(idFilm!!)
+            viewModel.getFilterGalery(idFilm!!)
             }
         }
 
@@ -73,6 +76,7 @@ class FilmGallery : Fragment() {
                 return if((position+1)%3==0) 2 else 1
             }
         }
+
 
         binding.rcAllGallery.adapter=adapterAllGallery
         binding.rcAllGallery.layoutManager=layuotManeger
@@ -85,8 +89,8 @@ class FilmGallery : Fragment() {
                     }
                     is StateFilmGallery.Success -> {
                         if(galleryAllFilm==null) {
-                            adapterAllGallery.submitList(state.data.still)
-                            Log.d("GalleryAll", "Success")
+                            viewModel.getGallery(idFilm!!,nameTypeGalleryEng[0])
+                            setFlowGallery()
                         }
                         galleryAllFilm = state.data
                         flagFirstChip=true
@@ -98,39 +102,48 @@ class FilmGallery : Fragment() {
                             when(chip.text.toString().filter { it != ' '&&it.isLetter()}) {
                                 nameTypeGallery[0] -> {
                                     selectedChip=0
-                                    adapterAllGallery.submitList(state.data.still)
+                                  viewModel.getGallery(idFilm!!,nameTypeGalleryEng[0])
+                                    setFlowGallery()
                                 }
                                 nameTypeGallery[1].filter {it != ' '} -> {
                                     selectedChip=1
-                                    adapterAllGallery.submitList(state.data.shooting)
+                                    viewModel.getGallery(idFilm!!,nameTypeGalleryEng[1])
+                                    setFlowGallery()
                                 }
                                 nameTypeGallery[2] -> {
                                     selectedChip=2
-                                    adapterAllGallery.submitList(state.data.poster)
+                                    viewModel.getGallery(idFilm!!,nameTypeGalleryEng[2])
+                                    setFlowGallery()
                                 }
                                 nameTypeGallery[3] -> {
                                     selectedChip=3
-                                    adapterAllGallery.submitList(state.data.fanArt)
+                                    viewModel.getGallery(idFilm!!,nameTypeGalleryEng[3])
+                                    setFlowGallery()
                                 }
                                 nameTypeGallery[4] -> {
                                     selectedChip=4
-                                    adapterAllGallery.submitList(state.data.promo)
+                                    viewModel.getGallery(idFilm!!,nameTypeGalleryEng[4])
+                                    setFlowGallery()
                                 }
                                 nameTypeGallery[5] -> {
                                     selectedChip=5
-                                    adapterAllGallery.submitList(state.data.concept)
+                                    viewModel.getGallery(idFilm!!,nameTypeGalleryEng[5])
+                                    setFlowGallery()
                                 }
                                 nameTypeGallery[6] -> {
                                     selectedChip=6
-                                    adapterAllGallery.submitList(state.data.wallpaper)
+                                    viewModel.getGallery(idFilm!!,nameTypeGalleryEng[6])
+                                    setFlowGallery()
                                 }
                                 nameTypeGallery[7] -> {
                                     selectedChip=7
-                                    adapterAllGallery.submitList(state.data.cover)
+                                    viewModel.getGallery(idFilm!!,nameTypeGalleryEng[7])
+                                    setFlowGallery()
                                 }
                                 nameTypeGallery[8] -> {
                                     selectedChip=8
-                                    adapterAllGallery.submitList(state.data.screenshot)
+                                    viewModel.getGallery(idFilm!!,nameTypeGalleryEng[8])
+                                    setFlowGallery()
                                 }
                             }
                         }
@@ -143,6 +156,13 @@ class FilmGallery : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun setFlowGallery() {
+        viewModel.listGalleryType?.onEach {
+            Log.d("PaggeGallery","it.toString()")
+            adapterAllGallery.submitData(it)
+        }?.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun setChipGroup(name: String,isChecked:Boolean,size:Int) {
@@ -186,32 +206,32 @@ class FilmGallery : Fragment() {
     }
 
     private fun setFilterFromGallery(galleryAllFilm: GalleryAllFilm){
-        if(galleryAllFilm.still?.isNotEmpty() == true) {
-            setChipGroup(nameTypeGallery[0],selectedChip==0, galleryAllFilm.still!!.size)
+        if(galleryAllFilm.still!=0) {
+            setChipGroup(nameTypeGallery[0],selectedChip==0, galleryAllFilm.still)
         }
-        if(galleryAllFilm.shooting?.isNotEmpty() == true) {
-            setChipGroup(nameTypeGallery[1],selectedChip==1, galleryAllFilm.shooting!!.size)
+        if(galleryAllFilm.shooting!=0) {
+            setChipGroup(nameTypeGallery[1],selectedChip==1, galleryAllFilm.shooting)
         }
-        if(galleryAllFilm.poster?.isNotEmpty() == true) {
-            setChipGroup(nameTypeGallery[2],selectedChip==2, galleryAllFilm.poster!!.size)
+        if(galleryAllFilm.poster!=0) {
+            setChipGroup(nameTypeGallery[2],selectedChip==2, galleryAllFilm.poster)
         }
-        if(galleryAllFilm.fanArt?.isNotEmpty() == true) {
-            setChipGroup(nameTypeGallery[3],selectedChip==3, galleryAllFilm.fanArt!!.size)
+        if(galleryAllFilm.fanArt!=0) {
+            setChipGroup(nameTypeGallery[3],selectedChip==3, galleryAllFilm.fanArt)
         }
-        if(galleryAllFilm.promo?.isNotEmpty() == true) {
-            setChipGroup(nameTypeGallery[4],selectedChip==4, galleryAllFilm.promo!!.size)
+        if(galleryAllFilm.promo!=0) {
+            setChipGroup(nameTypeGallery[4],selectedChip==4, galleryAllFilm.promo)
         }
-        if(galleryAllFilm.concept?.isNotEmpty() == true) {
-            setChipGroup(nameTypeGallery[5],selectedChip==5, galleryAllFilm.concept!!.size)
+        if(galleryAllFilm.concept!=0) {
+            setChipGroup(nameTypeGallery[5],selectedChip==5, galleryAllFilm.concept)
         }
-        if(galleryAllFilm.wallpaper?.isNotEmpty() == true) {
-            setChipGroup(nameTypeGallery[6],selectedChip==6, galleryAllFilm.wallpaper!!.size)
+        if(galleryAllFilm.wallpaper!=0) {
+            setChipGroup(nameTypeGallery[6],selectedChip==6, galleryAllFilm.wallpaper)
         }
-        if(galleryAllFilm.cover?.isNotEmpty() == true) {
-            setChipGroup(nameTypeGallery[7],selectedChip==7, galleryAllFilm.cover!!.size)
+        if(galleryAllFilm.cover!=0) {
+            setChipGroup(nameTypeGallery[7],selectedChip==7, galleryAllFilm.cover)
         }
-        if(galleryAllFilm.screenshot?.isNotEmpty() == true) {
-            setChipGroup(nameTypeGallery[8],selectedChip==8, galleryAllFilm.screenshot!!.size)
+        if(galleryAllFilm.screenshot!=0) {
+            setChipGroup(nameTypeGallery[8],selectedChip==8, galleryAllFilm.screenshot)
         }
     }
 
