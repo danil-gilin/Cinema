@@ -77,14 +77,26 @@ class FilmInfoFragment : Fragment() {
                             binding.rcActor.visibility = View.GONE
                         }else{
                             binding.rcActor.updateListActor(state.actorList,3)
-                            binding.rcActor.updateAllFilmBtn(state.actorList.second.size)
+                            binding.rcActor.updateAllFilmBtn(state.actorList.second.size,20)
+                            binding.rcActor.allClickEmpty {
+                                val bundle = Bundle()
+                                bundle.putInt(Constance.FILM_ALL_ACTOR_ID,idFilm!! )
+                                bundle.putString(Constance.FILM_ALL_ACTOR_TYPE,"ACTOR")
+                                findNavController().navigate(R.id.action_filmInfoFragment_to_allActorFragment, bundle)
+                            }
                         }
 
                         if(state.workerList.second.isEmpty()) {
                             binding.rcFilmWorker.visibility = View.GONE
                         }else {
                             binding.rcFilmWorker.updateListWorker(state.workerList, 2)
-                            binding.rcFilmWorker.updateAllFilmBtn(state.workerList.second.size)
+                            binding.rcFilmWorker.updateAllFilmBtn(state.workerList.second.size,6)
+                            binding.rcFilmWorker.allClickEmpty {
+                                val bundle = Bundle()
+                                bundle.putInt(Constance.FILM_ALL_ACTOR_ID,idFilm!! )
+                                bundle.putString(Constance.FILM_ALL_ACTOR_TYPE,"WORKER")
+                                findNavController().navigate(R.id.action_filmInfoFragment_to_allActorFragment, bundle)
+                            }
                         }
 
 
@@ -93,7 +105,7 @@ class FilmInfoFragment : Fragment() {
                             binding.rcGallery.visibility=View.GONE
                         }else{
 
-                            binding.rcGallery.allGalleryClick {
+                            binding.rcGallery.allClickEmpty {
                                 val bundle = Bundle()
                                 bundle.putInt(Constance.FILM_GALLERY_ID_FILM,idFilm!! )
                                 findNavController().navigate(R.id.action_filmInfoFragment_to_filmGallery, bundle)

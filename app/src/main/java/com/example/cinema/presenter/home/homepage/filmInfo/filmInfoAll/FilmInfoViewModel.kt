@@ -134,7 +134,7 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                     film?.posterUrlPreview ?: "",
                     film?.logoUrl,
                     ("В фильме снимались" to (listActorAndWorker?.filter { it.professionKey == "ACTOR" && (it.nameRu != "" || it.nameEn != "") }?:emptyList())),
-                    ("Над фильмом работали" to( listActorAndWorker?.filter { it.professionKey != "ACTOR" && (it.nameRu != "" || it.nameEn != "") } ?:emptyList())),
+                    ("Над фильмом работали" to( listActorAndWorker?.filter { it.professionKey != "ACTOR" && (it.nameRu != "" || it.nameEn != "") }?:emptyList())),
                     ("Галерея" to (listGallery?.items ?:emptyList()) ),
                     ("Похожие фильмы" to (listSimilar?.items ?:emptyList())),
                     film?.genres?.get(0)?.genre ?: "",

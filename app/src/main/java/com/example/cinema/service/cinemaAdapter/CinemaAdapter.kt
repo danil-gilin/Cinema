@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.example.cinema.databinding.AllCinemaItemBinding
 import com.example.cinema.databinding.CinemaItemBinding
-import com.example.cinema.databinding.CinemaItemFirstBinding
 import com.example.cinema.entity.cinema.Cinema
 
 
@@ -40,8 +39,8 @@ class CinemaAdapter(val onClickAllFilm: () -> Unit,val clickFilm:(Int)->Unit) : 
                 )
             )
         }else{
-            return CinemaFirstViewHolder(
-                CinemaItemFirstBinding.inflate(
+            return CinemaViewHolder(
+                CinemaItemBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
@@ -91,45 +90,19 @@ class CinemaAdapter(val onClickAllFilm: () -> Unit,val clickFilm:(Int)->Unit) : 
                     onClickAllFilm()
                 }
             }
-        }else{
-            val item = getItem(position)
-            with(holder as CinemaFirstViewHolder) {
-                Glide.with(binding.cinemaFirstImg).load(item.posterUrlPreview).centerCrop().into(binding.cinemaFirstImg)
-                if (item.nameRu == null) {
-                    binding.cinemaFirstNameTxt.text = item.nameOriginal
-                } else {
-                    binding.cinemaFirstNameTxt.text = item.nameRu
-                }
-                if (item.genres.isNotEmpty()) {
-                    binding.cinemaFirstGenre.text = item.genres[0].genre
-                }
-                if (item.ratingKinopoisk != null) {
-                    binding.cinemaRatingFirst.text = item.ratingKinopoisk.toString()
-                } else{
-                    binding.cinemaRatingFirst.visibility = View.GONE
-                }
-                binding.root.setOnClickListener {
-                    clickFilm(item.kinopoiskId)
-                }
-            }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         return if (position == itemCount - 1 && itemCount >= 20) {
             1
-        }else if(position ==0) {
-            2
-        } else {
+        }else{
             0
         }
     }
 }
 
 class CinemaViewHolder(val binding: CinemaItemBinding) : RecyclerView.ViewHolder(binding.root)
-class CinemaFirstViewHolder(val binding: CinemaItemFirstBinding) :
-    RecyclerView.ViewHolder(binding.root)
-
 class AllCinemaViewHolder(val binding: AllCinemaItemBinding) : RecyclerView.ViewHolder(binding.root)
 
 class CinemaDiffCallback : DiffUtil.ItemCallback<Cinema>() {

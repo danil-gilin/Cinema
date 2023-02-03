@@ -43,8 +43,10 @@
         android:id="@+id/rc_cinema_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:overScrollMode="never"
         android:layout_marginTop="24dp"
+        android:clipToPadding="false"
         android:orientation="vertical"
+        android:overScrollMode="never"
+        android:paddingStart="26dp"
         tools:listitem="@layout/cinema_item" />
 </LinearLayout>

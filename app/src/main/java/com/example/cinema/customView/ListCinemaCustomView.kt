@@ -2,6 +2,7 @@ package com.example.cinema.customView
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -32,6 +33,7 @@ class ListCinemaCustomView @JvmOverloads constructor(
     var galleryFunction:((String,ImageView) -> Unit)?=null
     var typeListFunction: ((TypeListFilm) -> Unit)?=null
     var filmInfoFunction: ((Int) -> Unit)?=null
+    var itemCount=0
     val adapterCinemaTop= CinemaTopAdapter({onClick()}, {onClickFilm(it)})
     val adapterCinema= CinemaAdapter({onClick()}, {onClickFilm(it)})
 
@@ -75,24 +77,37 @@ class ListCinemaCustomView @JvmOverloads constructor(
         binding.genreName.text=name
     }
 
-    fun updateAllFilmBtn(countItem:Int){
-        binding.txtAllFilm.visibility= View.VISIBLE
+    fun updateAllFilmBtn(countItem:Int,itemCounts:Int=20){
+        itemCount=itemCounts
+        if (countItem<itemCounts){
+            binding.txtAllFilm.visibility= View.GONE
+        }else{
+            binding.txtAllFilm.visibility= View.VISIBLE
+        }
         binding.txtAllFilm.text="$countItem"
         binding.txtAllFilm.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.film_all,0)
     }
 
-    fun updateListActor(listActor:Pair<String,List<ActorAndWorker>>,spanCount:Int){
-        val adapterActorAndWorker=ActorAdapter(spanCount)
+    fun updateListActor(listActor:Pair<String,List<ActorAndWorker>>,spanCount:Int,itemCounts:Int=20){
+        val adapterActorAndWorker=ActorAdapter()
         binding.rcCinemaList.adapter=adapterActorAndWorker
         binding.rcCinemaList.layoutManager=GridLayoutManager(context,spanCount,GridLayoutManager.HORIZONTAL,false)
-        adapterActorAndWorker.submitList(listActor.second)
+        if(listActor.second.size>itemCounts) {
+            adapterActorAndWorker.submitList(listActor.second.subList(0, itemCounts))
+        }else{
+            adapterActorAndWorker.submitList(listActor.second)
+        }
         binding.genreName.text=listActor.first
     }
-    fun updateListWorker(listWorker:Pair<String,List<ActorAndWorker>>,spanCount:Int){
-        val adapterActorAndWorker=ActorAdapter(spanCount)
+    fun updateListWorker(listWorker:Pair<String,List<ActorAndWorker>>,spanCount:Int,itemCounts:Int=6){
+        val adapterActorAndWorker=ActorAdapter()
         binding.rcCinemaList.adapter=adapterActorAndWorker
         binding.rcCinemaList.layoutManager=GridLayoutManager(context,spanCount,GridLayoutManager.HORIZONTAL,false)
-        adapterActorAndWorker.submitList(listWorker.second)
+        if (listWorker.second.size>itemCounts) {
+            adapterActorAndWorker.submitList(listWorker.second.subList(0, itemCounts))
+        }else{
+            adapterActorAndWorker.submitList(listWorker.second)
+        }
         binding.genreName.text=listWorker.first
     }
 
@@ -137,7 +152,7 @@ class ListCinemaCustomView @JvmOverloads constructor(
         filmInfoFunction=onClickFilmId
     }
 
-    fun allGalleryClick(onClickAllGallery: () -> Unit) {
+    fun allClickEmpty(onClickAllGallery: () -> Unit) {
         binding.txtAllFilm.setOnClickListener {
             onClickAllGallery()
         }

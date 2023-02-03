@@ -45,6 +45,9 @@
             <action
                 android:id="@+id/action_filmInfoFragment_to_fullScreenImgFragment"
                 app:destination="@id/fullScreenImgFragment" />
+            <action
+                android:id="@+id/action_filmInfoFragment_to_allActorFragment"
+                app:destination="@id/allActorFragment" />
         </fragment>
         <fragment
             android:id="@+id/filmGallery"
@@ -60,6 +63,12 @@
             android:name="com.example.cinema.presenter.home.homepage.filmInfo.fullScreenImg.FullScreenImgFragment"
             android:label="FullScreenImgFragment"
             tools:layout="@layout/fragment_full_screen_img"
+            />
+        <fragment
+            android:id="@+id/allActorFragment"
+            android:name="com.example.cinema.presenter.home.homepage.filmInfo.filmAllActor.AllActorFragment"
+            android:label="AllActorFragment"
+            tools:layout="@layout/fragment_all_actor"
             />
     </navigation>
 
