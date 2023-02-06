@@ -10,7 +10,7 @@ import com.example.cinema.databinding.ActorAndWorkerItemBinding
 import com.example.cinema.databinding.ActorWorkerAllItemBinding
 import com.example.cinema.entity.actorAndWorker.ActorAndWorker
 
-class AdapterActorWorkerAll:
+class AdapterActorWorkerAll(val actorFunction:((Int) -> Unit)?):
     ListAdapter<ActorAndWorker, AdapterActorWorkerAllViewHolder>(AdapterActorWorkerAllDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterActorWorkerAllViewHolder {
         return AdapterActorWorkerAllViewHolder(
@@ -33,6 +33,9 @@ class AdapterActorWorkerAll:
             if (item.description == null) {
                 nameActorInFilmTxtAll.text = item.professionText?.dropLast(1)
             } else  nameActorInFilmTxtAll.text =item.description.replaceFirstChar { it.uppercase() }
+            root.setOnClickListener {
+                actorFunction?.invoke(item.staffId)
+            }
             Glide.with(immActorAll).load(item.posterUrl).centerCrop().into(immActorAll)
         }
     }

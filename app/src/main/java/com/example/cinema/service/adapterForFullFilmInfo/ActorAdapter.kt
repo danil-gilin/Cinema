@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.cinema.databinding.ActorAndWorkerItemBinding
 import com.example.cinema.entity.actorAndWorker.ActorAndWorker
 
-class ActorAdapter() :
+class ActorAdapter(val actorFunction:((Int) -> Unit)?) :
     ListAdapter<ActorAndWorker, ActorViewHolder>(ActorDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActorViewHolder {
         return ActorViewHolder(
@@ -33,6 +33,9 @@ class ActorAdapter() :
                 nameActorInFilmTxt.text = item.professionText?.dropLast(1)
             } else nameActorInFilmTxt.text =  item.description.replaceFirstChar { it.uppercase() }
             Glide.with(immActor).load(item.posterUrl).centerCrop().into(immActor)
+            root.setOnClickListener {
+                actorFunction?.invoke(item.staffId)
+            }
         }
     }
 

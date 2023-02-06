@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.cinema.R
 import com.example.cinema.databinding.FragmentAllActorBinding
@@ -29,7 +30,8 @@ class AllActorFragment : Fragment() {
     @Inject
     lateinit var factory: AllActorFactory
 
-    private val adapterActor=AdapterActorWorkerAll()
+    private val adapterActor=AdapterActorWorkerAll(){it->onClickActor(it)}
+
     private val viewModel: AllActorViewModel by viewModels{factory}
     lateinit var binding: FragmentAllActorBinding
 
@@ -57,6 +59,13 @@ class AllActorFragment : Fragment() {
 
 
         return binding.root
+    }
+
+
+    private fun onClickActor(it: Int) {
+        val bundle=Bundle()
+        bundle.putInt(Constance.ACTOR_ID_FOR_FULL_INFO,it)
+        findNavController().navigate(R.id.action_allActorFragment_to_actorInfoFragment,bundle)
     }
 
 }

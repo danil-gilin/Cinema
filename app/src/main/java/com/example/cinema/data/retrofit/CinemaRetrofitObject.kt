@@ -4,6 +4,7 @@ import com.example.cinema.entity.actorAndWorker.ActorAndWorker
 import com.example.cinema.entity.cinema.AllCinema
 import com.example.cinema.entity.cinemaTop.CinemaTop
 import com.example.cinema.entity.filmInfo.FilmInfo
+import com.example.cinema.entity.fullInfoActor.FullInfoActor
 import com.example.cinema.entity.galleryFilm.GalleryFilm
 import com.example.cinema.entity.gener.GenreName
 import com.example.cinema.entity.serialInfo.InfoSeasons
@@ -22,7 +23,8 @@ import retrofit2.http.Query
 //6a2d7029-a0b8-4c64-8469-25bf56208176
 //543764a7-ddaa-498c-9bbb-a6d2393a6c88
 //02313c45-a6f6-47aa-9eb8-ea784b9b67f0
-const val apiKey="a16112fd-a6d3-480c-a1bc-7ece0ea36df5"
+const val apiKey="543764a7-ddaa-498c-9bbb-a6d2393a6c88"
+const val apiKeyForActor="543764a7-ddaa-498c-9bbb-a6d2393a6c88"
 const val baseUrl="https://kinopoiskapiunofficial.tech/api/"
 
 object CinemaRetrofitObject {
@@ -33,6 +35,7 @@ object CinemaRetrofitObject {
 
     val cinemaApi: CinemaApi = retrofit.create(CinemaApi::class.java)
     val cinemaFullInfoApi: CinemaFullInfoApi = retrofit.create(CinemaFullInfoApi::class.java)
+    val actorAndWorkerFullInfoApi: ActorAndWorkerFullInfoApi = retrofit.create(ActorAndWorkerFullInfoApi::class.java)
 }
 
 interface CinemaApi {
@@ -89,4 +92,11 @@ interface CinemaFullInfoApi{
     @GET("v2.2/films/{filmId}/images")
     @Headers("X-API-KEY: $apiKey")
     suspend fun getListGalleryType(@Path("filmId") filmId:Int,@Query("type") type:String,@Query("page") page:Int=1):GalleryFilm
+}
+
+interface ActorAndWorkerFullInfoApi{
+    @GET("v1/staff/{id}")
+    @Headers("X-API-KEY: $apiKeyForActor")
+    suspend fun getActorWorkerInfo(@Path("id") idActor: Int):FullInfoActor
+
 }

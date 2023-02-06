@@ -1,6 +1,9 @@
 package com.example.cinema.entity
 
 object Constance {
+    const val ACTOR_ID_FOR_FILM_HISTORY="actor id for film history"
+    const  val ACTOR_LIST_FILM_FOR_ALL_FILM="actor list film for all film"
+    const val ACTOR_ID_FOR_FULL_INFO="actor id"
     const val FILM_ALL_ACTOR_TYPE="film all actor type"
     const val FILM_ALL_ACTOR_ID="film all actor id"
     const val FULL_SCREEN_IMG_URL_IMG="url img full screen"

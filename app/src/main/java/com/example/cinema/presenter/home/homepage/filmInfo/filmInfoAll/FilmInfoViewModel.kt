@@ -45,7 +45,7 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                 if (film?.serial == true) {
                     val infoSerialItem = getFilmFullInfo.getSerialInfo(id)
                     infoSerialItem?.items?.size.let {
-                        if (it != null && it.toString() in TenNumber) {
+                        if (it != null && it.toString() in TenNumber|| it.toString().last() == '0') {
                             Log.d("SessonName", "${it} ${it.toString() in "10".."20"} 1")
                             short_info_2 += " ${it} сезонов,"
                             infoSerial = "${it} сезонов,"
@@ -67,13 +67,13 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                     infoSerialItem?.items?.forEach {
                         sumEpisod += it.episodes.size
                     }
-                    if (sumEpisod != null && sumEpisod.toString() in TenNumber) {
+                    if (sumEpisod != null && sumEpisod.toString() in TenNumber|| sumEpisod.toString().last() == '0') {
                         infoSerial += " ${sumEpisod} серий"
                     } else if (sumEpisod.toString().last() == '1') {
                         infoSerial += " ${sumEpisod} серия"
                     } else if (sumEpisod.toString().last() in '2'..'4') {
                         infoSerial += " ${sumEpisod} серии"
-                    } else if (sumEpisod.toString().last() in '5'..'0') {
+                    } else if (sumEpisod.toString().last() in '5'..'9') {
                         infoSerial += " ${sumEpisod} серий"
                     }
                 }

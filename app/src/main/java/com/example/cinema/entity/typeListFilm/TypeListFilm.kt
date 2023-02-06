@@ -1,6 +1,7 @@
 package com.example.cinema.entity.typeListFilm
 
 import android.os.Parcelable
+import com.example.cinema.entity.fullInfoActor.Film
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -13,4 +14,5 @@ data class TypeListFilm(
     var month:String?=null,
     var serial:Boolean?=null,
     var semilarFilmId:Int?=null,
+    var actorId:Int?=null,
 ): Parcelable

@@ -15,6 +15,7 @@ import com.example.cinema.R
 import com.example.cinema.databinding.FragmentAllFilmBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.typeListFilm.TypeListFilm
+import com.example.cinema.service.adapterFilmActor.AdapterFilmActor
 import com.example.cinema.service.adapterForFullFilmInfo.SimilarAdapter
 import com.example.cinema.service.cinemaPaggingAdapter.CinemaPaggingAdapter
 import com.example.cinema.service.cinemaPaggingAdapter.CinemaTopPagginAdapter
@@ -35,7 +36,7 @@ class AllFilmFragment : Fragment() {
 
     private val viewModel: AllFilmViewModel by viewModels { factory }
     lateinit var binding: FragmentAllFilmBinding
-    lateinit var typeListFilm: TypeListFilm
+    private var typeListFilm: TypeListFilm?=null
      var adapterTop:CinemaTopPagginAdapter= CinemaTopPagginAdapter{onClickFilm(it)}
      var adapter: CinemaPaggingAdapter= CinemaPaggingAdapter{onClickFilm(it)}
 
@@ -48,9 +49,16 @@ class AllFilmFragment : Fragment() {
     ): View? {
         binding= FragmentAllFilmBinding.inflate(inflater)
         arguments.let {
-            typeListFilm = it?.getParcelable<TypeListFilm>(Constance.NAME_GENRE_ALL_FILM)!!
-            binding.genreNameAllFilm.text=typeListFilm.name
-            viewModel.getCinema(typeListFilm)
+            typeListFilm = it?.getParcelable<TypeListFilm>(Constance.NAME_GENRE_ALL_FILM)
+            if (typeListFilm != null) {
+                binding.genreNameAllFilm.text = typeListFilm?.name
+                viewModel.getCinema(typeListFilm!!)
+            }
+            typeListFilm= it?.getParcelable<TypeListFilm>(Constance.ACTOR_LIST_FILM_FOR_ALL_FILM)
+            if (typeListFilm != null) {
+                binding.genreNameAllFilm.text = typeListFilm?.name
+                viewModel.getCinemaForActor(typeListFilm!!)
+            }
         }
         initrc()
 
@@ -74,6 +82,12 @@ class AllFilmFragment : Fragment() {
             binding.rcAllFilm.adapter=adapterSemillarFilm
         }?.launchIn(viewLifecycleOwner.lifecycleScope)
 
+        viewModel.actorFilm.onEach {
+            val adapter= AdapterFilmActor(true){ it->onClickFilm(it)}
+            adapter.submitList(it)
+            binding.rcAllFilm.adapter=adapter
+        }?.launchIn(viewLifecycleOwner.lifecycleScope)
+
 
         binding.allFilmBack.setOnClickListener {
             activity?.onBackPressed()
@@ -83,9 +97,9 @@ class AllFilmFragment : Fragment() {
     }
 
     fun initrc(){
-        if(typeListFilm.topFilmType!=null){
+        if(typeListFilm?.topFilmType!=null){
             binding.rcAllFilm.adapter=adapterTop
-        }else if(typeListFilm.semilarFilmId==null){
+        }else if(typeListFilm?.semilarFilmId==null){
             binding.rcAllFilm.adapter=adapter
         }
         binding.rcAllFilm.layoutManager=GridLayoutManager(context,2,GridLayoutManager.VERTICAL,false)

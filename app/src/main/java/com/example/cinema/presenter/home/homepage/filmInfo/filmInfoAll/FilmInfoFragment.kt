@@ -84,6 +84,11 @@ class FilmInfoFragment : Fragment() {
                                 bundle.putString(Constance.FILM_ALL_ACTOR_TYPE,"ACTOR")
                                 findNavController().navigate(R.id.action_filmInfoFragment_to_allActorFragment, bundle)
                             }
+                            binding.rcActor.clickActor { idActor ->
+                                val bundle = Bundle()
+                                bundle.putInt(Constance.ACTOR_ID_FOR_FULL_INFO, idActor)
+                                findNavController().navigate(R.id.action_filmInfoFragment_to_actorInfoFragment, bundle)
+                            }
                         }
 
                         if(state.workerList.second.isEmpty()) {
@@ -96,6 +101,11 @@ class FilmInfoFragment : Fragment() {
                                 bundle.putInt(Constance.FILM_ALL_ACTOR_ID,idFilm!! )
                                 bundle.putString(Constance.FILM_ALL_ACTOR_TYPE,"WORKER")
                                 findNavController().navigate(R.id.action_filmInfoFragment_to_allActorFragment, bundle)
+                            }
+                            binding.rcFilmWorker.clickActor { idActor ->
+                                val bundle = Bundle()
+                                bundle.putInt(Constance.ACTOR_ID_FOR_FULL_INFO, idActor)
+                                findNavController().navigate(R.id.action_filmInfoFragment_to_actorInfoFragment, bundle)
                             }
                         }
 

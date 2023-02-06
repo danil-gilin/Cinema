@@ -18,6 +18,7 @@ import com.example.cinema.entity.cinemaTop.Film
 import com.example.cinema.entity.galleryFilm.GalleryItem
 import com.example.cinema.entity.similarFilm.SimilarItem
 import com.example.cinema.entity.typeListFilm.TypeListFilm
+import com.example.cinema.service.adapterFilmActor.AdapterFilmActor
 import com.example.cinema.service.adapterForFullFilmInfo.ActorAdapter
 import com.example.cinema.service.adapterForFullFilmInfo.GalleryAdapter
 import com.example.cinema.service.adapterForFullFilmInfo.SimilarAdapter
@@ -31,6 +32,7 @@ class ListCinemaCustomView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
     lateinit var typeListFilmLocal: TypeListFilm
     var galleryFunction:((String,ImageView) -> Unit)?=null
+    var actorFunction:((Int) -> Unit)?=null
     var typeListFunction: ((TypeListFilm) -> Unit)?=null
     var filmInfoFunction: ((Int) -> Unit)?=null
     var itemCount=0
@@ -73,7 +75,7 @@ class ListCinemaCustomView @JvmOverloads constructor(
         }
     }
 
-    fun updateGenreFilmInfo(name:String){
+    fun updateNameList(name:String){
         binding.genreName.text=name
     }
 
@@ -89,7 +91,7 @@ class ListCinemaCustomView @JvmOverloads constructor(
     }
 
     fun updateListActor(listActor:Pair<String,List<ActorAndWorker>>,spanCount:Int,itemCounts:Int=20){
-        val adapterActorAndWorker=ActorAdapter()
+        val adapterActorAndWorker=ActorAdapter(){id->onClickActor(id)}
         binding.rcCinemaList.adapter=adapterActorAndWorker
         binding.rcCinemaList.layoutManager=GridLayoutManager(context,spanCount,GridLayoutManager.HORIZONTAL,false)
         if(listActor.second.size>itemCounts) {
@@ -100,7 +102,7 @@ class ListCinemaCustomView @JvmOverloads constructor(
         binding.genreName.text=listActor.first
     }
     fun updateListWorker(listWorker:Pair<String,List<ActorAndWorker>>,spanCount:Int,itemCounts:Int=6){
-        val adapterActorAndWorker=ActorAdapter()
+        val adapterActorAndWorker=ActorAdapter(){id->onClickActor(id)}
         binding.rcCinemaList.adapter=adapterActorAndWorker
         binding.rcCinemaList.layoutManager=GridLayoutManager(context,spanCount,GridLayoutManager.HORIZONTAL,false)
         if (listWorker.second.size>itemCounts) {
@@ -128,37 +130,46 @@ class ListCinemaCustomView @JvmOverloads constructor(
         binding.genreName.text=listSimilarFilm.first
     }
 
+    fun updateFilmActor(adapter:AdapterFilmActor){
+        binding.txtAllFilm.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.film_all,0)
+        if (adapter.itemCount<10){
+            binding.txtAllFilm.visibility= View.VISIBLE
+        }
+        binding.rcCinemaList.adapter=adapter
+    }
 
     fun onClick(){
         typeListFunction?.let { it(typeListFilmLocal) }
     }
 
-    fun onClickFilm(id:Int){
+    private fun onClickFilm(id:Int){
         filmInfoFunction?.let { it(id) }
     }
 
-    fun onClickGallery(imgUrl:String,view:ImageView){
+   private fun onClickGallery(imgUrl:String,view:ImageView){
         galleryFunction.let { it?.invoke(imgUrl,view) }
     }
-
+    private fun onClickActor(id:Int){
+        actorFunction?.let { it(id) }
+    }
     fun setClickAllFilm(onClickAllFilm: (TypeListFilm) -> Unit) {
         typeListFunction=onClickAllFilm
         binding.txtAllFilm.setOnClickListener {
             onClickAllFilm(typeListFilmLocal)
         }
     }
-
     fun setClickInfoFilm(onClickFilmId: (Int) -> Unit) {
         filmInfoFunction=onClickFilmId
     }
-
     fun allClickEmpty(onClickAllGallery: () -> Unit) {
         binding.txtAllFilm.setOnClickListener {
             onClickAllGallery()
         }
     }
-
     fun clickGallery(onClickGallery: (String,ImageView) -> Unit) {
         galleryFunction=onClickGallery
+    }
+    fun clickActor(actorfun: ((Int) -> Unit)) {
+        actorFunction=actorfun
     }
 }
