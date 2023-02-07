@@ -29,7 +29,10 @@ class ActorInfoFragment : Fragment() {
 
     private val viewModel: ActorInfoViewModel by viewModels{factory}
     lateinit var binding:FragmentActorInfoBinding
-    private val adapter=AdapterFilmActor(){it->onClickFilm(it)}
+    private val adapter=AdapterFilmActor(false,{it->onClickFilm(it)},{onClickAll()})
+
+
+
     private  var idActor=0
 
 
@@ -40,8 +43,10 @@ class ActorInfoFragment : Fragment() {
 
         binding= FragmentActorInfoBinding.inflate(inflater,container,false)
         arguments?.let {
-            idActor=it.getInt(Constance.ACTOR_ID_FOR_FULL_INFO)
-            viewModel.getActorInfo(idActor)
+            if(idActor==0){
+                idActor=it.getInt(Constance.ACTOR_ID_FOR_FULL_INFO)
+                viewModel.getActorInfo(idActor)
+            }
         }
         binding.backBtnFullInfoActor.setOnClickListener {
             findNavController().popBackStack()
@@ -55,7 +60,11 @@ class ActorInfoFragment : Fragment() {
                     }
                     is ActorInfoState.Success ->{
                         Glide.with(binding.imgFullInfoActor).load(it.actorInfo.posterUrl).centerCrop().into(binding.imgFullInfoActor)
-                        binding.txtNameFullInfoActor.text=it.actorInfo.nameRu
+                        if (it.actorInfo.nameRu !=null){
+                            binding.txtNameFullInfoActor.text=it.actorInfo.nameRu
+                        }else{
+                            binding.txtNameFullInfoActor.text=it.actorInfo.nameEn
+                        }
                         binding.txtProffessionFullInfoActor.text=it.actorInfo.profession
                         binding.listCinmaActor.updateFilmActor(adapter)
                         binding.listCinmaActor.updateNameList("Лучшее")
@@ -93,5 +102,11 @@ class ActorInfoFragment : Fragment() {
         val bundle=Bundle()
         bundle.putInt(Constance.FILM_FILM_INFO_ID,it)
         findNavController().navigate(R.id.action_actorInfoFragment_to_filmInfoFragment,bundle)
+    }
+    private fun onClickAll() {
+        val bundle=Bundle()
+        var typeFilms=TypeListFilm(name = "${binding.txtNameFullInfoActor.text} Лучшее", actorId = idActor)
+        bundle.putParcelable(Constance.ACTOR_LIST_FILM_FOR_ALL_FILM,typeFilms)
+        findNavController().navigate(R.id.action_actorInfoFragment_to_allFilmFragment,bundle)
     }
 }

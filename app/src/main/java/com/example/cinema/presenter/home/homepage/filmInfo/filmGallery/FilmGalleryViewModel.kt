@@ -22,17 +22,25 @@ class FilmGalleryViewModel @Inject constructor(private val getfilmFallery: GetFi
     val state=_state.asStateFlow()
 
     fun getFilterGalery(idFilm: Int) {
-        viewModelScope.launch {
-            _state.value=StateFilmGallery.Loading
-                _state.value=StateFilmGallery.Success(getfilmFallery.getFilmGallery(idFilm))
+        try {
+            viewModelScope.launch {
+                _state.value = StateFilmGallery.Loading
+                _state.value = StateFilmGallery.Success(getfilmFallery.getFilmGallery(idFilm))
+            }
+        }catch (e:Exception){
+            _state.value=StateFilmGallery.Error("Ошибка с интернетом")
         }
     }
 
     fun getGallery(idFilm: Int,type: String){
+        try {
             listGalleryType = Pager(
                 config = PagingConfig(pageSize = 20),
                 pagingSourceFactory = { AlllGalleryPaggingSource(idFilm, type) }
             ).flow.cachedIn(viewModelScope)
         Log.d("PaggeGallery","$listGalleryType")
+        }catch (e:Exception){
+            _state.value=StateFilmGallery.Error("Ошибка с интернетом")
+        }
     }
 }

@@ -51,13 +51,15 @@ class AllFilmFragment : Fragment() {
         arguments.let {
             typeListFilm = it?.getParcelable<TypeListFilm>(Constance.NAME_GENRE_ALL_FILM)
             if (typeListFilm != null) {
+                Log.d("bag","typeListFilm.toString() 1")
                 binding.genreNameAllFilm.text = typeListFilm?.name
                 viewModel.getCinema(typeListFilm!!)
             }
-            typeListFilm= it?.getParcelable<TypeListFilm>(Constance.ACTOR_LIST_FILM_FOR_ALL_FILM)
-            if (typeListFilm != null) {
-                binding.genreNameAllFilm.text = typeListFilm?.name
-                viewModel.getCinemaForActor(typeListFilm!!)
+           var typeListFilm2= it?.getParcelable<TypeListFilm>(Constance.ACTOR_LIST_FILM_FOR_ALL_FILM)
+            if (typeListFilm2?.actorId != null) {
+                Log.d("bag","typeListFilm.toString()")
+                binding.genreNameAllFilm.text = typeListFilm2?.name
+                viewModel.getCinemaForActor(typeListFilm2!!)
             }
         }
         initrc()
@@ -83,7 +85,7 @@ class AllFilmFragment : Fragment() {
         }?.launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.actorFilm.onEach {
-            val adapter= AdapterFilmActor(true){ it->onClickFilm(it)}
+            val adapter= AdapterFilmActor(true,{ it->onClickFilm(it)})
             adapter.submitList(it)
             binding.rcAllFilm.adapter=adapter
         }?.launchIn(viewLifecycleOwner.lifecycleScope)

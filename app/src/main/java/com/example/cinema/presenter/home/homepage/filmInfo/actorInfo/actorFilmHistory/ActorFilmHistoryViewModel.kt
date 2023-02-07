@@ -8,7 +8,6 @@ import com.example.cinema.domain.GetFilmFullInfo
 import com.example.cinema.entity.fullInfoActor.FilmWithPosterAndActor
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
 import javax.inject.Inject
 
 class ActorFilmHistoryViewModel @Inject constructor(
@@ -18,12 +17,14 @@ class ActorFilmHistoryViewModel @Inject constructor(
 
     val filterEnabled = MutableStateFlow("ACTOR")
 
-    private val _stateActorFilmHistory = MutableStateFlow<ActorFilmHistoryState>(ActorFilmHistoryState.Loading)
+    private val _stateActorFilmHistory =
+        MutableStateFlow<ActorFilmHistoryState>(ActorFilmHistoryState.Loading)
     val stateActorFilmHistory = _stateActorFilmHistory.asStateFlow()
 
     private val _films = MutableStateFlow<List<FilmWithPosterAndActor>>(emptyList())
-    val films: StateFlow<List<FilmWithPosterAndActor>> = combine(_films, filterEnabled) { films, filterEnabled ->
-        Log.d("ActorFilmHistoryViewModelList", "filterEnabled: $filterEnabled")
+    val films: StateFlow<List<FilmWithPosterAndActor>> =
+        combine(_films, filterEnabled) { films, filterEnabled ->
+            Log.d("ActorFilmHistoryViewModelList", "filterEnabled: $filterEnabled")
             when (filterEnabled) {
                 proffesionalKey[0] -> films.filter { it.professionKey == proffesionalKey[0] }
                 proffesionalKey[1] -> films.filter { it.professionKey == proffesionalKey[1] }
@@ -52,39 +53,77 @@ class ActorFilmHistoryViewModel @Inject constructor(
 
     fun getActorFilmHistory(idActor: Int) {
         viewModelScope.launch {
-            val info = getActorWorkerInfo.getActorWorkerInfo(idActor)
-            var listUrlFilmPreview = arrayListOf<FilmWithPosterAndActor>()
-            var filterString = arrayListOf<String>()
-            val reatingFilm = info.films?.sortedByDescending { it.rating }?.distinctBy { it.filmId }
-            reatingFilm?.forEach {
-                val infoFilm = getFilmFullInfo.getFilmInfo(it.filmId!!)
-                listUrlFilmPreview.add(
-                    FilmWithPosterAndActor(
-                        it.description,
-                        it.filmId,
-                        it.general,
-                        it.nameEn,
-                        it.nameRu,
-                        it.professionKey,
-                        it.rating,
-                        infoFilm?.posterUrlPreview
+            try {
+                val info = getActorWorkerInfo.getActorWorkerInfo(idActor)
+                var nameActorWorker = ""
+                var listUrlFilmPreview = arrayListOf<FilmWithPosterAndActor>()
+                var filterString = arrayListOf<String>()
+                val reatingFilm =
+                    info.films?.sortedByDescending { it.rating }?.distinctBy { it.filmId }
+                reatingFilm?.forEach {
+                    val infoFilm = getFilmFullInfo.getFilmInfo(it.filmId!!)
+                    val genre = infoFilm?.genres?.get(0)?.genre ?: null
+                    listUrlFilmPreview.add(
+                        FilmWithPosterAndActor(
+                            it.description,
+                            it.filmId,
+                            it.general,
+                            it.nameEn,
+                            it.nameRu,
+                            it.professionKey,
+                            it.rating,
+                            infoFilm?.posterUrlPreview,
+                            infoFilm?.year.toString() ?: null,
+                            genre
+                        )
                     )
-                )
-                if(!filterString.contains(it.professionKey) && it.professionKey!=null){
-                    filterString.add(it.professionKey)
+                    if (!filterString.contains(it.professionKey) && it.professionKey != null) {
+                        filterString.add(it.professionKey)
+                    }
                 }
+                var filterStringWithSize = arrayListOf<Pair<String, Int>>()
+                filterString.forEach { filter ->
+                    Log.d("ActorFilmHistoryFragment", "getActorFilmHistory: $filter")
+                    filterStringWithSize.add(
+                        Pair(
+                            filter,
+                            reatingFilm?.filter { it.professionKey == filter }?.size!!
+                        )
+                    )
+                }
+                _films.value = listUrlFilmPreview
+                if (info.nameRu != null) nameActorWorker = info.nameRu
+                else if (info.nameEn != null) nameActorWorker = info.nameEn
+                val famel = info.sex != "MALE"
+                _stateActorFilmHistory.value = ActorFilmHistoryState.Success(
+                    filterStringWithSize.sortedByDescending { it.second },
+                    nameActorWorker,
+                    famel
+                )
+            } catch (e: Exception) {
+                _stateActorFilmHistory.value = ActorFilmHistoryState.Error("Ошибка загрузки")
             }
-            var filterStringWithSize = arrayListOf<Pair<String,Int>>()
-            filterString.forEach { filter->
-                Log.d("ActorFilmHistoryFragment", "getActorFilmHistory: $filter")
-                filterStringWithSize.add(Pair(filter, reatingFilm?.filter{ it.professionKey == filter }?.size!!))
-            }
-            _films.value = listUrlFilmPreview
-            _stateActorFilmHistory.value = ActorFilmHistoryState.Success(filterStringWithSize)
         }
     }
 
-    companion object{
-        var proffesionalKey= listOf<String>("WRITER", "OPERATOR", "EDITOR", "COMPOSER", "PRODUCER_USSR", "HIMSELF", "HERSELF", "HRONO_TITR_MALE", "HRONO_TITR_FEMALE", "TRANSLATOR", "DIRECTOR", "DESIGN", "PRODUCER", "ACTOR", "VOICE_DIRECTOR", "UNKNOWN")
+    companion object {
+        var proffesionalKey = listOf<String>(
+            "WRITER",
+            "OPERATOR",
+            "EDITOR",
+            "COMPOSER",
+            "PRODUCER_USSR",
+            "HIMSELF",
+            "HERSELF",
+            "HRONO_TITR_MALE",
+            "HRONO_TITR_FEMALE",
+            "TRANSLATOR",
+            "DIRECTOR",
+            "DESIGN",
+            "PRODUCER",
+            "ACTOR",
+            "VOICE_DIRECTOR",
+            "UNKNOWN"
+        )
     }
 }

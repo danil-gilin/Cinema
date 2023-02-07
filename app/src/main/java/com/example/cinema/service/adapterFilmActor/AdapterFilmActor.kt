@@ -6,16 +6,47 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.cinema.databinding.AllCinemaItemBinding
 import com.example.cinema.databinding.CinemaItem2Binding
 import com.example.cinema.databinding.CinemaItemBinding
 import com.example.cinema.entity.fullInfoActor.FilmWithPosterAndActor
 
-class AdapterFilmActor(private val allFilm:Boolean=false,private val onClickFilm:(Int)->Unit):ListAdapter<FilmWithPosterAndActor,RecyclerView.ViewHolder>(FilmActorDiffUtil()) {
+class AdapterFilmActor(private val allFilm:Boolean=false,private val onClickFilm:(Int)->Unit,private val onClickAll:(()->Unit)?=null):ListAdapter<FilmWithPosterAndActor,RecyclerView.ViewHolder>(FilmActorDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if(allFilm)
             return FilmActorAllHolder(CinemaItem2Binding.inflate(LayoutInflater.from(parent.context),parent,false))
-        else
-            return FilmActorHolder(CinemaItemBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+        else {
+            when(viewType){
+                0->{
+                    return FilmActorHolder(
+                        CinemaItemBinding.inflate(
+                            LayoutInflater.from(parent.context),
+                            parent,
+                            false
+                        )
+                    )
+                }
+                1->{
+                    return FilmActorAllCinemaViewHolder(
+                        AllCinemaItemBinding.inflate(
+                            LayoutInflater.from(parent.context),
+                            parent,
+                            false
+                        )
+                    )
+                }
+                else->{
+                    return FilmActorHolder(
+                        CinemaItemBinding.inflate(
+                            LayoutInflater.from(parent.context),
+                            parent,
+                            false
+                        )
+                    )
+                }
+            }
+
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -48,14 +79,28 @@ class AdapterFilmActor(private val allFilm:Boolean=false,private val onClickFilm
                     }
                 }
             }
+            is FilmActorAllCinemaViewHolder->{
+                holder.binding.root.setOnClickListener {
+                    onClickAll?.invoke()
+                }
+            }
         }
 
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == itemCount - 1 && itemCount >= 10) {
+            1
+        }else{
+            0
+        }
     }
 
 }
 
 class FilmActorHolder(val binding:CinemaItemBinding): RecyclerView.ViewHolder(binding.root)
 class FilmActorAllHolder(val binding:CinemaItem2Binding): RecyclerView.ViewHolder(binding.root)
+class FilmActorAllCinemaViewHolder(val binding: AllCinemaItemBinding): RecyclerView.ViewHolder(binding.root)
 
 class FilmActorDiffUtil: DiffUtil.ItemCallback<FilmWithPosterAndActor>(){
     override fun areItemsTheSame(oldItem: FilmWithPosterAndActor, newItem: FilmWithPosterAndActor): Boolean {

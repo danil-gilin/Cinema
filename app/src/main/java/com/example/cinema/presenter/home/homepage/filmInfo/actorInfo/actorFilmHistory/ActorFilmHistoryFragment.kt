@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.cinema.R
 import com.example.cinema.databinding.FragmentActorFilmHistoryBinding
 import com.example.cinema.entity.Constance
@@ -35,7 +36,7 @@ class ActorFilmHistoryFragment : Fragment() {
     companion object {
         fun newInstance() = ActorFilmHistoryFragment()
         var proffesionalKey= listOf<String>("WRITER", "OPERATOR", "EDITOR", "COMPOSER", "PRODUCER_USSR", "HIMSELF", "HERSELF", "HRONO_TITR_MALE", "HRONO_TITR_FEMALE", "TRANSLATOR", "DIRECTOR", "DESIGN", "PRODUCER", "ACTOR", "VOICE_DIRECTOR", "UNKNOWN")
-        var proffesionalKeyRu= listOf<String>("Сценарист", "Оператор", "Редактор", "Композитор", "Продъюсер", "Играет сам себя", "Играет сама себя", "Главная роль мужчина", "Главная роль женщина", "Переводчик", "Режиссер", "Художник", "Продъюсер", "Актер", "Режиссер звука", "Неизвестно")
+        var proffesionalKeyRu= listOf<String>("Сценарист", "Оператор", "Редактор", "Композитор", "Продъюсер", "Играет сам себя", "Играет сама себя", "Мужчина: главная роль", "Женщина: главная роль", "Переводчик", "Режиссер", "Художник", "Продъюсер", "Актер", "Режиссер звука", "Неизвестно")
     }
 
     @Inject
@@ -44,7 +45,6 @@ class ActorFilmHistoryFragment : Fragment() {
     private val viewModel: ActorFilmHistoryViewModel by viewModels{factory}
     lateinit var binding: FragmentActorFilmHistoryBinding
     private  var idActor=0
-    private  var flagFirstChip=true
     private var selectedChip:Int=0
     private val adapter= AdapterFilmHistory(){idFilm->clickFilm(idFilm)}
 
@@ -57,9 +57,8 @@ class ActorFilmHistoryFragment : Fragment() {
         arguments?.let {
             if (idActor==0){
                 idActor=it.getInt(Constance.ACTOR_ID_FOR_FILM_HISTORY)
+                viewModel.getActorFilmHistory(idActor)
             }
-            Log.d("ActorFilmHistoryFragment", "onCreateView: $idActor")
-            viewModel.getActorFilmHistory(idActor)
         }
         binding.rcHistoryFilm.adapter=adapter
 
@@ -72,9 +71,11 @@ class ActorFilmHistoryFragment : Fragment() {
                     }
                     is ActorFilmHistoryState.Success ->{
                         selectedChip= proffesionalKey.indexOf(it.filterFilms[0].first)
+                        Log.d("ActorFilmHistoryFragment", "filterFilms[0]: ${it.filterFilms[0].first}")
                         viewModel.filterEnabled.value=proffesionalKey[selectedChip]
+                        binding.actorNameHistoryFilm.text=it.nameActorWorker
                         it.filterFilms.forEach{pair ->
-                            setFilterFromGallery(pair)
+                            setFilterFromGallery(pair,it.famel)
                         }
                         binding.filterHistoryFilm.setOnCheckedStateChangeListener { group, checkedIds ->
                             val chip=group.findViewById<Chip>(checkedIds[0])
@@ -107,11 +108,11 @@ class ActorFilmHistoryFragment : Fragment() {
                                     selectedChip=6
                                     viewModel.filterEnabled.value=proffesionalKey[6]
                                 }
-                                proffesionalKeyRu[7].filter {it != ' '}  ->{
+                                proffesionalKeyRu[7].filter {it != ' '&&it !=':'}  ->{
                                     selectedChip=7
                                     viewModel.filterEnabled.value=proffesionalKey[7]
                                 }
-                                proffesionalKeyRu[8].filter {it != ' '} ->{
+                                proffesionalKeyRu[8].filter {it != ' '&&it !=':'} ->{
                                     selectedChip=8
                                     viewModel.filterEnabled.value=proffesionalKey[8]
                                 }
@@ -143,6 +144,10 @@ class ActorFilmHistoryFragment : Fragment() {
                                     selectedChip=15
                                     viewModel.filterEnabled.value=proffesionalKey[15]
                                 }
+                                "Актриса"->{
+                                    selectedChip=13
+                                    viewModel.filterEnabled.value=proffesionalKey[13]
+                                }
                             }
                         }
                     }
@@ -164,6 +169,7 @@ class ActorFilmHistoryFragment : Fragment() {
 
     private fun setChipGroup(name: String, isChecked: Boolean, size: Int) {
         val chip2 = layoutInflater.inflate(R.layout.single_chip, binding.filterHistoryFilm, false) as Chip
+        chip2.id= View.generateViewId()
         val word: Spannable = SpannableString("  $size")
         word.setSpan(
             ForegroundColorSpan(Color.parseColor("#B5B5C9")),
@@ -186,30 +192,28 @@ class ActorFilmHistoryFragment : Fragment() {
         chip2.text= name
         chip2.append(word)
         chip2.isChecked=isChecked
-        if (flagFirstChip) {
-            val r: Resources = resources
-            val px = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                26.0f,
-                r.displayMetrics
-            ).toInt()
-            val params = chip2.layoutParams as ViewGroup.MarginLayoutParams
-            params.setMargins(px, 0, 0, 0)
-            chip2.layoutParams = params
-            flagFirstChip=false
-        }
         binding.filterHistoryFilm.addView(chip2)
     }
 
-    private fun setFilterFromGallery(historyAllFilm:Pair<String, Int>){
+    private fun setFilterFromGallery(historyAllFilm:Pair<String, Int>,female:Boolean=false){
         val index=proffesionalKey.indexOf(historyAllFilm.first)
         if (index in 0..15){
-            setChipGroup(proffesionalKeyRu[index],selectedChip==index,historyAllFilm.second)
+            if (index==13){
+                if(female){
+                    setChipGroup("Актриса",selectedChip==index,historyAllFilm.second)
+                }else{
+                    setChipGroup(proffesionalKeyRu[index],selectedChip==index,historyAllFilm.second)
+                }
+             }else{
+                setChipGroup(proffesionalKeyRu[index],selectedChip==index,historyAllFilm.second)
+            }
         }
     }
 
     private fun clickFilm(idFilm: Int) {
-
+        val bundle = Bundle()
+        bundle.putInt(Constance.FILM_FILM_INFO_ID, idFilm)
+        findNavController().navigate(R.id.action_actorFilmHistoryFragment_to_filmInfoFragment, bundle)
     }
 
 }

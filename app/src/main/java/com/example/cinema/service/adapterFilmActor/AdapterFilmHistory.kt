@@ -1,5 +1,6 @@
 package com.example.cinema.service.adapterFilmActor
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +42,7 @@ class AdapterFilmHistory(val onClickFilm:(Int)->Unit):ListAdapter<FilmWithPoster
             if (film.genre!=null){
                 info+=film.genre
             }
+            Log.d("AdapterFilmHistory", "onBindViewHolder: $info ++ $film")
             cinemaGenreFilmHistory.text=info
 
             root.setOnClickListener {

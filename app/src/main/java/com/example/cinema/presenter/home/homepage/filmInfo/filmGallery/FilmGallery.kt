@@ -93,12 +93,9 @@ class FilmGallery : Fragment() {
                             setFlowGallery()
                         }
                         galleryAllFilm = state.data
-                        flagFirstChip=true
                         setFilterFromGallery(state.data)
                         binding.filterGallery.setOnCheckedStateChangeListener { group, checkedId ->
-                            val chip=group.findViewById<Chip>(checkedId[0])
-
-
+                            val chip=group.findViewById<Chip>(checkedId.getOrNull(0) ?: 0)
                             when(chip.text.toString().filter { it != ' '&&it.isLetter()}) {
                                 nameTypeGallery[0] -> {
                                     selectedChip=0
@@ -167,6 +164,7 @@ class FilmGallery : Fragment() {
 
     private fun setChipGroup(name: String,isChecked:Boolean,size:Int) {
         val chip2 = layoutInflater.inflate(R.layout.single_chip, binding.filterGallery, false) as Chip
+        chip2.id= View.generateViewId()
         val word: Spannable = SpannableString("  $size")
         word.setSpan(
             ForegroundColorSpan(Color.parseColor("#B5B5C9")),
@@ -190,18 +188,6 @@ class FilmGallery : Fragment() {
         chip2.text= name
         chip2.append(word)
         chip2.isChecked=isChecked
-        if (flagFirstChip) {
-            val r: Resources = resources
-            val px = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                26.0f,
-                r.displayMetrics
-            ).toInt()
-            val params = chip2.layoutParams as ViewGroup.MarginLayoutParams
-            params.setMargins(px, 0, 0, 0)
-            chip2.layoutParams = params
-            flagFirstChip=false
-        }
         binding.filterGallery.addView(chip2)
     }
 

@@ -19,6 +19,7 @@ class ActorInfoViewModel @Inject constructor(private val getActorWorkerInfo: Get
 
     fun getActorInfo(idActor: Int) {
         viewModelScope.launch {
+            try {
             _stateActroInfo.value= ActorInfoState.Loading
           val info=  getActorWorkerInfo.getActorWorkerInfo(idActor)
             var listUrlFilmPreview= arrayListOf<FilmWithPosterAndActor>()
@@ -26,7 +27,7 @@ class ActorInfoViewModel @Inject constructor(private val getActorWorkerInfo: Get
             if (info.films?.size!! <10){
                reatingFilm= info.films?.sortedByDescending { it.rating }?.distinctBy { it.filmId}
             }else{
-                reatingFilm= info.films?.sortedByDescending { it.rating }?.distinctBy { it.filmId}?.subList(0,10)
+                reatingFilm= info.films?.sortedByDescending { it.rating }?.distinctBy { it.filmId}?.subList(0,11)
             }
             reatingFilm?.forEach {
                 val infoFilm=getFilmFullInfo.getFilmInfo(it.filmId!!)
@@ -48,6 +49,9 @@ class ActorInfoViewModel @Inject constructor(private val getActorWorkerInfo: Get
             }
             _stateActroInfo.value=
                 ActorInfoState.Success(info, listUrlFilmPreview, infoHistoryFilms)
+            }catch (e:Exception){
+                _stateActroInfo.value= ActorInfoState.Error("Ошибка загрузки")
+            }
         }
     }
     companion object {

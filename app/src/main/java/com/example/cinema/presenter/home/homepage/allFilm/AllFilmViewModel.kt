@@ -40,6 +40,7 @@ class AllFilmViewModel @Inject constructor(private val getFilmFullInfo: GetFilmF
             try {
                 Log.d("ClickAllFilm", "getCinema: ${typeListFilm.name}")
                 if (typeListFilm.topFilmType != null) {
+                    Log.d("ClickAllFilm", "getCinema: ${typeListFilm.name} 1")
                     typeListTop = Pager(
                         config = PagingConfig(pageSize = 20),
                         initialKey = null,

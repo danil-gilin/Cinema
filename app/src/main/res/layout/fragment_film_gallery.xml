@@ -45,6 +45,9 @@
             android:id="@+id/filter_gallery"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingStart="26dp"
+            app:selectionRequired="true"
             app:singleLine="true"
             app:singleSelection="true" />
     </HorizontalScrollView>
