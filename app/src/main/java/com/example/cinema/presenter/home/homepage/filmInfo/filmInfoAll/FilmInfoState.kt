@@ -10,6 +10,7 @@ sealed class FilmInfoState {
         val shotInfo1: String,
         val shotInfo2: String,
         val shotInfo3: String,
+        val name:String,
         val imgPreview: String,
         val imgLogo: String?,
         val actorList: Pair<String, List<ActorAndWorker>>,

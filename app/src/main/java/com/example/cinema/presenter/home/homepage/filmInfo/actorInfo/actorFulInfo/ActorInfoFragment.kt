@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.example.cinema.R
 import com.example.cinema.databinding.FragmentActorInfoBinding
 import com.example.cinema.entity.Constance
-import com.example.cinema.entity.typeListFilm.TypeListFilm
+import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
 import com.example.cinema.service.adapterFilmActor.AdapterFilmActor
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -70,11 +70,13 @@ class ActorInfoFragment : Fragment() {
                         binding.listCinmaActor.updateNameList("Лучшее")
                         binding.listCinmaActor.allClickEmpty{
                             val bundle=Bundle()
-                            var typeFilms:TypeListFilm
+                            var typeFilms: TypeListFilm
                             if (it.actorInfo.nameRu==null)
-                                typeFilms=TypeListFilm(name = "${it.actorInfo.nameEn} Лучшее", actorId = idActor)
+                                typeFilms=
+                                    TypeListFilm(name = "${it.actorInfo.nameEn} Лучшее", actorId = idActor)
                             else
-                               typeFilms=TypeListFilm(name = "${it.actorInfo.nameRu} Лучшее", actorId = idActor)
+                               typeFilms=
+                                   TypeListFilm(name = "${it.actorInfo.nameRu} Лучшее", actorId = idActor)
                             bundle.putParcelable(Constance.ACTOR_LIST_FILM_FOR_ALL_FILM,typeFilms)
                             findNavController().navigate(R.id.action_actorInfoFragment_to_allFilmFragment,bundle)
                         }
@@ -105,7 +107,7 @@ class ActorInfoFragment : Fragment() {
     }
     private fun onClickAll() {
         val bundle=Bundle()
-        var typeFilms=TypeListFilm(name = "${binding.txtNameFullInfoActor.text} Лучшее", actorId = idActor)
+        var typeFilms= TypeListFilm(name = "${binding.txtNameFullInfoActor.text} Лучшее", actorId = idActor)
         bundle.putParcelable(Constance.ACTOR_LIST_FILM_FOR_ALL_FILM,typeFilms)
         findNavController().navigate(R.id.action_actorInfoFragment_to_allFilmFragment,bundle)
     }

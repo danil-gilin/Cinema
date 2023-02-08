@@ -7,7 +7,7 @@ import com.example.cinema.domain.GetCinemaGenreUseCase
 import com.example.cinema.domain.GetGenreNameUseCase
 import com.example.cinema.entity.cinema.AllCinema
 import com.example.cinema.entity.cinemaTop.CinemaTop
-import com.example.cinema.entity.typeListFilm.TypeListFilm
+import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
 

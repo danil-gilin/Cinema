@@ -16,7 +16,7 @@ import com.example.cinema.databinding.AllCinemaItemBinding
 import com.example.cinema.databinding.CinemaItem2Binding
 import com.example.cinema.databinding.CinemaItemBinding
 import com.example.cinema.entity.cinema.Cinema
-import com.example.cinema.entity.typeListFilm.TypeListFilm
+import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
 
 class CinemaPaggingAdapter(val clickFilm:(Int)->Unit): PagingDataAdapter<Cinema, CinemaPaggingViewHolder>(CinemaPaggingDiffCallback()) {
 

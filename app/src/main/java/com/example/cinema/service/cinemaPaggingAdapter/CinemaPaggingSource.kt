@@ -5,7 +5,7 @@ import androidx.paging.PagingState
 import com.example.cinema.data.CinemaFullInfoRepostory
 import com.example.cinema.data.CinemaRepository
 import com.example.cinema.entity.cinema.Cinema
-import com.example.cinema.entity.typeListFilm.TypeListFilm
+import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
 import javax.inject.Inject
 
 class CinemaPaggingSource(private val typeListFilm: TypeListFilm):PagingSource<Int,Cinema>() {

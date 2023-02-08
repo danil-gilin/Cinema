@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.cinema.R
 import com.example.cinema.databinding.FragmentAllFilmBinding
 import com.example.cinema.entity.Constance
-import com.example.cinema.entity.typeListFilm.TypeListFilm
+import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
 import com.example.cinema.service.adapterFilmActor.AdapterFilmActor
 import com.example.cinema.service.adapterForFullFilmInfo.SimilarAdapter
 import com.example.cinema.service.cinemaPaggingAdapter.CinemaPaggingAdapter

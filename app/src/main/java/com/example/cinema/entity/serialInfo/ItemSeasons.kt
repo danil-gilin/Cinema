@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Item(
+data class ItemSeasons(
     @Json(name = "episodes")
     val episodes: List<Episode>,
     @Json(name = "number")

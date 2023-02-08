@@ -7,7 +7,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class InfoSeasons(
     @Json(name = "items")
-    val items: List<Item>,
+    val items: List<ItemSeasons>,
     @Json(name = "total")
     val total: Int
 )

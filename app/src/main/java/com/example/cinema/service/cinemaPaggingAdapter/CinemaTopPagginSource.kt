@@ -5,7 +5,7 @@ import androidx.paging.PagingState
 import com.example.cinema.data.CinemaRepository
 import com.example.cinema.entity.cinema.Cinema
 import com.example.cinema.entity.cinemaTop.Film
-import com.example.cinema.entity.typeListFilm.TypeListFilm
+import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
 
 class CinemaTopPagginSource(private val typeListFilm: TypeListFilm): PagingSource<Int, Film>() {
     private val repository: CinemaRepository = CinemaRepository()

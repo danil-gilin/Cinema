@@ -12,7 +12,6 @@ import com.example.cinema.entity.similarFilm.SimilarFilm
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -36,6 +35,7 @@ object CinemaRetrofitObject {
     val cinemaApi: CinemaApi = retrofit.create(CinemaApi::class.java)
     val cinemaFullInfoApi: CinemaFullInfoApi = retrofit.create(CinemaFullInfoApi::class.java)
     val actorAndWorkerFullInfoApi: ActorAndWorkerFullInfoApi = retrofit.create(ActorAndWorkerFullInfoApi::class.java)
+    val serialSeasonApi=retrofit.create(SerialSeasonApi::class.java)
 }
 
 interface CinemaApi {
@@ -99,4 +99,10 @@ interface ActorAndWorkerFullInfoApi{
     @Headers("X-API-KEY: $apiKeyForActor")
     suspend fun getActorWorkerInfo(@Path("id") idActor: Int):FullInfoActor
 
+}
+
+interface SerialSeasonApi{
+    @GET("v2.2/films/{filmId}/seasons")
+    @Headers("X-API-KEY: $apiKey")
+    suspend fun getInfoForSerial(@Path("filmId") serialId:Int): InfoSeasons
 }

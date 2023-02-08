@@ -127,10 +127,13 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                 var filmDescription:String= film?.description ?: ""
                 var filmShortDescription:String= film?.shortDescription ?: ""
 
+                var filmName= film?.nameRu ?: film?.nameEn ?: film?.nameOriginal ?: ""
+
                 _state.value = FilmInfoState.Success(
                     short_info_1,
                     short_info_2,
                     short_info_3,
+                    filmName,
                     film?.posterUrlPreview ?: "",
                     film?.logoUrl,
                     ("В фильме снимались" to (listActorAndWorker?.filter { it.professionKey == "ACTOR" && (it.nameRu != "" || it.nameEn != "") }?:emptyList())),

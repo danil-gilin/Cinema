@@ -17,7 +17,7 @@ import com.example.cinema.entity.cinema.Cinema
 import com.example.cinema.entity.cinemaTop.Film
 import com.example.cinema.entity.galleryFilm.GalleryItem
 import com.example.cinema.entity.similarFilm.SimilarItem
-import com.example.cinema.entity.typeListFilm.TypeListFilm
+import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
 import com.example.cinema.service.adapterFilmActor.AdapterFilmActor
 import com.example.cinema.service.adapterForFullFilmInfo.ActorAdapter
 import com.example.cinema.service.adapterForFullFilmInfo.GalleryAdapter

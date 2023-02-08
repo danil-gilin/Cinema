@@ -1,4 +1,4 @@
-package com.example.cinema.entity.typeListFilm
+package com.example.cinema.entity.fullInfoActor.typeListFilm
 
 import android.os.Parcelable
 import com.example.cinema.entity.fullInfoActor.Film

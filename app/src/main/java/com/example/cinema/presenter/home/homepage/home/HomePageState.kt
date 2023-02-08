@@ -2,7 +2,7 @@ package com.example.cinema.presenter.home.homepage.home
 
 import com.example.cinema.entity.cinema.AllCinema
 import com.example.cinema.entity.cinemaTop.CinemaTop
-import com.example.cinema.entity.typeListFilm.TypeListFilm
+import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
 
 sealed class HomePageState {
     object Loading : HomePageState()

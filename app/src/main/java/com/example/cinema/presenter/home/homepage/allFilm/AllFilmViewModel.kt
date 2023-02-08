@@ -16,7 +16,7 @@ import com.example.cinema.entity.cinemaTop.Film
 import com.example.cinema.entity.fullInfoActor.FilmWithPosterAndActor
 import com.example.cinema.entity.similarFilm.SimilarFilm
 import com.example.cinema.entity.similarFilm.SimilarItem
-import com.example.cinema.entity.typeListFilm.TypeListFilm
+import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
 import com.example.cinema.service.cinemaPaggingAdapter.CinemaPaggingSource
 import com.example.cinema.service.cinemaPaggingAdapter.CinemaTopPagginSource
 import kotlinx.coroutines.channels.Channel

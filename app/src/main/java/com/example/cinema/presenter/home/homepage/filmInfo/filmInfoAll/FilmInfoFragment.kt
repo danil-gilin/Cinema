@@ -19,7 +19,7 @@ import com.bumptech.glide.Glide
 import com.example.cinema.R
 import com.example.cinema.databinding.FragmentFilmInfoBinding
 import com.example.cinema.entity.Constance
-import com.example.cinema.entity.typeListFilm.TypeListFilm
+import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -154,6 +154,12 @@ class FilmInfoFragment : Fragment() {
 
                         if(state.infoSerial!=null){
                             binding.sessonInfo.text=state.infoSerial
+                            binding.serialBtn.setOnClickListener {
+                                val bundle = Bundle()
+                                bundle.putInt(Constance.SERIAL_ID_FOR_SEASON,idFilm!! )
+                                bundle.putString(Constance.SERIAL_NAME_FOR_SEASON,state.name)
+                                findNavController().navigate(R.id.action_filmInfoFragment_to_filmSerialInfoFragment, bundle)
+                            }
                         }else{
                             binding.linearSerilaInfo.visibility=View.GONE
                         }

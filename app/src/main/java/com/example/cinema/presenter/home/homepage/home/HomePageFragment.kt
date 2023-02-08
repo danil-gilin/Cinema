@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.cinema.R
 import com.example.cinema.databinding.FragmentHomePageBinding
 import com.example.cinema.entity.Constance
-import com.example.cinema.entity.typeListFilm.TypeListFilm
+import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
