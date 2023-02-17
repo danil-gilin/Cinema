@@ -12,6 +12,8 @@ import com.example.cinema.databinding.FilmHistoryItemBinding
 import com.example.cinema.entity.fullInfoActor.FilmWithPosterAndActor
 
 class AdapterFilmHistory(val onClickFilm:(Int)->Unit):ListAdapter<FilmWithPosterAndActor,FilmHistorViewHolder>(FilmHistoryDiffUtil()) {
+    private  var watchFilms= emptyList<Int>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmHistorViewHolder {
         return FilmHistorViewHolder(FilmHistoryItemBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
@@ -48,7 +50,19 @@ class AdapterFilmHistory(val onClickFilm:(Int)->Unit):ListAdapter<FilmWithPoster
             root.setOnClickListener {
                 onClickFilm(film.filmId)
             }
+
+            if(film.filmId in watchFilms ){
+                gradientImgFilmHistory.visibility=View.VISIBLE
+                cinemaSeenFilmHistory.visibility=View.VISIBLE
+            }else{
+                gradientImgFilmHistory.visibility=View.GONE
+                cinemaSeenFilmHistory.visibility=View.GONE
+            }
         }
+    }
+
+    fun updateWatchFilms(watchFilmsId:List<Int>){
+        watchFilms=watchFilmsId
     }
 }
 

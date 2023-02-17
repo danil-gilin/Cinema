@@ -1,6 +1,7 @@
 package com.example.cinema.service.adapterFilmActor
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,6 +13,9 @@ import com.example.cinema.databinding.CinemaItemBinding
 import com.example.cinema.entity.fullInfoActor.FilmWithPosterAndActor
 
 class AdapterFilmActor(private val allFilm:Boolean=false,private val onClickFilm:(Int)->Unit,private val onClickAll:(()->Unit)?=null):ListAdapter<FilmWithPosterAndActor,RecyclerView.ViewHolder>(FilmActorDiffUtil()) {
+    private  var watchFilms= emptyList<Int>()
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if(allFilm)
             return FilmActorAllHolder(CinemaItem2Binding.inflate(LayoutInflater.from(parent.context),parent,false))
@@ -63,6 +67,13 @@ class AdapterFilmActor(private val allFilm:Boolean=false,private val onClickFilm
                     if (item.rating!=null){
                         cinemaRating.text=item.rating
                     }
+                    if (item.filmId in watchFilms){
+                        gradientImg.visibility=View.VISIBLE
+                        cinemaSeen.visibility=View.VISIBLE
+                    }else{
+                        gradientImg.visibility=View.GONE
+                        cinemaSeen.visibility=View.GONE
+                    }
                 }
             }
             is FilmActorAllHolder->{
@@ -77,23 +88,34 @@ class AdapterFilmActor(private val allFilm:Boolean=false,private val onClickFilm
                     if (item.rating!=null){
                         cinemaRating2.text=item.rating
                     }
+                    if (item.filmId in watchFilms){
+                        gradientImg2.visibility=View.VISIBLE
+                        cinemaSeen2.visibility=View.VISIBLE
+                    }else{
+                        gradientImg2.visibility=View.GONE
+                        cinemaSeen2.visibility=View.GONE
+                    }
                 }
             }
             is FilmActorAllCinemaViewHolder->{
                 holder.binding.root.setOnClickListener {
                     onClickAll?.invoke()
                 }
+
             }
         }
 
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount - 1 && itemCount >= 10) {
+        return if (position == itemCount - 1 && itemCount >= 11) {
             1
         }else{
             0
         }
+    }
+    fun updateWatchFilms(watchFilmsId:List<Int>){
+        watchFilms=watchFilmsId
     }
 
 }

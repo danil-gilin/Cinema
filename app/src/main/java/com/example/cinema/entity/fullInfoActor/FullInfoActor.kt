@@ -19,7 +19,7 @@ data class FullInfoActor(
     @Json(name = "facts")
     val facts: List<String>?,
     @Json(name = "films")
-    val films: List<Film>?,
+    var films: List<Film>?,
     @Json(name = "growth")
     val growth: Int?,
     @Json(name = "hasAwards")

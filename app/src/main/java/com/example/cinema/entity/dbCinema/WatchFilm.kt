@@ -16,7 +16,7 @@ data class WatchFilm(
     @ColumnInfo(name = "genre")
     val genre:String,
     @ColumnInfo(name = "rating")
-    val rating:Double,
+    val rating: Double?,
     @ColumnInfo(name = "serial")
     val serial:Boolean,
 )

@@ -20,6 +20,7 @@ import com.example.cinema.service.adapterForFullFilmInfo.SimilarAdapter
 import com.example.cinema.service.cinemaPaggingAdapter.CinemaPaggingAdapter
 import com.example.cinema.service.cinemaPaggingAdapter.CinemaTopPagginAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -37,8 +38,9 @@ class AllFilmFragment : Fragment() {
     private val viewModel: AllFilmViewModel by viewModels { factory }
     lateinit var binding: FragmentAllFilmBinding
     private var typeListFilm: TypeListFilm?=null
-     var adapterTop:CinemaTopPagginAdapter= CinemaTopPagginAdapter{onClickFilm(it)}
-     var adapter: CinemaPaggingAdapter= CinemaPaggingAdapter{onClickFilm(it)}
+    var adapterTop:CinemaTopPagginAdapter= CinemaTopPagginAdapter{onClickFilm(it)}
+    var adapter: CinemaPaggingAdapter= CinemaPaggingAdapter{onClickFilm(it)}
+    val adapterSemillarFilm= SimilarAdapter({onClickFilm(it)}, allFilmFlag = true)
 
 
 
@@ -61,38 +63,52 @@ class AllFilmFragment : Fragment() {
                 binding.genreNameAllFilm.text = typeListFilm2?.name
                 viewModel.getCinemaForActor(typeListFilm2!!)
             }
+            viewModel.getWatchFilms()
         }
         initrc()
 
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.state.collect{state->
+                when(state){
+                    is AllFilmState.Loading->{
 
+                    }
+                    is AllFilmState.Error->{
 
+                    }
+                    is AllFilmState.Success->{
+                        viewModel.pagedCinema?.onEach {
+                            Log.d("pagedCinema",it.toString())
+                            adapter.updateWatchFilms(state.watchFilms)
+                            adapter.submitData(it)
+                        }?.launchIn(viewLifecycleOwner.lifecycleScope)
 
+                        viewModel.typeListTop?.onEach {
+                            Log.d("pagedCinema",it.toString())
+                            adapterTop.updateWatchFilms(state.watchFilms)
+                            adapterTop.submitData(it)
+                        }?.launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewModel.pagedCinema?.onEach {
-            Log.d("pagedCinema",it.toString())
-            adapter.submitData(it)
-        }?.launchIn(viewLifecycleOwner.lifecycleScope)
+                        viewModel.semilarFilm.onEach {
+                            adapterSemillarFilm.genre=it.first
+                            adapterSemillarFilm.submitList(it.second)
+                            adapterSemillarFilm.updateWatchFilms(state.watchFilms)
+                            binding.rcAllFilm.adapter=adapterSemillarFilm
+                        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewModel.typeListTop?.onEach {
-            Log.d("pagedCinema",it.toString())
-            adapterTop.submitData(it)
-        }?.launchIn(viewLifecycleOwner.lifecycleScope)
-
-        viewModel.semilarFilm?.onEach {
-            val adapterSemillarFilm= SimilarAdapter(it.first,{onClickFilm(it)}, allFilmFlag = true)
-            adapterSemillarFilm.submitList(it.second)
-            binding.rcAllFilm.adapter=adapterSemillarFilm
-        }?.launchIn(viewLifecycleOwner.lifecycleScope)
-
-        viewModel.actorFilm.onEach {
-            val adapter= AdapterFilmActor(true,{ it->onClickFilm(it)})
-            adapter.submitList(it)
-            binding.rcAllFilm.adapter=adapter
-        }?.launchIn(viewLifecycleOwner.lifecycleScope)
-
+                        viewModel.actorFilm.onEach {
+                            val adapter= AdapterFilmActor(true,{ it->onClickFilm(it)})
+                            adapter.submitList(it)
+                            adapter.updateWatchFilms(state.watchFilms)
+                            binding.rcAllFilm.adapter=adapter
+                        }.launchIn(viewLifecycleOwner.lifecycleScope)
+                    }
+                }
+            }
+        }
 
         binding.allFilmBack.setOnClickListener {
-            activity?.onBackPressed()
+            findNavController().popBackStack()
         }
 
         return binding.root

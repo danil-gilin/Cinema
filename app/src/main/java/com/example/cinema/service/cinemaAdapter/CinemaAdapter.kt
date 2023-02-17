@@ -20,6 +20,7 @@ import com.example.cinema.entity.cinema.Cinema
 class CinemaAdapter(val onClickAllFilm: () -> Unit,val clickFilm:(Int)->Unit) : ListAdapter<Cinema, ViewHolder>(
     CinemaDiffCallback()
 ) {
+    private var watchFilms= emptyList<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         if (viewType == 0) {
@@ -83,6 +84,13 @@ class CinemaAdapter(val onClickAllFilm: () -> Unit,val clickFilm:(Int)->Unit) : 
                 root.setOnClickListener {
                     clickFilm(item.kinopoiskId)
                 }
+                if(item.kinopoiskId in watchFilms){
+                    gradientImg.visibility=View.VISIBLE
+                    cinemaSeen.visibility=View.VISIBLE
+                }else{
+                    gradientImg.visibility=View.GONE
+                    cinemaSeen.visibility=View.GONE
+                }
             }
         } else  if (holder is AllCinemaViewHolder){
             with(holder) {
@@ -99,6 +107,10 @@ class CinemaAdapter(val onClickAllFilm: () -> Unit,val clickFilm:(Int)->Unit) : 
         }else{
             0
         }
+    }
+
+    fun updateWatchFilms(watchFilmsId:List<Int>){
+        watchFilms=watchFilmsId
     }
 }
 

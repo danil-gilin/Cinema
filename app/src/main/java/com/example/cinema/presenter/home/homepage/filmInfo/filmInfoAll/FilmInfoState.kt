@@ -10,7 +10,7 @@ sealed class FilmInfoState {
         val shotInfo1: String,
         val shotInfo2: String,
         val shotInfo3: String,
-        val name:String,
+        val name: String,
         val imgPreview: String,
         val imgLogo: String?,
         val actorList: Pair<String, List<ActorAndWorker>>,
@@ -21,6 +21,8 @@ sealed class FilmInfoState {
         val infoSerial: String?,
         val filmDescription: String,
         val filmShortDescription: String,
+        val isWatch: Boolean,
+        val filmsWatch: List<Int>,
     ) : FilmInfoState()
     data class Error(val error: String) : FilmInfoState()
 }

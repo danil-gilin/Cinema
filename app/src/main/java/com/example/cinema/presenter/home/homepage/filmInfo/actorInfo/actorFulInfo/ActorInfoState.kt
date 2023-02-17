@@ -8,7 +8,8 @@ sealed class ActorInfoState{
     data class Success(
         val actorInfo: FullInfoActor,
         val Films: ArrayList<FilmWithPosterAndActor>,
-        val infoHistoryFilms: String
+        val infoHistoryFilms: String,
+        val watchesFilms: List<Int>
     ): ActorInfoState()
     data class Error(val error:String): ActorInfoState()
 }

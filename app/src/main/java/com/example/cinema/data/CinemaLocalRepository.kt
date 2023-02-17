@@ -10,13 +10,20 @@ class CinemaLocalRepository @Inject constructor(
     suspend fun addWatchFilm(watchFilm: WatchFilm) {
         cinemaDao.addWatchFilm(watchFilm)
     }
+
     suspend fun addLikeFilm(watchFilm: WatchFilm) {
         cinemaDao.addLikeFilm(watchFilm)
     }
+
     suspend fun getWatchFilm(id: Int): WatchFilm? {
         return cinemaDao.getWatchFilm(id)
     }
+
     suspend fun getWatchFilmId(): List<Int> {
         return cinemaDao.getWatchFilmId()
+    }
+
+    suspend fun deleteWatchFilm(id: Int){
+        cinemaDao.deleteWatchFilm(id)
     }
 }

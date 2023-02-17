@@ -14,6 +14,7 @@ import com.example.cinema.entity.cinemaTop.Film
 class CinemaTopAdapter(val onClickAllFilm: () -> Unit,val clickFilm:(Int)->Unit): ListAdapter<Film, RecyclerView.ViewHolder>(
     CinemaTopDiffCallback()
 ) {
+    private var watchFilms= emptyList<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType== 0) {
@@ -64,6 +65,13 @@ class CinemaTopAdapter(val onClickAllFilm: () -> Unit,val clickFilm:(Int)->Unit)
                 root.setOnClickListener {
                     clickFilm(item.filmId)
                 }
+                if(item.filmId in watchFilms){
+                    gradientImg.visibility=View.VISIBLE
+                    cinemaSeen.visibility=View.VISIBLE
+                }else{
+                    gradientImg.visibility=View.GONE
+                    cinemaSeen.visibility=View.GONE
+                }
             }
         }else  if (holder is AllCinemaTopViewHolder){
             with(holder) {
@@ -80,6 +88,10 @@ class CinemaTopAdapter(val onClickAllFilm: () -> Unit,val clickFilm:(Int)->Unit)
         }else{
             0
         }
+    }
+
+    fun updateWatchFilms(watchFilmsId:List<Int>){
+        watchFilms=watchFilmsId
     }
 }
 

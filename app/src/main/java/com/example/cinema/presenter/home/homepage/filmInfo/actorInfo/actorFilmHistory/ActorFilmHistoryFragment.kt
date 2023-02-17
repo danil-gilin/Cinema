@@ -36,7 +36,7 @@ class ActorFilmHistoryFragment : Fragment() {
     companion object {
         fun newInstance() = ActorFilmHistoryFragment()
         var proffesionalKey= listOf<String>("WRITER", "OPERATOR", "EDITOR", "COMPOSER", "PRODUCER_USSR", "HIMSELF", "HERSELF", "HRONO_TITR_MALE", "HRONO_TITR_FEMALE", "TRANSLATOR", "DIRECTOR", "DESIGN", "PRODUCER", "ACTOR", "VOICE_DIRECTOR", "UNKNOWN")
-        var proffesionalKeyRu= listOf<String>("Сценарист", "Оператор", "Редактор", "Композитор", "Продъюсер", "Играет сам себя", "Играет сама себя", "Мужчина: главная роль", "Женщина: главная роль", "Переводчик", "Режиссер", "Художник", "Продъюсер", "Актер", "Режиссер звука", "Неизвестно")
+        var proffesionalKeyRu= listOf<String>("Сценарист", "Оператор", "Редактор", "Композитор", "Продъюсер СССР", "Играет сам себя", "Играет сама себя", "Мужчина: главная роль", "Женщина: главная роль", "Переводчик", "Режиссер", "Художник", "Продъюсер", "Актер", "Режиссер звука", "Неизвестно")
     }
 
     @Inject
@@ -60,6 +60,8 @@ class ActorFilmHistoryFragment : Fragment() {
                 viewModel.getActorFilmHistory(idActor)
             }
         }
+        viewModel.getWatchesFilm()
+
         binding.rcHistoryFilm.adapter=adapter
 
 
@@ -71,12 +73,15 @@ class ActorFilmHistoryFragment : Fragment() {
                     }
                     is ActorFilmHistoryState.Success ->{
                         selectedChip= proffesionalKey.indexOf(it.filterFilms[0].first)
-                        Log.d("ActorFilmHistoryFragment", "filterFilms[0]: ${it.filterFilms[0].first}")
                         viewModel.filterEnabled.value=proffesionalKey[selectedChip]
                         binding.actorNameHistoryFilm.text=it.nameActorWorker
                         it.filterFilms.forEach{pair ->
-                            setFilterFromGallery(pair,it.famel)
+                            Log.d("ActorFilmHistoryFragment", "filterFilms[0]: ${pair}")
+                            setFilter(pair,it.famel)
                         }
+
+                        adapter.updateWatchFilms(it.watchesFilms)
+
                         binding.filterHistoryFilm.setOnCheckedStateChangeListener { group, checkedIds ->
                             val chip=group.findViewById<Chip>(checkedIds[0])
                             when(chip.text.toString().filter { it != ' '&&it.isLetter()}){
@@ -97,6 +102,7 @@ class ActorFilmHistoryFragment : Fragment() {
                                     viewModel.filterEnabled.value=proffesionalKey[3]
                                 }
                                 proffesionalKeyRu[4]->{
+                                    //
                                     selectedChip=4
                                     viewModel.filterEnabled.value=proffesionalKey[4]
                                 }
@@ -129,6 +135,7 @@ class ActorFilmHistoryFragment : Fragment() {
                                     viewModel.filterEnabled.value=proffesionalKey[11]
                                 }
                                 proffesionalKeyRu[12]->{
+                                    //
                                     selectedChip=12
                                     viewModel.filterEnabled.value=proffesionalKey[12]
                                 }
@@ -163,6 +170,11 @@ class ActorFilmHistoryFragment : Fragment() {
            adapter.submitList(it)
        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
+        viewModel.watchsFilm.onEach {
+           adapter.updateWatchFilms(it)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+
 
         return binding.root
     }
@@ -195,7 +207,7 @@ class ActorFilmHistoryFragment : Fragment() {
         binding.filterHistoryFilm.addView(chip2)
     }
 
-    private fun setFilterFromGallery(historyAllFilm:Pair<String, Int>,female:Boolean=false){
+    private fun setFilter(historyAllFilm:Pair<String, Int>,female:Boolean=false){
         val index=proffesionalKey.indexOf(historyAllFilm.first)
         if (index in 0..15){
             if (index==13){

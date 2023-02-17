@@ -1,6 +1,7 @@
 package com.example.cinema.data.bd
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -19,4 +20,7 @@ interface CinemaDao {
 
     @Query("SELECT id FROM WatchFilm")
     suspend fun getWatchFilmId(): List<Int>
+
+    @Query("DELETE FROM WatchFilm WHERE id=:id")
+    suspend fun deleteWatchFilm(id: Int)
 }

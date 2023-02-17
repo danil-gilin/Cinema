@@ -1,21 +1,19 @@
 package com.example.cinema.presenter.home.homepage.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinema.domain.GetCinemaGenreUseCase
 import com.example.cinema.domain.GetGenreNameUseCase
+import com.example.cinema.domain.WatchFilmUseCase
 import com.example.cinema.entity.cinema.AllCinema
 import com.example.cinema.entity.cinemaTop.CinemaTop
 import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
 import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject
@@ -23,42 +21,28 @@ import javax.inject.Inject
 class HomePageViewModel @Inject constructor(
     private val getCinemaGenreUseCase: GetCinemaGenreUseCase,
     private val getGenreNameUseCase: GetGenreNameUseCase,
+    private val watchFilmUseCase: WatchFilmUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow<HomePageState>(HomePageState.Loading)
     val state = _state.asStateFlow()
 
-    private val _cinemaGenreChannel1 = Channel<Pair<TypeListFilm, AllCinema>> { }
-    val cinemaGenreChannel1 = _cinemaGenreChannel1.receiveAsFlow()
 
-    private val _cinemaGenreChannel2 = Channel<Pair<TypeListFilm, AllCinema>> { }
-    val cinemaGenreChannel2 = _cinemaGenreChannel2.receiveAsFlow()
 
-    private val _cinemaPremiers = Channel<Pair<TypeListFilm, AllCinema>> { }
-    val cinemaPremiers = _cinemaPremiers.receiveAsFlow()
-
-    private val _cinemaSerial = Channel<Pair<TypeListFilm, AllCinema>> { }
-    val cinemaSerial = _cinemaSerial.receiveAsFlow()
-
-    private val _cinemaPopularFilm1 = Channel<Pair<TypeListFilm, CinemaTop>> { }
-    val cinemaPopularFilm1 = _cinemaPopularFilm1.receiveAsFlow()
-
-    private val _cinemaPopularFilm2 = Channel<Pair<TypeListFilm, CinemaTop>> { }
-    val cinemaPopularFilm2 = _cinemaPopularFilm2.receiveAsFlow()
-
-    private val _test = Channel<String> { }
-    val test = _test.receiveAsFlow()
+    private val _watchsFilm = Channel<List<Int>> { }
+    val watchsFilm = _watchsFilm.receiveAsFlow()
 
     fun getCinema() {
         viewModelScope.launch {
             try {
                 _state.value = HomePageState.Loading
-                val genreCinema1 = getCinemaGenre(_cinemaGenreChannel1)
-                val genreCinema2 = getCinemaGenre(_cinemaGenreChannel2)
+                val genreCinema1 = getCinemaGenre()
+                val genreCinema2 = getCinemaGenre()
                 val premiers = getCinemaPremiers()
                 val serial = getSerial()
-                val popular = getPopularFilm("TOP_250_BEST_FILMS", "ТОП 250", _cinemaPopularFilm1)
-                val popular1 = getPopularFilm("TOP_AWAIT_FILMS", "Топ ожидаемых", _cinemaPopularFilm2)
-                _state.value = HomePageState.Success(genreCinema1,genreCinema2,premiers,serial,popular,popular1)
+                val popular = getPopularFilm("TOP_250_BEST_FILMS", "ТОП 250")
+                val popular1 = getPopularFilm("TOP_AWAIT_FILMS", "Топ ожидаемых")
+                val watchesFilm=watchFilmUseCase.getWatchFilmId()
+                _state.value = HomePageState.Success(genreCinema1,genreCinema2,premiers,serial,popular,popular1,watchesFilm)
             } catch (e: Exception) {
                 _state.value =
                     HomePageState.Error("Придумайте название \n для вашей новой коллекции |")
@@ -66,7 +50,7 @@ class HomePageViewModel @Inject constructor(
         }
     }
 
-    suspend fun getCinemaGenre(channel: Channel<Pair<TypeListFilm, AllCinema>>): Pair<TypeListFilm, AllCinema>? {
+    suspend fun getCinemaGenre(): Pair<TypeListFilm, AllCinema>? {
         val genreName = getGenreNameUseCase.getGenreName()
         var genre = 0
         var country = 0
@@ -162,7 +146,6 @@ class HomePageViewModel @Inject constructor(
     suspend fun getPopularFilm(
         type: String,
         genreName: String,
-        channel: Channel<Pair<TypeListFilm, CinemaTop>>
     ): Pair<TypeListFilm, CinemaTop>? {
 
         try {
@@ -206,6 +189,12 @@ class HomePageViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             return null
+        }
+    }
+
+    fun getWatchesFilm() {
+        viewModelScope.launch {
+            _watchsFilm.send(watchFilmUseCase.getWatchFilmId())
         }
     }
 }

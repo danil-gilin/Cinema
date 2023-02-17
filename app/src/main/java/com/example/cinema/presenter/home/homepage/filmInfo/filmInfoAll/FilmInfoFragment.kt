@@ -21,6 +21,8 @@ import com.example.cinema.databinding.FragmentFilmInfoBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -39,6 +41,7 @@ class FilmInfoFragment : Fragment() {
     private var isCollapsed: Boolean = INITIAL_IS_COLLAPSED
     private var maxLinesTxtView=0
     private var idFilm:Int?=0
+    private var stateWatch=false
     private var textFilmDescription=""
     private lateinit var typeListFilm: TypeListFilm
 
@@ -55,6 +58,7 @@ class FilmInfoFragment : Fragment() {
                 viewModel.getFilm(idFilm!!)
             }
         }
+        viewModel.getWatchesFilm()
 
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.state.collect { state ->
@@ -63,7 +67,6 @@ class FilmInfoFragment : Fragment() {
 
                     }
                     is FilmInfoState.Success -> {
-                        Log.d("idCinema", state.imgLogo.toString())
                         if(state.imgLogo!=null){
                             binding.posterImg.visibility=View.VISIBLE
                             Glide.with(binding.posterImg).load(state.imgLogo).centerInside().into(binding.posterImg)
@@ -109,8 +112,6 @@ class FilmInfoFragment : Fragment() {
                             }
                         }
 
-
-
                         if(state.galleryList.second.isEmpty()){
                             binding.rcGallery.visibility=View.GONE
                         }else{
@@ -132,12 +133,10 @@ class FilmInfoFragment : Fragment() {
                             }
                         }
 
-
-
                        if(state.similarList.second.isEmpty()) {
                            binding.rcFilm.visibility = View.GONE
                        }else {
-                           binding.rcFilm.updateListSimilarFilm(state.similarList, state.genre)
+                           binding.rcFilm.updateListSimilarFilm(state.similarList, state.genre,state.filmsWatch)
                            binding.rcFilm.updateAllFilmBtn(state.similarList.second.size)
                            binding.rcFilm.setClickInfoFilm { id ->
                                val bundle = Bundle()
@@ -151,6 +150,7 @@ class FilmInfoFragment : Fragment() {
                                  findNavController().navigate(R.id.action_filmInfoFragment_to_allFilmFragment, bundle)
                            }
                        }
+
 
                         if(state.infoSerial!=null){
                             binding.sessonInfo.text=state.infoSerial
@@ -205,7 +205,10 @@ class FilmInfoFragment : Fragment() {
                             }
                         }
 
+                        stateWatch=state.isWatch
 
+                        initBtn()
+                        initStateBtn()
 
                     }
                     is FilmInfoState.Error -> {
@@ -215,8 +218,33 @@ class FilmInfoFragment : Fragment() {
             }
         }
 
+        viewModel.watchsFilm.onEach {
+            binding.rcFilm.updateListSemilarWatchesFilms(it)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
 
         return binding.root
+    }
+
+    private fun initBtn(){
+        binding.watchBtn.setOnClickListener {
+            if (stateWatch){
+                stateWatch=false
+                binding.watchBtn.setImageResource(R.drawable.icon_un_watch)
+            }else{
+                stateWatch=true
+                binding.watchBtn.setImageResource(R.drawable.icon_watch_film_info)
+            }
+            viewModel.addWatchFilm(stateWatch)
+        }
+    }
+
+    private fun initStateBtn(){
+        if (stateWatch){
+            binding.watchBtn.setImageResource(R.drawable.icon_watch_film_info)
+        }else{
+            binding.watchBtn.setImageResource(R.drawable.icon_un_watch)
+        }
     }
 
 }

@@ -5,7 +5,8 @@ sealed class ActorFilmHistoryState{
     data class Success(
         val filterFilms: List<Pair<String, Int>>,
         val nameActorWorker: String,
-        val famel: Boolean
+        val famel: Boolean,
+        val watchesFilms: List<Int>
     ): ActorFilmHistoryState()
     data class Error(val error:String): ActorFilmHistoryState()
 }

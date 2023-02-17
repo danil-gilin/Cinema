@@ -14,6 +14,8 @@ import com.example.cinema.databinding.FragmentHomePageBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -39,6 +41,7 @@ class HomePageFragment : Fragment() {
             viewModel.getCinema()
             flagGetFilm=false
         }
+        viewModel.getWatchesFilm()
 
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.state.collect { state ->
@@ -56,33 +59,43 @@ class HomePageFragment : Fragment() {
             }
         }
 
+        viewModel.watchsFilm.onEach {
+            binding.cinemaList1.updateListCinemaWatchsFilm(it)
+            binding.cinemaList2.updateListCinemaWatchsFilm(it)
+            binding.cinemaList3.updateListCinemaWatchsFilm(it)
+            binding.cinemaList4.updateListCinemaTopWatchsFilm(it)
+            binding.cinemaList5.updateListCinemaTopWatchsFilm(it)
+            binding.cinemaList6.updateListCinemaWatchsFilm(it)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+
 
         return binding.root
     }
 
     fun updateListsFilm(state: HomePageState.Success) {
 
-                binding.cinemaList1.updateListCinema(state.genreCinema1!!.second.items)
+                binding.cinemaList1.updateListCinema(state.genreCinema1!!.second.items,state.watchesFilm)
                 binding.cinemaList1.updategenre(state.genreCinema1!!.first)
                 binding.cinemaList1.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
                 binding.cinemaList1.setClickInfoFilm{id->onClickInfoFilm(id)}
 
 
-                binding.cinemaList2.updateListCinema(state.genreCinema2!!.second.items)
+                binding.cinemaList2.updateListCinema(state.genreCinema2!!.second.items,state.watchesFilm)
                 binding.cinemaList2.updategenre(state.genreCinema2!!.first)
                 binding.cinemaList2.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
                 binding.cinemaList2.setClickInfoFilm{id->onClickInfoFilm(id)}
 
 
 
-                binding.cinemaList3.updateListCinema(state.premiers!!.second.items)
+                binding.cinemaList3.updateListCinema(state.premiers!!.second.items,state.watchesFilm)
                 binding.cinemaList3.updategenre(state.premiers.first)
                 binding.cinemaList3.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
                 binding.cinemaList3.setClickInfoFilm{id->onClickInfoFilm(id)}
 
 
 
-                binding.cinemaList4.updateListCinemaTop(state.popular!!.second.films)
+                binding.cinemaList4.updateListCinemaTop(state.popular!!.second.films,state.watchesFilm)
                 binding.cinemaList4.updategenre(state.popular!!.first)
                 binding.cinemaList4.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
                 binding.cinemaList4.setClickInfoFilm{id->onClickInfoFilm(id)}
@@ -90,14 +103,14 @@ class HomePageFragment : Fragment() {
 
 
 
-                binding.cinemaList5.updateListCinemaTop(state.popular1!!.second.films)
+                binding.cinemaList5.updateListCinemaTop(state.popular1!!.second.films,state.watchesFilm)
                 binding.cinemaList5.updategenre(state.popular1!!.first)
                 binding.cinemaList5.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
                 binding.cinemaList5.setClickInfoFilm{id->onClickInfoFilm(id)}
 
 
 
-                binding.cinemaList6.updateListCinema(state.serial!!.second.items)
+                binding.cinemaList6.updateListCinema(state.serial!!.second.items,state.watchesFilm)
                 binding.cinemaList6.updategenre(state.serial!!.first)
                 binding.cinemaList6.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
                 binding.cinemaList6.setClickInfoFilm{id->onClickInfoFilm(id)}

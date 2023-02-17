@@ -38,6 +38,7 @@ class ListCinemaCustomView @JvmOverloads constructor(
     var itemCount=0
     val adapterCinemaTop= CinemaTopAdapter({onClick()}, {onClickFilm(it)})
     val adapterCinema= CinemaAdapter({onClick()}, {onClickFilm(it)})
+    val adapterSimilar=SimilarAdapter( { it->onClickFilm(it) })
 
 
     lateinit var binding:ListCinemaCustomViewBinding
@@ -46,7 +47,7 @@ class ListCinemaCustomView @JvmOverloads constructor(
         binding.rcCinemaList.layoutManager=LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
     }
 
-    fun updateListCinema(list: List<Cinema>){
+    fun updateListCinema(list: List<Cinema>,watchFilms:List<Int>){
         binding.rcCinemaList.adapter=adapterCinema
         if(list.size>=20){
             binding.txtAllFilm.visibility= View.VISIBLE
@@ -54,6 +55,7 @@ class ListCinemaCustomView @JvmOverloads constructor(
         }else{
             adapterCinema.submitList(list)
         }
+        adapterCinema.updateWatchFilms(watchFilms)
     }
 
     fun updategenre(typeListFilm: TypeListFilm) {
@@ -65,7 +67,7 @@ class ListCinemaCustomView @JvmOverloads constructor(
         }
     }
 
-    fun updateListCinemaTop(films: List<Film>) {
+    fun updateListCinemaTop(films: List<Film>,watchFilms:List<Int>) {
         binding.rcCinemaList.adapter=adapterCinemaTop
         if(films.size>=20){
             binding.txtAllFilm.visibility= View.VISIBLE
@@ -73,6 +75,7 @@ class ListCinemaCustomView @JvmOverloads constructor(
         }else {
             adapterCinemaTop.submitList(films)
         }
+        adapterCinemaTop.updateWatchFilms(watchFilms)
     }
 
     fun updateNameList(name:String){
@@ -122,17 +125,21 @@ class ListCinemaCustomView @JvmOverloads constructor(
     }
 
 
-    fun updateListSimilarFilm(listSimilarFilm:Pair<String,List<SimilarItem>>,genre:String){
-        val adapterSimilar=SimilarAdapter(genre, { it->onClickFilm(it) })
+    fun updateListSimilarFilm(listSimilarFilm:Pair<String,List<SimilarItem>>,genre:String,watchFilms:List<Int>){
+        adapterSimilar.genre=genre
         binding.rcCinemaList.adapter=adapterSimilar
         binding.rcCinemaList.layoutManager=LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
         adapterSimilar.submitList(listSimilarFilm.second)
+        adapterSimilar.updateWatchFilms(watchFilms)
         binding.genreName.text=listSimilarFilm.first
     }
 
     fun updateFilmActor(adapter:AdapterFilmActor){
+        Log.d("FilmActor",adapter.itemCount.toString())
         binding.txtAllFilm.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.film_all,0)
-        if (adapter.itemCount<10){
+        if (adapter.itemCount<=10){
+            binding.txtAllFilm.visibility= View.GONE
+        }else{
             binding.txtAllFilm.visibility= View.VISIBLE
         }
         binding.rcCinemaList.adapter=adapter
@@ -171,5 +178,17 @@ class ListCinemaCustomView @JvmOverloads constructor(
     }
     fun clickActor(actorfun: ((Int) -> Unit)) {
         actorFunction=actorfun
+    }
+
+    fun updateListCinemaWatchsFilm(watchsFilm: List<Int>) {
+            adapterCinema.updateWatchFilms(watchsFilm)
+    }
+
+    fun updateListCinemaTopWatchsFilm(watchsFilm: List<Int>) {
+        adapterCinemaTop.updateWatchFilms(watchsFilm)
+    }
+
+    fun updateListSemilarWatchesFilms(watchsFilm: List<Int>){
+        adapterSimilar.updateWatchFilms(watchsFilm)
     }
 }

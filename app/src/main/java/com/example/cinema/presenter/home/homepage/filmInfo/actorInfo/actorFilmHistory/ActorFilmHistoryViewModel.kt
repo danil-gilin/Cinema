@@ -5,21 +5,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinema.domain.GetActorWorkerInfo
 import com.example.cinema.domain.GetFilmFullInfo
+import com.example.cinema.domain.WatchFilmUseCase
 import com.example.cinema.entity.fullInfoActor.FilmWithPosterAndActor
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ActorFilmHistoryViewModel @Inject constructor(
     private val getActorWorkerInfo: GetActorWorkerInfo,
-    private val getFilmFullInfo: GetFilmFullInfo
+    private val getFilmFullInfo: GetFilmFullInfo,
+    private val watchFilmUseCase: WatchFilmUseCase
 ) : ViewModel() {
 
     val filterEnabled = MutableStateFlow("ACTOR")
 
-    private val _stateActorFilmHistory =
-        MutableStateFlow<ActorFilmHistoryState>(ActorFilmHistoryState.Loading)
+    private val _stateActorFilmHistory = MutableStateFlow<ActorFilmHistoryState>(ActorFilmHistoryState.Loading)
     val stateActorFilmHistory = _stateActorFilmHistory.asStateFlow()
+
+    private val _watchsFilm = Channel<List<Int>> { }
+    val watchsFilm = _watchsFilm.receiveAsFlow()
 
     private val _films = MutableStateFlow<List<FilmWithPosterAndActor>>(emptyList())
     val films: StateFlow<List<FilmWithPosterAndActor>> =
@@ -53,16 +58,15 @@ class ActorFilmHistoryViewModel @Inject constructor(
 
     fun getActorFilmHistory(idActor: Int) {
         viewModelScope.launch {
-            try {
                 val info = getActorWorkerInfo.getActorWorkerInfo(idActor)
                 var nameActorWorker = ""
                 var listUrlFilmPreview = arrayListOf<FilmWithPosterAndActor>()
                 var filterString = arrayListOf<String>()
-                val reatingFilm =
-                    info.films?.sortedByDescending { it.rating }?.distinctBy { it.filmId }
+                val reatingFilm = info.films?.sortedByDescending { it.rating }?.distinctBy { it.filmId }
+
                 reatingFilm?.forEach {
                     val infoFilm = getFilmFullInfo.getFilmInfo(it.filmId!!)
-                    val genre = infoFilm?.genres?.get(0)?.genre ?: null
+                    val genre = if(infoFilm?.genres?.size!! >0) infoFilm.genres[0].genre else ""
                     listUrlFilmPreview.add(
                         FilmWithPosterAndActor(
                             it.description,
@@ -78,12 +82,12 @@ class ActorFilmHistoryViewModel @Inject constructor(
                         )
                     )
                     if (!filterString.contains(it.professionKey) && it.professionKey != null) {
+                        Log.d("ActorFilmHistoryFragment", "getActorFilmHistory: ${it.professionKey}")
                         filterString.add(it.professionKey)
                     }
                 }
                 var filterStringWithSize = arrayListOf<Pair<String, Int>>()
                 filterString.forEach { filter ->
-                    Log.d("ActorFilmHistoryFragment", "getActorFilmHistory: $filter")
                     filterStringWithSize.add(
                         Pair(
                             filter,
@@ -95,14 +99,21 @@ class ActorFilmHistoryViewModel @Inject constructor(
                 if (info.nameRu != null) nameActorWorker = info.nameRu
                 else if (info.nameEn != null) nameActorWorker = info.nameEn
                 val famel = info.sex != "MALE"
+
+                val watchesFilms=watchFilmUseCase.getWatchFilmId()
+
                 _stateActorFilmHistory.value = ActorFilmHistoryState.Success(
                     filterStringWithSize.sortedByDescending { it.second },
                     nameActorWorker,
-                    famel
+                    famel,
+                    watchesFilms,
                 )
-            } catch (e: Exception) {
-                _stateActorFilmHistory.value = ActorFilmHistoryState.Error("Ошибка загрузки")
-            }
+        }
+    }
+
+    fun getWatchesFilm() {
+        viewModelScope.launch {
+            _watchsFilm.send(watchFilmUseCase.getWatchFilmId())
         }
     }
 

@@ -4,15 +4,28 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinema.domain.GetFilmFullInfo
+import com.example.cinema.domain.WatchFilmUseCase
+import com.example.cinema.entity.dbCinema.WatchFilm
+import com.example.cinema.entity.filmInfo.FilmInfo
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilmFullInfo) :
+class FilmInfoViewModel @Inject constructor(
+    private val getFilmFullInfo: GetFilmFullInfo,
+    private val watchFilmUseCase: WatchFilmUseCase
+) :
     ViewModel() {
     private val _state = MutableStateFlow<FilmInfoState>(FilmInfoState.Loading)
     val state = _state.asStateFlow()
+
+    private val _watchsFilm = Channel<List<Int>> { }
+    val watchsFilm = _watchsFilm.receiveAsFlow()
+
+    var localFilm: FilmInfo? = null
 
 
     fun getFilm(id: Int) {
@@ -23,6 +36,7 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                 var short_info_2 = ""
                 var short_info_3 = ""
                 val film = getFilmFullInfo.getFilmInfo(id)
+                localFilm = film
                 //short 1
                 if (film?.ratingKinopoisk != null) {
                     short_info_1 += film.ratingKinopoisk
@@ -45,7 +59,9 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                 if (film?.serial == true) {
                     val infoSerialItem = getFilmFullInfo.getSerialInfo(id)
                     infoSerialItem?.items?.size.let {
-                        if (it != null && it.toString() in TenNumber|| it.toString().last() == '0') {
+                        if (it != null && it.toString() in TenNumber || it.toString()
+                                .last() == '0'
+                        ) {
                             Log.d("SessonName", "${it} ${it.toString() in "10".."20"} 1")
                             short_info_2 += " ${it} сезонов,"
                             infoSerial = "${it} сезонов,"
@@ -67,7 +83,9 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                     infoSerialItem?.items?.forEach {
                         sumEpisod += it.episodes.size
                     }
-                    if (sumEpisod != null && sumEpisod.toString() in TenNumber|| sumEpisod.toString().last() == '0') {
+                    if (sumEpisod != null && sumEpisod.toString() in TenNumber || sumEpisod.toString()
+                            .last() == '0'
+                    ) {
                         infoSerial += " ${sumEpisod} серий"
                     } else if (sumEpisod.toString().last() == '1') {
                         infoSerial += " ${sumEpisod} серия"
@@ -119,15 +137,15 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                 val listActorAndWorker = getFilmFullInfo.getActorAndWorker(id)
                 val listGallery = getFilmFullInfo.getGalerryFilm(id)
                 val listSimilar = getFilmFullInfo.getSimilarFilms(id)
-                var x =
-                    listActorAndWorker?.filter { it.professionKey != "ACTOR" && (it.nameRu != "" || it.nameEn != "") }
-                        .toString()
-                Log.d("ListWorker", x)
 
-                var filmDescription:String= film?.description ?: ""
-                var filmShortDescription:String= film?.shortDescription ?: ""
+                val filmDescription: String = film?.description ?: ""
+                val filmShortDescription: String = film?.shortDescription ?: ""
 
-                var filmName= film?.nameRu ?: film?.nameEn ?: film?.nameOriginal ?: ""
+                val filmName = film?.nameRu ?: film?.nameEn ?: film?.nameOriginal ?: ""
+
+                val isWatchFilm= watchFilmUseCase.getWatchFilm(film!!.kinopoiskId) !=null
+                val filmsWatch=watchFilmUseCase.getWatchFilmId()
+
 
                 _state.value = FilmInfoState.Success(
                     short_info_1,
@@ -136,14 +154,18 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                     filmName,
                     film?.posterUrlPreview ?: "",
                     film?.logoUrl,
-                    ("В фильме снимались" to (listActorAndWorker?.filter { it.professionKey == "ACTOR" && (it.nameRu != "" || it.nameEn != "") }?:emptyList())),
-                    ("Над фильмом работали" to( listActorAndWorker?.filter { it.professionKey != "ACTOR" && (it.nameRu != "" || it.nameEn != "") }?:emptyList())),
-                    ("Галерея" to (listGallery?.items ?:emptyList()) ),
-                    ("Похожие фильмы" to (listSimilar?.items ?:emptyList())),
+                    ("В фильме снимались" to (listActorAndWorker?.filter { it.professionKey == "ACTOR" && (it.nameRu != "" || it.nameEn != "") }
+                        ?: emptyList())),
+                    ("Над фильмом работали" to (listActorAndWorker?.filter { it.professionKey != "ACTOR" && (it.nameRu != "" || it.nameEn != "") }
+                        ?: emptyList())),
+                    ("Галерея" to (listGallery?.items ?: emptyList())),
+                    ("Похожие фильмы" to (listSimilar?.items ?: emptyList())),
                     film?.genres?.get(0)?.genre ?: "",
                     infoSerial,
                     filmDescription,
-                    filmShortDescription
+                    filmShortDescription,
+                    isWatchFilm,
+                    filmsWatch
                 )
             }
         } catch (e: Exception) {
@@ -151,7 +173,41 @@ class FilmInfoViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
         }
     }
 
+    fun addWatchFilm(stateWatch: Boolean) {
+        viewModelScope.launch {
+            if (stateWatch) {
+                if (localFilm != null) {
+                    val name =
+                        localFilm?.nameRu ?: localFilm?.nameEn ?: localFilm?.nameOriginal ?: ""
+                    val filmToDb = WatchFilm(
+                        localFilm!!.kinopoiskId,
+                        name,
+                        localFilm!!.posterUrl,
+                        localFilm!!.genres?.get(0)?.genre ?: "",
+                        localFilm!!.ratingKinopoisk,
+                        localFilm?.serial == true
+                    )
+                    watchFilmUseCase.addWatchFilm(filmToDb)
+                }
+            } else {
+                watchFilmUseCase.delWatchFilm(localFilm!!.kinopoiskId)
+            }
+        }
+    }
+
+    fun getWatchesFilm() {
+        try {
+            viewModelScope.launch {
+                _watchsFilm.send(watchFilmUseCase.getWatchFilmId())
+            }
+        }catch (e:Exception){
+
+        }
+
+    }
+
     companion object {
-        private val TenNumber = listOf<String>("10", "11", "12", "13", "14", "15", "16", "17", "18", "19")
+        private val TenNumber =
+            listOf<String>("10", "11", "12", "13", "14", "15", "16", "17", "18", "19")
     }
 }

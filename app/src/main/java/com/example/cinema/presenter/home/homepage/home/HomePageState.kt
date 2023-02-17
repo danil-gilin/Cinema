@@ -14,7 +14,9 @@ sealed class HomePageState {
         val premiers: Pair<TypeListFilm, AllCinema>?,
         val serial: Pair<TypeListFilm, AllCinema>?,
         val popular: Pair<TypeListFilm, CinemaTop>?,
-        val popular1: Pair<TypeListFilm, CinemaTop>?
-    ) : HomePageState()
+        val popular1: Pair<TypeListFilm, CinemaTop>?,
+        val watchesFilm: List<Int>,
+
+        ) : HomePageState()
 
 }

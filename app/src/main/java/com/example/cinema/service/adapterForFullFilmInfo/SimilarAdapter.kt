@@ -12,7 +12,11 @@ import com.example.cinema.databinding.CinemaItemBinding
 import com.example.cinema.entity.similarFilm.SimilarItem
 import com.example.cinema.service.cinemaPaggingAdapter.CinemaPaggingTopViewHolder
 
-class SimilarAdapter(val genre: String, val clickFilm:(Int)->Unit,private val allFilmFlag: Boolean =false) :ListAdapter<SimilarItem,RecyclerView.ViewHolder>(SimilarDiffCallback()) {
+class SimilarAdapter( val clickFilm:(Int)->Unit,private val allFilmFlag: Boolean =false) :ListAdapter<SimilarItem,RecyclerView.ViewHolder>(SimilarDiffCallback()) {
+  private  var watchFilms= emptyList<Int>()
+    var genre=""
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when(viewType){
             1->{
@@ -61,6 +65,14 @@ class SimilarAdapter(val genre: String, val clickFilm:(Int)->Unit,private val al
                    }
                    cinemaGenre.text=genre
                    root.setOnClickListener { clickFilm(item.filmId) }
+                   if(item.filmId in watchFilms)
+                   {
+                       gradientImg.visibility=View.VISIBLE
+                       cinemaSeen.visibility=View.VISIBLE
+                   }else{
+                       gradientImg.visibility=View.GONE
+                       cinemaSeen.visibility=View.GONE
+                   }
                }
            }
               is CinemaPaggingTopViewHolder->{
@@ -77,6 +89,14 @@ class SimilarAdapter(val genre: String, val clickFilm:(Int)->Unit,private val al
                       root.setOnClickListener {
                           clickFilm(item.filmId)
                       }
+                      if(item.filmId in watchFilms)
+                      {
+                          gradientImg2.visibility=View.VISIBLE
+                          cinemaSeen2.visibility=View.VISIBLE
+                      }else{
+                          gradientImg2.visibility=View.GONE
+                          cinemaSeen2.visibility=View.GONE
+                      }
                   }
               }
        }
@@ -88,6 +108,9 @@ class SimilarAdapter(val genre: String, val clickFilm:(Int)->Unit,private val al
         }else{
             return 1
         }
+    }
+    fun updateWatchFilms(watchFilmsId:List<Int>){
+        watchFilms=watchFilmsId
     }
 }
 

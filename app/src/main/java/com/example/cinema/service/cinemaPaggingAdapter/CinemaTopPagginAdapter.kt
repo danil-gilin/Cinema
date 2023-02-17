@@ -18,8 +18,10 @@ import com.example.cinema.entity.cinemaTop.Film
 
 class CinemaTopPagginAdapter(val clickFilm: (Int) -> Unit) :
     PagingDataAdapter<Film, CinemaPaggingTopViewHolder>(CinemaPaggingTopDiffCallback()) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CinemaPaggingTopViewHolder {
+    private var watchFilms= emptyList<Int>()
 
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CinemaPaggingTopViewHolder {
         return CinemaPaggingTopViewHolder(
             CinemaItem2Binding.inflate(
                 LayoutInflater.from(parent.context),
@@ -49,7 +51,18 @@ class CinemaTopPagginAdapter(val clickFilm: (Int) -> Unit) :
             root.setOnClickListener {
                 clickFilm(item.filmId)
             }
+            if (item.filmId in watchFilms){
+                gradientImg2.visibility=View.VISIBLE
+                cinemaSeen2.visibility=View.VISIBLE
+            } else{
+                gradientImg2.visibility=View.GONE
+                cinemaSeen2.visibility=View.GONE
+            }
         }
+    }
+
+    fun updateWatchFilms(watchFilmsId:List<Int>){
+        watchFilms=watchFilmsId
     }
 }
 

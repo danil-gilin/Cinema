@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.core.view.marginBottom
 import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
@@ -19,6 +20,9 @@ import com.example.cinema.entity.cinema.Cinema
 import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
 
 class CinemaPaggingAdapter(val clickFilm:(Int)->Unit): PagingDataAdapter<Cinema, CinemaPaggingViewHolder>(CinemaPaggingDiffCallback()) {
+
+    private  var watchFilms= emptyList<Int>()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CinemaPaggingViewHolder {
                 return CinemaPaggingViewHolder(
@@ -52,7 +56,19 @@ class CinemaPaggingAdapter(val clickFilm:(Int)->Unit): PagingDataAdapter<Cinema,
                 root.setOnClickListener {
                     clickFilm(item.kinopoiskId)
                 }
+                if (item.kinopoiskId in watchFilms){
+                    Log.d("item.kinopoiskId", "onBindViewHolder: ${item.kinopoiskId} ${watchFilms}")
+                    gradientImg2.visibility=View.VISIBLE
+                    cinemaSeen2.visibility=View.VISIBLE
+                }else{
+                    gradientImg2.visibility=View.GONE
+                    cinemaSeen2.visibility=View.GONE
+                }
             }
+    }
+
+    fun updateWatchFilms(watchFilmsId:List<Int>){
+        watchFilms=watchFilmsId
     }
 }
 

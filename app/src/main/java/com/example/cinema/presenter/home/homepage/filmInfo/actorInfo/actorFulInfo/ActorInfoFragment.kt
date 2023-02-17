@@ -1,6 +1,7 @@
 package com.example.cinema.presenter.home.homepage.filmInfo.actorInfo.actorFulInfo
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,8 @@ import com.example.cinema.entity.Constance
 import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
 import com.example.cinema.service.adapterFilmActor.AdapterFilmActor
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -52,6 +55,8 @@ class ActorInfoFragment : Fragment() {
             findNavController().popBackStack()
         }
 
+        viewModel.getWatchesFilm()
+
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.stateActorInfo.collect{
                 when(it){
@@ -59,6 +64,7 @@ class ActorInfoFragment : Fragment() {
 
                     }
                     is ActorInfoState.Success ->{
+                        Log.d("ActorInfoState","good")
                         Glide.with(binding.imgFullInfoActor).load(it.actorInfo.posterUrl).centerCrop().into(binding.imgFullInfoActor)
                         if (it.actorInfo.nameRu !=null){
                             binding.txtNameFullInfoActor.text=it.actorInfo.nameRu
@@ -66,7 +72,6 @@ class ActorInfoFragment : Fragment() {
                             binding.txtNameFullInfoActor.text=it.actorInfo.nameEn
                         }
                         binding.txtProffessionFullInfoActor.text=it.actorInfo.profession
-                        binding.listCinmaActor.updateFilmActor(adapter)
                         binding.listCinmaActor.updateNameList("Лучшее")
                         binding.listCinmaActor.allClickEmpty{
                             val bundle=Bundle()
@@ -80,7 +85,10 @@ class ActorInfoFragment : Fragment() {
                             bundle.putParcelable(Constance.ACTOR_LIST_FILM_FOR_ALL_FILM,typeFilms)
                             findNavController().navigate(R.id.action_actorInfoFragment_to_allFilmFragment,bundle)
                         }
+                        adapter.updateWatchFilms(it.watchesFilms)
                         adapter.submitList(it.Films)
+                        binding.listCinmaActor.updateFilmActor(adapter)
+
                         binding.filmhistoryInfo.text=it.infoHistoryFilms
 
                     }
@@ -96,6 +104,10 @@ class ActorInfoFragment : Fragment() {
             bundle.putInt(Constance.ACTOR_ID_FOR_FILM_HISTORY,idActor)
             findNavController().navigate(R.id.action_actorInfoFragment_to_actorFilmHistoryFragment,bundle)
         }
+
+        viewModel.watchsFilm.onEach {
+            adapter.updateWatchFilms(it)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         return binding.root
     }

@@ -10,6 +10,7 @@ import androidx.paging.cachedIn
 import com.example.cinema.domain.GetActorWorkerInfo
 
 import com.example.cinema.domain.GetFilmFullInfo
+import com.example.cinema.domain.WatchFilmUseCase
 import com.example.cinema.entity.cinema.AllCinema
 import com.example.cinema.entity.cinema.Cinema
 import com.example.cinema.entity.cinemaTop.Film
@@ -21,12 +22,18 @@ import com.example.cinema.service.cinemaPaggingAdapter.CinemaPaggingSource
 import com.example.cinema.service.cinemaPaggingAdapter.CinemaTopPagginSource
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 import javax.inject.Inject
 
-class AllFilmViewModel @Inject constructor(private val getFilmFullInfo: GetFilmFullInfo, private val getActorWorkerInfo: GetActorWorkerInfo) : ViewModel() {
+class AllFilmViewModel @Inject constructor(
+    private val getFilmFullInfo: GetFilmFullInfo,
+    private val getActorWorkerInfo: GetActorWorkerInfo,
+    private val watchFilmUseCase: WatchFilmUseCase
+) : ViewModel() {
     var pagedCinema: Flow<PagingData<Cinema>>? = null
     var typeListTop: Flow<PagingData<Film>>? = null
     private val _semilarFilm = Channel<Pair<String, List<SimilarItem>>> { }
@@ -34,6 +41,10 @@ class AllFilmViewModel @Inject constructor(private val getFilmFullInfo: GetFilmF
 
     private val _actorFilm = Channel<List<FilmWithPosterAndActor>> { }
     val actorFilm = _actorFilm.receiveAsFlow()
+
+    private val _state = MutableStateFlow<AllFilmState>(AllFilmState.Loading)
+    val state = _state.asStateFlow()
+
 
     fun getCinema(typeListFilm: TypeListFilm) {
         viewModelScope.launch {
@@ -72,7 +83,7 @@ class AllFilmViewModel @Inject constructor(private val getFilmFullInfo: GetFilmF
         viewModelScope.launch {
             val actorFilm = getActorWorkerInfo.getActorWorkerInfo(typeListFilm.actorId!!).films
             val listUrlFilmPreview = arrayListOf<FilmWithPosterAndActor>()
-            val exclusive = actorFilm?.sortedByDescending { it.rating }?.distinctBy { it.filmId}
+            val exclusive = actorFilm?.sortedByDescending { it.rating }?.distinctBy { it.filmId }
             exclusive?.forEach {
                 val infoFilm = getFilmFullInfo.getFilmInfo(it.filmId!!)
                 listUrlFilmPreview.add(
@@ -89,6 +100,18 @@ class AllFilmViewModel @Inject constructor(private val getFilmFullInfo: GetFilmF
                 )
             }
             _actorFilm.send(listUrlFilmPreview)
+        }
+    }
+
+    fun getWatchFilms() {
+        viewModelScope.launch {
+            _state.value = AllFilmState.Loading
+            try {
+                val watchFilms = watchFilmUseCase.getWatchFilmId()
+                _state.value = AllFilmState.Success(watchFilms)
+            } catch (e: Exception) {
+                _state.value = AllFilmState.Error(e.message ?: "Error")
+            }
         }
     }
 }
