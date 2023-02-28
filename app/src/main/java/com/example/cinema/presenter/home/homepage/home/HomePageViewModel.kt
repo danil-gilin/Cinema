@@ -1,5 +1,6 @@
 package com.example.cinema.presenter.home.homepage.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinema.domain.GetCinemaGenreUseCase

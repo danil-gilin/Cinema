@@ -9,5 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue_shadow">#0F3D3BFF</color>
     <color name="chip_ripple">#272727</color>
+    <color name="blue_radio_btn">#3D3BFF</color>
 </resources>
 

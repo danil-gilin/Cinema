@@ -8,4 +8,10 @@
         <item name="chipStrokeColor">@color/chip_stroke_color_state</item>
     </style>
 
+    <style name="ColoredHandleTheme">
+        <item name="colorControlActivated">#B33D3BFF</item>
+    </style>
+
+
+
 </resources>
