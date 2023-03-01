@@ -42,9 +42,9 @@
         app:layout_constraintTop_toBottomOf="@+id/preview_filter" />
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView"
         android:layout_width="match_parent"
         android:layout_height="31dp"
-
         android:layout_marginStart="26dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="26dp"
@@ -105,5 +105,209 @@
                 android:textSize="14sp" />
         </RadioGroup>
     </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:divider="@drawable/divider_linear_filter"
+        android:orientation="vertical"
+        android:showDividers="middle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="26dp"
+            android:paddingEnd="26dp"
+            android:clickable="true"
+            android:orientation="horizontal"
+            android:background="@drawable/ripple_filter_linear"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/county_filter_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/graphik_regular"
+                android:text="Страна"
+                android:textColor="#272727"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/country_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/graphik_regular"
+                android:gravity="end"
+                android:text="Россия"
+                android:textColor="#838390"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="26dp"
+            android:paddingEnd="26dp"
+            android:background="@drawable/ripple_filter_linear"
+            android:orientation="horizontal"
+            android:paddingTop="16dp"
+            android:clickable="true"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/genre_filter_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/graphik_regular"
+                android:text="Жанр"
+                android:textColor="#272727"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/genre_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/graphik_regular"
+                android:gravity="end"
+                android:text="Комедия"
+                android:textColor="#838390"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="26dp"
+            android:paddingEnd="26dp"
+            android:orientation="horizontal"
+            android:paddingTop="16dp"
+            android:clickable="true"
+            android:background="@drawable/ripple_filter_linear"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/year_filter_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/graphik_regular"
+                android:text="Год"
+                android:textColor="#272727"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/year_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/graphik_regular"
+                android:gravity="end"
+                android:text="с 1998 до 2017"
+                android:textColor="#838390"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingStart="26dp"
+                    android:paddingEnd="26dp">
+
+                    <TextView
+                        android:id="@+id/raiting_filter_preview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/graphik_regular"
+                        android:text="Рейтинг"
+                        android:textColor="#272727"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/raiting_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/graphik_regular"
+                        android:gravity="end"
+                        android:text="любой"
+                        android:textColor="#838390"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/raitingSlider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:labelFor="@null"
+                    android:stepSize="1.0"
+                    android:valueFrom="0.0"
+                    android:valueTo="10.0"
+                    app:haloColor="@android:color/transparent"
+                    app:labelBehavior="gone"
+                    app:thumbColor="@color/white"
+                    app:thumbStrokeColor="@color/black"
+                    app:thumbStrokeWidth="1dp"
+                    app:tickVisible="false"
+                    app:trackColorInactive="#838390"
+                    app:trackHeight="4dp"
+                    app:values="@array/default_values" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp">
+
+                    <TextView
+                        android:id="@+id/raiting_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/graphik_regular"
+                        android:text="1"
+                        android:textColor="#838390"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/raiting_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/graphik_regular"
+                        android:gravity="end"
+                        android:text="10"
+                        android:textColor="#838390"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
