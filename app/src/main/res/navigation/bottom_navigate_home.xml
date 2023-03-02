@@ -122,6 +122,11 @@
                 app:destination="@id/countryFragment"
                 app:enterAnim="@anim/nav_default_enter_anim"
                 app:exitAnim="@anim/nav_default_exit_anim" />
+            <action
+                android:id="@+id/action_filterFragment_to_genreFragment"
+                app:destination="@id/genreFragment"
+                app:enterAnim="@anim/nav_default_enter_anim"
+                app:exitAnim="@anim/nav_default_exit_anim" />
         </fragment>
         <fragment
             android:id="@+id/searchFragment"
@@ -139,6 +144,11 @@
             android:name="com.example.cinema.presenter.home.searchPage.country.CountryFragment"
             android:label="fragment_country"
             tools:layout="@layout/fragment_country" />
+        <fragment
+            android:id="@+id/genreFragment"
+            android:name="com.example.cinema.presenter.home.searchPage.genre.GenreFragment"
+            android:label="GenreFragment"
+            tools:layout="@layout/fragment_genre"/>
     </navigation>
 
 

@@ -16,7 +16,7 @@ class CountryViewModel @Inject constructor(private val getFilterCountryAndGenre:
 
     fun getCountryList(selectCountry: String) {
         viewModelScope.launch {
-           var listCountry= getFilterCountryAndGenre.getFilterCountryAndGenre()
+           var listCountry= getFilterCountryAndGenre.getFilterCountry()
             val id=listCountry.find { it.country==selectCountry }?.id ?:0
             listCountry= listCountry.filter { it.country!=selectCountry }
             val list= arrayListOf(CountryFilter(selectCountry,id))
@@ -27,7 +27,7 @@ class CountryViewModel @Inject constructor(private val getFilterCountryAndGenre:
 
     fun getCountryListSearch(countrySbstr: String) {
         viewModelScope.launch {
-            var listCountry= getFilterCountryAndGenre.getFilterCountryAndGenre()
+            var listCountry= getFilterCountryAndGenre.getFilterCountry()
             listCountry=listCountry.filter { it.country.contains(countrySbstr,true) }
             _listCountryChannel.send(listCountry)
         }

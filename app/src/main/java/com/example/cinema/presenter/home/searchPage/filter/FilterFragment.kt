@@ -46,12 +46,24 @@ class FilterFragment : Fragment() {
             findNavController().navigate(R.id.action_filterFragment_to_countryFragment,bundle)
         }
 
+        binding.genreFilterLinear.setOnClickListener {
+            val bundle=Bundle()
+            bundle.putString(Constance.GenreFilter,binding.genreFilter.text.toString())
+            findNavController().navigate(R.id.action_filterFragment_to_genreFragment,bundle)
+        }
+
         //получаем результат из фрагмента выбора страны
         setFragmentResultListener(Constance.CountryFilter) { requestKey, bundle ->
-
             val country = bundle.getString(Constance.CountryFilter)
-            val id = bundle.getInt(Constance.CountryFilterId)
+            val idCountry = bundle.getInt(Constance.CountryFilterId)
             binding.countryFilter.text=country
+        }
+
+        //получаем результат из фрагмента выбора жанра
+        setFragmentResultListener(Constance.GenreFilter) { requestKey, bundle ->
+            val genre= bundle.getString(Constance.GenreFilter)
+            val idGenre = bundle.getInt(Constance.GenreFilterId)
+            binding.genreFilter.text=genre
         }
         return binding.root
     }

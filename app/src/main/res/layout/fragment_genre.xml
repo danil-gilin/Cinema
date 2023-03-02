@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        tools:context=".presenter.home.searchPage.country.CountryFragment">
+
+
+        <TextView
+            android:id="@+id/preview_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:fontFamily="@font/graphik_medium"
+            android:text="Жанр"
+            android:textColor="#272727"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/back_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="34dp"
+            android:src="@drawable/icon_back"
+            app:layout_constraintBottom_toBottomOf="@+id/preview_genre"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/preview_genre" />
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="29dp"
+            android:layout_marginEnd="26dp"
+            android:background="@drawable/search_back"
+            android:orientation="horizontal"
+            android:showDividers="middle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/preview_genre">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/search_txt_layuot_genre"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                app:boxBackgroundMode="filled"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:hintEnabled="false"
+                app:startIconDrawable="@drawable/icon_search_">
+
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/search_txt_genre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/graphik_regular"
+                    android:hint="Фильмы, актёры, режиссёры"
+                    android:inputType="textNoSuggestions"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp"
+                    android:singleLine="true"
+                    android:textColor="#272727"
+                    android:textColorHighlight="#663D3BFF"
+                    android:textColorHint="#838390"
+                    android:textCursorDrawable="@drawable/custom_cursor_drawable"
+                    android:textSize="14sp"
+                    android:theme="@style/ColoredHandleTheme" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_genre"
+            android:layout_width="0dp"
+            android:overScrollMode="never"
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="true"
+            android:layout_marginTop="56dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
+            tools:listitem="@layout/item_search_text" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

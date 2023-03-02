@@ -3,6 +3,8 @@ package com.example.cinema.entity
 object Constance {
     const val CountryFilter= "country"
     const val CountryFilterId= "country Id"
+    const val GenreFilter= "genre"
+    const val GenreFilterId= "genre Id"
     const val SERIAL_NAME_FOR_SEASON="serial name for season"
     const  val SERIAL_ID_FOR_SEASON="serial id for season"
     const val ACTOR_ID_FOR_FILM_HISTORY="actor id for film history"

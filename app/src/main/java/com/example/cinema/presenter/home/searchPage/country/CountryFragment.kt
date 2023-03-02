@@ -33,7 +33,7 @@ class CountryFragment : Fragment() {
     private val viewModel: CountryViewModel by viewModels { factory }
     lateinit var binding: FragmentCountryBinding
     var adapter = AdapterCountry() { id, name -> selectCountry(id, name) }
-   private lateinit var selectCountry:String
+    private lateinit var selectCountry:String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +55,10 @@ class CountryFragment : Fragment() {
 
         binding.searchTxtCountry.addTextChangedListener {
             viewModel.getCountryListSearch(it.toString())
+        }
+
+        binding.backCountry.setOnClickListener {
+            findNavController().popBackStack()
         }
 
         return binding.root
