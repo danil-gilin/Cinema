@@ -4,6 +4,7 @@ import com.example.cinema.entity.actorAndWorker.ActorAndWorker
 import com.example.cinema.entity.cinema.AllCinema
 import com.example.cinema.entity.cinemaTop.CinemaTop
 import com.example.cinema.entity.filmInfo.FilmInfo
+import com.example.cinema.entity.filterEntity.GenreAndCountryFilter
 import com.example.cinema.entity.fullInfoActor.FullInfoActor
 import com.example.cinema.entity.galleryFilm.GalleryFilm
 import com.example.cinema.entity.gener.GenreName
@@ -36,6 +37,7 @@ object CinemaRetrofitObject {
     val cinemaFullInfoApi: CinemaFullInfoApi = retrofit.create(CinemaFullInfoApi::class.java)
     val actorAndWorkerFullInfoApi: ActorAndWorkerFullInfoApi = retrofit.create(ActorAndWorkerFullInfoApi::class.java)
     val serialSeasonApi=retrofit.create(SerialSeasonApi::class.java)
+    val filterApi=retrofit.create(FilterApi::class.java)
 }
 
 interface CinemaApi {
@@ -105,4 +107,10 @@ interface SerialSeasonApi{
     @GET("v2.2/films/{filmId}/seasons")
     @Headers("X-API-KEY: $apiKey")
     suspend fun getInfoForSerial(@Path("filmId") serialId:Int): InfoSeasons
+}
+
+interface FilterApi{
+    @GET("v2.2/films/filters")
+    @Headers("X-API-KEY: $apiKey")
+    suspend fun getCountryAndGenreFilter(): GenreAndCountryFilter
 }

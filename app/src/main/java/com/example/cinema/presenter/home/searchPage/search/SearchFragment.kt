@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.cinema.R
 import com.example.cinema.databinding.FragmentSearchBinding
+import com.example.cinema.service.adapter_filter.AdapterCountry
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

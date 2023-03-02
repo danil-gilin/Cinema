@@ -10,5 +10,6 @@
     <color name="blue_shadow">#0F3D3BFF</color>
     <color name="chip_ripple">#272727</color>
     <color name="blue_radio_btn">#3D3BFF</color>
+    <color name="select_item_back_ground">#4DB5B5C9</color>
 </resources>
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear_filter_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#4DB5B5C9"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/name_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:fontFamily="@font/graphik_regular"
+        android:paddingStart="26dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:text="Россия"
+        android:textColor="#272727"
+        android:textSize="16sp" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/divider_linear_filter"
+
+        />
+</LinearLayout>

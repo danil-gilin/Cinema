@@ -116,7 +116,13 @@
             android:id="@+id/filterFragment"
             android:name="com.example.cinema.presenter.home.searchPage.filter.FilterFragment"
             android:label="fragment_filter"
-            tools:layout="@layout/fragment_filter" />
+            tools:layout="@layout/fragment_filter" >
+            <action
+                android:id="@+id/action_filterFragment_to_countryFragment"
+                app:destination="@id/countryFragment"
+                app:enterAnim="@anim/nav_default_enter_anim"
+                app:exitAnim="@anim/nav_default_exit_anim" />
+        </fragment>
         <fragment
             android:id="@+id/searchFragment"
             android:name="com.example.cinema.presenter.home.searchPage.search.SearchFragment"
@@ -128,7 +134,13 @@
                 app:enterAnim="@anim/from_right_to_left"
                 app:exitAnim="@anim/stop_exit" />
         </fragment>
+        <fragment
+            android:id="@+id/countryFragment"
+            android:name="com.example.cinema.presenter.home.searchPage.country.CountryFragment"
+            android:label="fragment_country"
+            tools:layout="@layout/fragment_country" />
     </navigation>
+
 
 
 </navigation>
