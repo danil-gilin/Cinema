@@ -2,6 +2,7 @@ package com.example.cinema.presenter.home.searchPage.filter
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -56,6 +57,7 @@ class FilterFragment : Fragment() {
         setFragmentResultListener(Constance.CountryFilter) { requestKey, bundle ->
             val country = bundle.getString(Constance.CountryFilter)
             val idCountry = bundle.getInt(Constance.CountryFilterId)
+            Log.d("FilterLog","genre $idCountry")
             binding.countryFilter.text=country
         }
 
@@ -63,6 +65,7 @@ class FilterFragment : Fragment() {
         setFragmentResultListener(Constance.GenreFilter) { requestKey, bundle ->
             val genre= bundle.getString(Constance.GenreFilter)
             val idGenre = bundle.getInt(Constance.GenreFilterId)
+            Log.d("FilterLog","genre $idGenre")
             binding.genreFilter.text=genre
         }
         return binding.root

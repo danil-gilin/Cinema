@@ -17,7 +17,7 @@ class GenreViewModel @Inject constructor(private val getFilterCountryAndGenre: G
     fun getGenreList(selectGenre: String) {
         viewModelScope.launch {
             var listGenre= getFilterCountryAndGenre.getFilterGenre()
-            val id=listGenre.find { it.genre==selectGenre }?.id ?:0
+            val id=listGenre.find { it.genre==selectGenre.lowercase() }?.id ?:0
             listGenre= listGenre.filter { it.genre!=selectGenre.lowercase()}
             val list= arrayListOf(GenreFilter(selectGenre,id))
             list.addAll(listGenre)
