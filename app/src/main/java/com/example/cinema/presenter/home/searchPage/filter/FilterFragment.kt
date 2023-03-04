@@ -52,6 +52,11 @@ class FilterFragment : Fragment() {
             bundle.putString(Constance.GenreFilter,binding.genreFilter.text.toString())
             findNavController().navigate(R.id.action_filterFragment_to_genreFragment,bundle)
         }
+        binding.yearFilterLinear.setOnClickListener {
+            findNavController().navigate(R.id.action_filterFragment_to_yearFragment)
+        }
+
+
 
         //получаем результат из фрагмента выбора страны
         setFragmentResultListener(Constance.CountryFilter) { requestKey, bundle ->
