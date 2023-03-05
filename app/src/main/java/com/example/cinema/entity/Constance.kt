@@ -1,6 +1,9 @@
 package com.example.cinema.entity
 
 object Constance {
+    const val YearFilterFrom="year filter from"
+    const val YearFilter="year filter"
+    const val YearFilterTo="year filter to"
     const val CountryFilter= "country"
     const val CountryFilterId= "country Id"
     const val GenreFilter= "genre"

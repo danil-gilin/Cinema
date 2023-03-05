@@ -53,7 +53,13 @@ class FilterFragment : Fragment() {
             findNavController().navigate(R.id.action_filterFragment_to_genreFragment,bundle)
         }
         binding.yearFilterLinear.setOnClickListener {
-            findNavController().navigate(R.id.action_filterFragment_to_yearFragment)
+            val bundle=Bundle()
+            //"с 1998 до 2017" взять года
+            val pattern = Regex("\\d+")
+            val years = pattern.findAll(binding.yearFilter.text.toString()).map { it.value.toInt() }.toList()
+            bundle.putString(Constance.YearFilterFrom,years[0].toString())
+            bundle.putString(Constance.YearFilterTo,years[1].toString())
+            findNavController().navigate(R.id.action_filterFragment_to_yearFragment,bundle)
         }
 
 
@@ -73,6 +79,15 @@ class FilterFragment : Fragment() {
             Log.d("FilterLog","genre $idGenre")
             binding.genreFilter.text=genre
         }
+
+        //получаем результат из фрагмента выбора года
+        setFragmentResultListener(Constance.YearFilter) { requestKey, bundle ->
+            val yearFrom= bundle.getString(Constance.YearFilterFrom)
+            val yearTo= bundle.getString(Constance.YearFilterTo)
+            Log.d("trySelectYear", "yearFrom $yearFrom yearTo $yearTo")
+            binding.yearFilter.text="с $yearFrom до $yearTo"
+        }
+
         return binding.root
     }
 

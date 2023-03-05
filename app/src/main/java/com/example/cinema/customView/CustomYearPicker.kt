@@ -11,16 +11,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cinema.databinding.CustomYearPickerBinding
 import com.example.cinema.databinding.ListCinemaCustomViewBinding
 import com.example.cinema.service.adapter_filter.AdapterYear
+import java.util.Calendar
 
 class CustomYearPicker@JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
-    private val year=2023
+    private val year=Calendar.getInstance().get(Calendar.YEAR)
+    private var yearSelect=year
     private var yearTemp=year
     private var listYear= arrayListOf<String>()
-    private val adapterYear= AdapterYear()
+    private val adapterYear= AdapterYear(){}
 
     lateinit var binding: CustomYearPickerBinding
     init {
@@ -45,6 +47,7 @@ class CustomYearPicker@JvmOverloads constructor(
             }
             Log.d("yearTemp",yearTemp.toString())
             Log.d("listYear",listYear.toString())
+            adapterYear.lastCheckedPosition=-1
            adapterYear.submitList(listYear)
             adapterYear.notifyDataSetChanged()
         }
@@ -57,6 +60,7 @@ class CustomYearPicker@JvmOverloads constructor(
                 for (i in yearTemp-11..yearTemp){
                     listYear.add(i.toString())
                 }
+                adapterYear.lastCheckedPosition=-1
                 adapterYear.submitList(listYear)
                 adapterYear.notifyDataSetChanged()
             }else{
@@ -66,6 +70,7 @@ class CustomYearPicker@JvmOverloads constructor(
                 for (i in yearTemp-11..yearTemp){
                     listYear.add(i.toString())
                 }
+                adapterYear.lastCheckedPosition=-1
                 adapterYear.submitList(listYear)
                 adapterYear.notifyDataSetChanged()
                 Log.d("listYear","${listYear}= ${yearTemp}")
@@ -76,19 +81,33 @@ class CustomYearPicker@JvmOverloads constructor(
 
     }
 
-
-
     fun setYear(year: String){
-
+        adapterYear.checkYear=year
+        yearSelect=year.toInt()
+        while (yearSelect<yearTemp-11){
+            yearTemp -= 12
+        }
+        listYear.clear()
+        for (i in yearTemp-11..yearTemp){
+            listYear.add(i.toString())
+        }
+        adapterYear.submitList(listYear)
+        adapterYear.notifyDataSetChanged()
     }
 
-    fun setDateFrom(year: String){
-
+    fun setClickListener(click:(String)->Unit){
+        adapterYear.click=click
     }
 
-    fun setDateTo(year: String){
-
+    fun setYearTo(it: String) {
+        adapterYear.yearTo=it
     }
 
+    fun setYearFrom(it: String) {
+        adapterYear.yearFrom=it
+    }
 
+    fun getYear():String{
+        return adapterYear.checkYear
+    }
 }
