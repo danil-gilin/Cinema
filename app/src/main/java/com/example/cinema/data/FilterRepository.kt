@@ -1,13 +1,15 @@
 package com.example.cinema.data
 
 import com.example.cinema.data.retrofit.CinemaRetrofitObject
-import com.example.cinema.entity.filterEntity.CountryFilter
-import com.example.cinema.entity.filterEntity.GenreFilter
+import com.example.cinema.entity.filterEntity.*
 import javax.inject.Inject
 
 class FilterRepository @Inject constructor() {
     private var listCountry: List<CountryFilter>? = null
     private var listGenre: List<GenreFilter>? = null
+    private var filterLocal= filter
+
+
     suspend fun getFilterCountry(): List<CountryFilter> {
         return when {
             getFilterCountryLocal() != null -> getFilterCountryLocal()!!
@@ -43,5 +45,27 @@ class FilterRepository @Inject constructor() {
 
     private  fun getFilterGenreLocal(): List<GenreFilter>? {
         return listGenre
+    }
+
+    fun getFilterLocal(): Filter {
+        return filterLocal
+    }
+
+    fun setFilterLocal(filter: Filter) {
+        filterLocal=filter
+    }
+
+    companion object {
+        val filter= Filter(
+            type = TypeFilmFilter.ALL,
+            country = "Россия",
+            genre = "Комедия",
+            yearFrom = "2000",
+            yearTo = "2017",
+            ratingFrom = 5,
+            ratingTo = 10,
+            sort = SortFilter.RATING,
+            watch = false
+        )
     }
 }

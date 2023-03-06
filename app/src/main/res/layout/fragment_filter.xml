@@ -63,6 +63,7 @@
 
 
         <RadioGroup
+            android:id="@+id/radio_group_type_film"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@drawable/divider_filter"
@@ -355,6 +356,7 @@
 
 
                 <RadioGroup
+                    android:id="@+id/sort_list_by_group"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:divider="@drawable/divider_filter"
@@ -406,6 +408,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_filter_watch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -419,8 +422,8 @@
                 android:layout_height="18dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="10dp"
-                android:src="@drawable/icon_un_watch"
-                app:tint="#272727" />
+                android:src="@drawable/icon_unwatch_filter"
+           />
 
             <TextView
                 android:id="@+id/text_filter_watch"
