@@ -1,16 +1,25 @@
 package com.example.cinema.presenter.home.searchPage.search
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.cinema.domain.FilterLocalUseCase
 import com.example.cinema.domain.GetFilterCountryAndGenre
 import com.example.cinema.domain.GetSearchFilms
-import com.example.cinema.entity.filterEntity.CountryFilter
-import com.example.cinema.entity.filterEntity.FilterSearch
-import com.example.cinema.entity.filterEntity.SortFilter
-import com.example.cinema.entity.filterEntity.TypeFilmFilter
+import com.example.cinema.domain.WatchFilmUseCase
+import com.example.cinema.entity.cinemaTop.Film
+import com.example.cinema.entity.dbCinema.WatchFilm
+import com.example.cinema.entity.filterEntity.*
 import com.example.cinema.entity.searchFilm.SearchItem
+import com.example.cinema.service.adapterSearchFilms.SearchPaggingSource
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,13 +27,40 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val getSearchFilms: GetSearchFilms,
     private val filterLocalUseCase: FilterLocalUseCase,
-    private val getFilterCountryAndGenre: GetFilterCountryAndGenre
+    private val getFilterCountryAndGenre: GetFilterCountryAndGenre,
+    private val watchFilmUseCase: WatchFilmUseCase
 ) : ViewModel() {
-    private val _listSearchChannel = Channel<List<SearchItem>> { }
-    val listSearchChannel = _listSearchChannel.receiveAsFlow()
+    private val _listwatchesFilm = Channel<List<Int>> { }
+    val listwatchesFilm = _listwatchesFilm .receiveAsFlow()
 
 
-    fun getSearchList(keyWord: String) {
+    val filterForSearch = FilterSearch(
+        "ALL",
+        34,
+        13,
+        2000,
+        2017,
+        5,
+        10,
+        "RATING",
+        false,
+        "")
+
+    var listSearchPaggin: Flow<PagingData<SearchItem>> = Pager(
+    config = PagingConfig(pageSize = 20),
+    initialKey = null,
+    pagingSourceFactory = { SearchPaggingSource(filterForSearch,getSearchFilms) }
+    ).flow.cachedIn(viewModelScope)
+
+
+    fun getWatchesFilm(){
+        viewModelScope.launch {
+            val listWatchesFilm = watchFilmUseCase.getWatchFilmId()
+            _listwatchesFilm.send(listWatchesFilm)
+        }
+    }
+
+    fun getSearchListPagging(keyWord: String){
         viewModelScope.launch {
             val filter = filterLocalUseCase.getFilterLocal()
 
@@ -55,10 +91,16 @@ class SearchViewModel @Inject constructor(
                 filter.watch,
                 keyWord)
 
-            val listSearch = getSearchFilms.getSerachFilms(filterForSearch)
-            _listSearchChannel.send(listSearch)
+            //при первом заходе на фрагмент почему-то не показывает список
+            listSearchPaggin = Pager(
+                config = PagingConfig(pageSize = 20),
+                initialKey = null,
+                pagingSourceFactory = { SearchPaggingSource(filterForSearch,getSearchFilms) }
+            ).flow.cachedIn(viewModelScope)
+            Log.d("startRC","creat $listSearchPaggin")
         }
     }
+
 
 
     companion object {

@@ -157,6 +157,9 @@
             android:name="com.example.cinema.presenter.home.searchPage.year.YearFragment"
             tools:layout="@layout/fragment_year"
             android:label="YearFragment" />
+        <action
+            android:id="@+id/action_global_homePage"
+            app:destination="@id/homePage" />
     </navigation>
 
 

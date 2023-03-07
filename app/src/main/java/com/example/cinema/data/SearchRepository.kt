@@ -1,15 +1,17 @@
 package com.example.cinema.data
 
+import android.util.Log
+import com.example.cinema.data.bd.CinemaDao
 import com.example.cinema.data.retrofit.CinemaRetrofitObject
 import com.example.cinema.entity.filterEntity.Filter
 import com.example.cinema.entity.filterEntity.FilterSearch
 import com.example.cinema.entity.searchFilm.SearchItem
 import javax.inject.Inject
 
-class SearchRepository @Inject constructor() {
+class SearchRepository @Inject constructor( private val cinemaDao: CinemaDao) {
 
-    suspend fun getSearchResult(query: FilterSearch): List<SearchItem> {
-      return  CinemaRetrofitObject.searchApi.getSearchFilm(
+    suspend fun getSearchResultPage(query: FilterSearch,page:Int): List<SearchItem> {
+        val listSearch=  CinemaRetrofitObject.searchApi.getSearchFilm(
             query.type,
             query.country,
             query.genre,
@@ -18,8 +20,15 @@ class SearchRepository @Inject constructor() {
             query.ratingFrom,
             query.ratingTo,
             query.sort,
-            query.keyWord
+            query.keyWord,
+            page
         ).items
+        if (!query.watch) {
+            val listWatch =  cinemaDao.getWatchFilmId()
+            return listSearch.filter { !listWatch.contains(it.kinopoiskId) }
+        }else{
+            return listSearch
+        }
     }
 
 

@@ -67,6 +67,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:fontFamily="@font/graphik_regular"
+                android:lines="1"
+                android:maxLines="1"
                 android:text="2021, триллер"
                 android:textColor="#838390" />
         </LinearLayout>

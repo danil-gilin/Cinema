@@ -84,7 +84,6 @@ class AllFilmFragment : Fragment() {
                         }?.launchIn(viewLifecycleOwner.lifecycleScope)
 
                         viewModel.typeListTop?.onEach {
-                            Log.d("pagedCinema",it.toString())
                             adapterTop.updateWatchFilms(state.watchFilms)
                             adapterTop.submitData(it)
                         }?.launchIn(viewLifecycleOwner.lifecycleScope)
