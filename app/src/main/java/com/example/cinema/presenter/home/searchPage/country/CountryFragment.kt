@@ -58,7 +58,12 @@ class CountryFragment : Fragment() {
         }
 
         binding.backCountry.setOnClickListener {
-            findNavController().popBackStack()
+            selectCountry(0,adapter.selectCountry)
+        }
+
+        binding.clearCountry.setOnClickListener {
+            adapter.selectCountry=""
+            adapter.notifyDataSetChanged()
         }
 
         return binding.root
@@ -71,7 +76,5 @@ class CountryFragment : Fragment() {
         bundle.putString(Constance.CountryFilter,name)
         setFragmentResult(Constance.CountryFilter,bundle)
         findNavController().popBackStack()
-
-
     }
 }

@@ -15,6 +15,19 @@
 
 
     <TextView
+        android:id="@+id/clearCountry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="26dp"
+        android:text="Сбросить"
+        android:textColor="#838390"
+        app:layout_constraintBottom_toBottomOf="@+id/preview_country"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/preview_country"
+        app:layout_constraintTop_toTopOf="@+id/preview_country" />
+
+    <TextView
         android:id="@+id/preview_country"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

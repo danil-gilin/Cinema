@@ -24,9 +24,9 @@ import retrofit2.http.Query
 //6a2d7029-a0b8-4c64-8469-25bf56208176
 //543764a7-ddaa-498c-9bbb-a6d2393a6c88
 //02313c45-a6f6-47aa-9eb8-ea784b9b67f0
-const val apiKey = "a16112fd-a6d3-480c-a1bc-7ece0ea36df5"
-const val apiKeyForActor = "a16112fd-a6d3-480c-a1bc-7ece0ea36df5"
-const val apiKeySearch = "f1877a5c-f583-454d-96e7-5d4f5a242426"
+const val apiKey = "518a1c18-031a-423c-92ea-dbdb897c776b"
+const val apiKeyForActor = "518a1c18-031a-423c-92ea-dbdb897c776b"
+const val apiKeySearch = "518a1c18-031a-423c-92ea-dbdb897c776b"
 const val baseUrl = "https://kinopoiskapiunofficial.tech/api/"
 
 object CinemaRetrofitObject {
@@ -138,10 +138,10 @@ interface SearchApi {
     @Headers("X-API-KEY: $apiKeySearch")
     suspend fun getSearchFilm(
         @Query("type") type: String,
-        @Query("countries") countries: Int,
-        @Query("genres") genres: Int,
-        @Query("yearFrom") yearFrom: Int,
-        @Query("yearTo") yearTo: Int,
+        @Query("countries") countries: Int?,
+        @Query("genres") genres: Int?,
+        @Query("yearFrom") yearFrom: Int?,
+        @Query("yearTo") yearTo: Int?,
         @Query("ratingFrom") ratingFrom: Int,
         @Query("ratingTo") ratingTo: Int,
         @Query("order") order: String,

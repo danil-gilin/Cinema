@@ -63,7 +63,12 @@ class GenreFragment : Fragment() {
         }
 
         binding.backGenre.setOnClickListener {
-            findNavController().popBackStack()
+            selectGenre(0,"")
+        }
+
+        binding.clearGenre.setOnClickListener {
+            adapter.selectGenre=""
+            adapter.notifyDataSetChanged()
         }
 
 

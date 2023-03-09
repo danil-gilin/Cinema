@@ -76,15 +76,23 @@ class SearchViewModel @Inject constructor(
             }
 
             //find id country and genre
-            val idCountry = getFilterCountryAndGenre.getFilterCountry().first { it.country == filter.country }.id
-            val idGenre = getFilterCountryAndGenre.getFilterGenre().first { it.genre == filter.genre.lowercase() }.id
+            val idCountry= if(filter.country==""){
+                null
+            }else{
+                getFilterCountryAndGenre.getFilterCountry().first { it.country == filter.country }.id
+            }
+            val idGenre = if (filter.genre == "") {
+                null
+            }else{
+                getFilterCountryAndGenre.getFilterGenre().first { it.genre == filter.genre.lowercase() }.id
+            }
 
             val filterForSearch = FilterSearch(
                 type,
                 idCountry,
                 idGenre,
-                filter.yearFrom.toInt(),
-                filter.yearTo.toInt(),
+                if(filter.yearFrom!="") filter.yearFrom.toInt() else null,
+                if(filter.yearTo!="") filter.yearTo.toInt() else null,
                 filter.ratingFrom,
                 filter.ratingTo,
                 sort,

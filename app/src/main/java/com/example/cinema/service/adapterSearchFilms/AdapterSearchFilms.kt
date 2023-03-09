@@ -46,7 +46,17 @@ class AdapterSearchFilms(val click: (Int) -> Unit) : PagingDataAdapter<SearchIte
                 gradientImgFilmSearch.visibility = View.GONE
                 cinemaSeenFilmSearch.visibility = View.GONE
             }
-            cinemaGenreFilmSearch.text="${item?.year}, ${item?.genres?.get(0)?.genre}"
+
+            if (item?.genres?.size!=0){
+                if(item?.year!=null){
+                    cinemaGenreFilmSearch.text="${item?.year}, ${item?.genres?.get(0)?.genre}"
+                }else
+                    cinemaGenreFilmSearch.text="${item?.genres?.get(0)?.genre}"
+            }else if (item?.year!=null){
+                cinemaGenreFilmSearch.text="${item?.year}"
+            }else{
+                cinemaGenreFilmSearch.visibility= View.GONE
+            }
 
             root.setOnClickListener {
                 click(item?.kinopoiskId!!)

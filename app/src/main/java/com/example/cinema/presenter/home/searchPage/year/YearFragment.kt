@@ -40,6 +40,8 @@ class YearFragment : Fragment() {
     ): View? {
         binding=FragmentYearBinding.inflate(inflater)
         arguments?.let {
+            Log.d("YearGet",it.getString(Constance.YearFilterFrom,"").toString())
+            Log.d("YearGet",it.getString(Constance.YearFilterTo,"").toString())
             binding.yearFrom.setYear(it.getString(Constance.YearFilterFrom,""))
             binding.yearTo.setYear(it.getString(Constance.YearFilterTo,""))
             binding.yearFrom.setYearFrom(it.getString(Constance.YearFilterTo,""))
@@ -55,6 +57,11 @@ class YearFragment : Fragment() {
 
         binding.yearFrom.setClickListener {
             binding.yearTo.setYearTo(it)
+        }
+
+        binding.clearYear.setOnClickListener {
+            binding.yearFrom.clearYear("1000")
+            binding.yearTo.clearYear("3000")
         }
 
         binding.selectYears.setOnClickListener {

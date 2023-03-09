@@ -25,7 +25,7 @@ class FilterViewModel @Inject constructor(
     }
 
     fun setFilter(type: TypeFilter, date: Any) {
-        val filterTemp=filterLocalUseCase.getFilterLocal()
+        val filterTemp = filterLocalUseCase.getFilterLocal()
         viewModelScope.launch {
             when (type) {
                 TypeFilter.TYPE -> filterTemp.type = date as TypeFilmFilter
@@ -33,8 +33,16 @@ class FilterViewModel @Inject constructor(
                 TypeFilter.GENRE -> filterTemp.genre = date as String
                 TypeFilter.YEARFROM -> filterTemp.yearFrom = date as String
                 TypeFilter.YEARTO -> filterTemp.yearTo = date as String
-                TypeFilter.RATINGFROM -> filterTemp.ratingFrom = date as Int
-                TypeFilter.RATINGTO -> filterTemp.ratingTo = date as Int
+                TypeFilter.RATINGFROM -> {
+                    val rating= date as Pair<Int, Int>
+                    filterTemp.ratingFrom = rating.first
+                    filterTemp.ratingTo = rating.second
+                }
+                TypeFilter.RATINGTO -> {
+                   val rating= date as Pair<Int, Int>
+                    filterTemp.ratingFrom = rating.first
+                    filterTemp.ratingTo = rating.second
+                }
                 TypeFilter.SORT -> filterTemp.sort = date as SortFilter
                 TypeFilter.WATCH -> filterTemp.watch = date as Boolean
             }

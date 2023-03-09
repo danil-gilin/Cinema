@@ -82,6 +82,7 @@ class CustomYearPicker@JvmOverloads constructor(
     }
 
     fun setYear(year: String){
+        if(year!=""){
         adapterYear.checkYear=year
         yearSelect=year.toInt()
         while (yearSelect<yearTemp-11){
@@ -93,6 +94,7 @@ class CustomYearPicker@JvmOverloads constructor(
         }
         adapterYear.submitList(listYear)
         adapterYear.notifyDataSetChanged()
+        }
     }
 
     fun setClickListener(click:(String)->Unit){
@@ -104,7 +106,16 @@ class CustomYearPicker@JvmOverloads constructor(
     }
 
     fun setYearFrom(it: String) {
+        Log.d("yearSelect","$it select")
         adapterYear.yearFrom=it
+    }
+
+    fun clearYear(year: String){
+        adapterYear.yearFrom=""
+        adapterYear.lastCheckedPosition=-1
+        adapterYear.checkYear=""
+        adapterYear.yearTo=""
+        adapterYear.notifyDataSetChanged()
     }
 
     fun getYear():String{
