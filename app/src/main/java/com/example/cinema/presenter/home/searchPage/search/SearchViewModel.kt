@@ -18,9 +18,7 @@ import com.example.cinema.entity.searchFilm.SearchItem
 import com.example.cinema.service.adapterSearchFilms.SearchPaggingSource
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,6 +30,9 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
     private val _listwatchesFilm = Channel<List<Int>> { }
     val listwatchesFilm = _listwatchesFilm .receiveAsFlow()
+
+    private val _state= MutableStateFlow<SearchState>(SearchState.Loading)
+    val state= _state.asStateFlow()
 
 
     val filterForSearch = FilterSearch(
@@ -62,6 +63,7 @@ class SearchViewModel @Inject constructor(
 
     fun getSearchListPagging(keyWord: String){
         viewModelScope.launch {
+            _state.value=SearchState.Loading
             val filter = filterLocalUseCase.getFilterLocal()
 
             val type = when (filter.type) {
@@ -99,13 +101,18 @@ class SearchViewModel @Inject constructor(
                 filter.watch,
                 keyWord)
 
-            //при первом заходе на фрагмент почему-то не показывает список
-            listSearchPaggin = Pager(
-                config = PagingConfig(pageSize = 20),
-                initialKey = null,
-                pagingSourceFactory = { SearchPaggingSource(filterForSearch,getSearchFilms) }
-            ).flow.cachedIn(viewModelScope)
-            Log.d("startRC","creat $listSearchPaggin")
+
+            val listCheckForEmpty= getSearchFilms.getSerachFilmsPagging(filterForSearch,1)
+            if(listCheckForEmpty.isEmpty()){
+                _state.value=SearchState.Empty
+            }else{
+                listSearchPaggin = Pager(
+                    config = PagingConfig(pageSize = 20),
+                    initialKey = null,
+                    pagingSourceFactory = { SearchPaggingSource(filterForSearch,getSearchFilms) }
+                ).flow.cachedIn(viewModelScope)
+                _state.value=SearchState.Success(listSearchPaggin)
+            }
         }
     }
 

@@ -10,11 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.example.cinema.R
 import com.example.cinema.databinding.FragmentSearchBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.service.adapterSearchFilms.AdapterSearchFilms
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -40,6 +43,7 @@ class SearchFragment : Fragment() {
         binding.recyclerSearch.adapter=adapter
 
        viewModel.getWatchesFilm()
+        viewModel.getSearchListPagging("")
 
         binding.imgFilter.setOnClickListener {
             binding.linearFilter.isPressed = true
@@ -49,20 +53,36 @@ class SearchFragment : Fragment() {
 
        binding.searchTxt.addTextChangedListener {
             viewModel.getSearchListPagging(it.toString())
-            viewModel.listSearchPaggin?.onEach {film->
-                adapter.submitData(film)
-            }?.launchIn(viewLifecycleOwner.lifecycleScope)
         }
-
-        viewModel.listSearchPaggin.onEach {film->
-            adapter.submitData(film)
-        }?.launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.listwatchesFilm.onEach {
             adapter.watchFilm=it
             adapter.notifyDataSetChanged()
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.state.collect {
+                when (it) {
+                    is SearchState.Success -> {
+                        it.flowList.onEach {film->
+                            adapter.submitData(film)
+                        }.launchIn(viewLifecycleOwner.lifecycleScope)
+                        binding.notFoundTxt.visibility=View.GONE
+                    }
+                    is SearchState.Error -> {
+                        Log.d("SearchFragment",  it.error)
+                        binding.notFoundTxt.visibility=View.GONE
+                    }
+                    is SearchState.Loading -> {
+                        Log.d("SearchFragment", "Loading")
+                    }
+                    is SearchState.Empty -> {
+                        adapter.submitData(PagingData.empty())
+                        binding.notFoundTxt.visibility=View.VISIBLE
+                    }
+                }
+            }
+        }
 
         return binding.root
     }
