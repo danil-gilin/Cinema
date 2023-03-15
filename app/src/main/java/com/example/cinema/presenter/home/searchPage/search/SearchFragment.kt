@@ -34,6 +34,7 @@ class SearchFragment : Fragment() {
     private val viewModel: SearchViewModel by viewModels { factory }
     lateinit var binding:FragmentSearchBinding
     private val adapter=AdapterSearchFilms(){it->clickFilm(it)}
+    private var getFilmFlag=true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,11 +44,14 @@ class SearchFragment : Fragment() {
         binding.recyclerSearch.adapter=adapter
 
        viewModel.getWatchesFilm()
-        viewModel.getSearchListPagging("")
+        if(getFilmFlag){
+            viewModel.getSearchListPagging("")
+        }
 
         binding.imgFilter.setOnClickListener {
             binding.linearFilter.isPressed = true
             binding.linearFilter.postDelayed({ binding.linearFilter.isPressed = false }, 100)
+            getFilmFlag=true
             findNavController().navigate(R.id.action_searchFragment_to_filterFragment)
         }
 
@@ -90,6 +94,8 @@ class SearchFragment : Fragment() {
     private fun clickFilm(id:Int){
         val bundle=Bundle()
         bundle.putInt(Constance.FILM_FILM_INFO_ID,id)
+        getFilmFlag=false
+        findNavController().navigate(R.id.action_searchFragment_to_filmInfoFragment,bundle)
     }
 
 }
