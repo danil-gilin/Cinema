@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "LikeFilm")
-data class LikeFilm(
+@Entity(tableName = "WantToWatchFilm")
+data class WantToWatchFilm(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id:Int,
@@ -16,7 +16,7 @@ data class LikeFilm(
     @ColumnInfo(name = "genre")
     val genre:String,
     @ColumnInfo(name = "rating")
-    val rating:Double?,
+    val rating: Double?,
     @ColumnInfo(name = "serial")
     val serial:Boolean,
 )

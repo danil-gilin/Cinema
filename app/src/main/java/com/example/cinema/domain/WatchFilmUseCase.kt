@@ -11,7 +11,5 @@ class WatchFilmUseCase @Inject constructor (private val cinemaLocalRepository: C
 
     suspend fun addWatchFilm(watchFilm: WatchFilm)=cinemaLocalRepository.addWatchFilm(watchFilm)
 
-    suspend fun delWatchFilm(kinopoiskId: Int) {
-        cinemaLocalRepository.deleteWatchFilm(kinopoiskId)
-    }
+    suspend fun delWatchFilm(kinopoiskId: Int) { cinemaLocalRepository.deleteWatchFilm(kinopoiskId) }
 }

@@ -1,6 +1,8 @@
 package com.example.cinema.data
 
 import com.example.cinema.data.bd.CinemaDao
+import com.example.cinema.entity.dbCinema.LikeFilm
+import com.example.cinema.entity.dbCinema.WantToWatchFilm
 import com.example.cinema.entity.dbCinema.WatchFilm
 import javax.inject.Inject
 
@@ -9,10 +11,6 @@ class CinemaLocalRepository @Inject constructor(
 ) {
     suspend fun addWatchFilm(watchFilm: WatchFilm) {
         cinemaDao.addWatchFilm(watchFilm)
-    }
-
-    suspend fun addLikeFilm(watchFilm: WatchFilm) {
-        cinemaDao.addLikeFilm(watchFilm)
     }
 
     suspend fun getWatchFilm(id: Int): WatchFilm? {
@@ -25,5 +23,30 @@ class CinemaLocalRepository @Inject constructor(
 
     suspend fun deleteWatchFilm(id: Int){
         cinemaDao.deleteWatchFilm(id)
+    }
+
+    suspend fun getLikeFilm(kinopoiskId: Int): LikeFilm? {
+        return cinemaDao.getLikeFilm(kinopoiskId)
+    }
+
+    suspend fun addLikeFilm(watchFilm: LikeFilm) {
+        cinemaDao.addLikeFilm(watchFilm)
+    }
+
+    suspend fun deleteLikeFilm(id: Int){
+        cinemaDao.deleteLikeFilm(id)
+    }
+
+
+    suspend fun getWantToWatchFilmFilm(kinopoiskId: Int): WantToWatchFilm? {
+        return cinemaDao.getWantToWatchFilm(kinopoiskId)
+    }
+
+    suspend fun addWantToWatchFilmFilm(watchFilm: WantToWatchFilm) {
+        cinemaDao.addWantToWatchFilm(watchFilm)
+    }
+
+    suspend fun deleteWantToWatchFilmFilm(id: Int){
+        cinemaDao.deleteWantToWatchFilm(id)
     }
 }

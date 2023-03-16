@@ -4,7 +4,11 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinema.domain.GetFilmFullInfo
+import com.example.cinema.domain.LikeFilmUseCase
+import com.example.cinema.domain.WantToWatchFilmUseCase
 import com.example.cinema.domain.WatchFilmUseCase
+import com.example.cinema.entity.dbCinema.LikeFilm
+import com.example.cinema.entity.dbCinema.WantToWatchFilm
 import com.example.cinema.entity.dbCinema.WatchFilm
 import com.example.cinema.entity.filmInfo.FilmInfo
 import kotlinx.coroutines.channels.Channel
@@ -16,7 +20,9 @@ import javax.inject.Inject
 
 class FilmInfoViewModel @Inject constructor(
     private val getFilmFullInfo: GetFilmFullInfo,
-    private val watchFilmUseCase: WatchFilmUseCase
+    private val watchFilmUseCase: WatchFilmUseCase,
+    private val likeFilmUseCase: LikeFilmUseCase,
+    private val wantToWatchFilmUseCase: WantToWatchFilmUseCase
 ) :
     ViewModel() {
     private val _state = MutableStateFlow<FilmInfoState>(FilmInfoState.Loading)
@@ -145,6 +151,8 @@ class FilmInfoViewModel @Inject constructor(
 
                 val isWatchFilm= watchFilmUseCase.getWatchFilm(film!!.kinopoiskId) !=null
                 val filmsWatch=watchFilmUseCase.getWatchFilmId()
+                val isLike=likeFilmUseCase.getLikeFilm(film.kinopoiskId) !=null
+                val isWantToWatch=wantToWatchFilmUseCase.getWantToWatchFilmFilm(film.kinopoiskId)!=null
 
 
                 _state.value = FilmInfoState.Success(
@@ -165,7 +173,9 @@ class FilmInfoViewModel @Inject constructor(
                     filmDescription,
                     filmShortDescription,
                     isWatchFilm,
-                    filmsWatch
+                    filmsWatch,
+                    isLike,
+                    isWantToWatch
                 )
             }
         } catch (e: Exception) {
@@ -204,6 +214,50 @@ class FilmInfoViewModel @Inject constructor(
 
         }
 
+    }
+
+    fun addLikeFilm(stateLike: Boolean) {
+        viewModelScope.launch {
+            if (stateLike) {
+                if (localFilm != null) {
+                    val name =
+                        localFilm?.nameRu ?: localFilm?.nameEn ?: localFilm?.nameOriginal ?: ""
+                    val filmToDb = LikeFilm(
+                        localFilm!!.kinopoiskId,
+                        name,
+                        localFilm!!.posterUrl,
+                        localFilm!!.genres?.get(0)?.genre ?: "",
+                        localFilm!!.ratingKinopoisk,
+                        localFilm?.serial == true
+                    )
+                    likeFilmUseCase.addLikeFilm(filmToDb)
+                }
+            } else {
+                likeFilmUseCase.delLikeFilm(localFilm!!.kinopoiskId)
+            }
+        }
+    }
+
+    fun addWantToWatchFilm(state: Boolean){
+        viewModelScope.launch {
+            if (state) {
+                if (localFilm != null) {
+                    val name =
+                        localFilm?.nameRu ?: localFilm?.nameEn ?: localFilm?.nameOriginal ?: ""
+                    val filmToDb = WantToWatchFilm(
+                        localFilm!!.kinopoiskId,
+                        name,
+                        localFilm!!.posterUrl,
+                        localFilm!!.genres?.get(0)?.genre ?: "",
+                        localFilm!!.ratingKinopoisk,
+                        localFilm?.serial == true
+                    )
+                    wantToWatchFilmUseCase.addWantToWatchFilmFilm(filmToDb)
+                }
+            } else {
+                wantToWatchFilmUseCase.delWantToWatchFilmFilm(localFilm!!.kinopoiskId)
+            }
+        }
     }
 
     companion object {

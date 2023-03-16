@@ -42,6 +42,8 @@ class FilmInfoFragment : Fragment() {
     private var maxLinesTxtView=0
     private var idFilm:Int?=0
     private var stateWatch=false
+    private var stateWantToWatch=false
+    private var stateLike=false
     private var textFilmDescription=""
     private lateinit var typeListFilm: TypeListFilm
 
@@ -54,7 +56,6 @@ class FilmInfoFragment : Fragment() {
             if (idFilm == 0) {
                 idFilm = it?.getInt(Constance.FILM_FILM_INFO_ID)
                 typeListFilm= TypeListFilm("Похожие фильмы", semilarFilmId = idFilm)
-                Log.d("idCinema", idFilm.toString())
                 viewModel.getFilm(idFilm!!)
             }
         }
@@ -206,6 +207,9 @@ class FilmInfoFragment : Fragment() {
                         }
 
                         stateWatch=state.isWatch
+                        stateLike=state.isLike
+                        stateWantToWatch=state.isWantToWatch
+
 
                         initBtn()
                         initStateBtn()
@@ -237,6 +241,29 @@ class FilmInfoFragment : Fragment() {
             }
             viewModel.addWatchFilm(stateWatch)
         }
+
+
+        binding.likeBtn.setOnClickListener {
+            if (stateLike){
+                stateLike=false
+                binding.likeBtn.setImageResource(R.drawable.icon_unlike_film)
+            }else{
+                stateLike=true
+                binding.likeBtn.setImageResource(R.drawable.icon_like_film)
+            }
+            viewModel.addLikeFilm(stateLike)
+        }
+
+        binding.bookmarksBtn.setOnClickListener {
+            if (stateWantToWatch){
+                stateWantToWatch=false
+                binding.bookmarksBtn.setImageResource(R.drawable.icon_un_bookmarks)
+            }else{
+                stateWantToWatch=true
+                binding.bookmarksBtn.setImageResource(R.drawable.icon_bookmarks)
+            }
+            viewModel.addWantToWatchFilm(stateWantToWatch)
+        }
     }
 
     private fun initStateBtn(){
@@ -245,6 +272,19 @@ class FilmInfoFragment : Fragment() {
         }else{
             binding.watchBtn.setImageResource(R.drawable.icon_un_watch)
         }
+
+        if (stateLike){
+            binding.likeBtn.setImageResource(R.drawable.icon_like_film)
+        }else{
+            binding.likeBtn.setImageResource(R.drawable.icon_unlike_film)
+        }
+
+        if(stateWantToWatch){
+            binding.bookmarksBtn.setImageResource(R.drawable.icon_bookmarks)
+        }else{
+            binding.bookmarksBtn.setImageResource(R.drawable.icon_un_bookmarks)
+        }
+
     }
 
 }

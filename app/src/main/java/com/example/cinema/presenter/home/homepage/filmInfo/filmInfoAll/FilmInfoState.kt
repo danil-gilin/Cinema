@@ -23,6 +23,8 @@ sealed class FilmInfoState {
         val filmShortDescription: String,
         val isWatch: Boolean,
         val filmsWatch: List<Int>,
+        val isLike: Boolean,
+        val isWantToWatch: Boolean,
     ) : FilmInfoState()
     data class Error(val error: String) : FilmInfoState()
 }
