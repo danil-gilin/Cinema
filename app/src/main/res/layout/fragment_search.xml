@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/search_txt_layuot"
+            android:id="@+id/search_layout"
             android:layout_width="match_parent"
             android:layout_height="32dp"
             android:layout_weight="1"
@@ -42,7 +42,7 @@
 
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/search_txt"
+                android:id="@+id/searchTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"

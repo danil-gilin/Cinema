@@ -8,15 +8,15 @@ import androidx.room.PrimaryKey
 data class WantToWatchFilm(
     @PrimaryKey
     @ColumnInfo(name = "id")
-    val id:Int,
+   override val id:Int,
     @ColumnInfo(name = "nameFilm")
-    val nameFilm:String,
+    override   val nameFilm:String,
     @ColumnInfo(name = "img")
-    val img:String,
+    override  val img:String,
     @ColumnInfo(name = "genre")
-    val genre:String,
+    override  val genre:String,
     @ColumnInfo(name = "rating")
-    val rating: Double?,
+    override  val rating: Double?,
     @ColumnInfo(name = "serial")
-    val serial:Boolean,
-)
+    override  val serial:Boolean,
+):FilmDB

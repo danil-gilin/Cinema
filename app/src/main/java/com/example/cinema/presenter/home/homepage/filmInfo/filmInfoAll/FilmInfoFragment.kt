@@ -1,5 +1,6 @@
 package com.example.cinema.presenter.home.homepage.filmInfo.filmInfoAll
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.InputFilter
@@ -20,6 +21,8 @@ import com.example.cinema.R
 import com.example.cinema.databinding.FragmentFilmInfoBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
+import com.example.cinema.presenter.home.homepage.bottomSheetFilm.AddCollectionFragment
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -226,6 +229,24 @@ class FilmInfoFragment : Fragment() {
             binding.rcFilm.updateListSemilarWatchesFilms(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
+        viewModel.webURL.onEach {
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, it)
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+        viewModel.filmBottom.onEach {
+            val bottomSheetDialog = AddCollectionFragment()
+            bottomSheetDialog.arguments = Bundle().apply {
+                putParcelable(Constance.FILM_BOTTOM_SHEET, it)
+            }
+            bottomSheetDialog.show(childFragmentManager, bottomSheetDialog.tag)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
 
         return binding.root
     }
@@ -264,6 +285,16 @@ class FilmInfoFragment : Fragment() {
             }
             viewModel.addWantToWatchFilm(stateWantToWatch)
         }
+
+        binding.shareBtn.setOnClickListener {
+            viewModel.getUrlWeb()
+        }
+
+        binding.dopMenuBtn.setOnClickListener {
+            //create bottom sheet dialog with AddCollectionFragment
+            viewModel.getFilmToBottomSheet()
+        }
+
     }
 
     private fun initStateBtn(){

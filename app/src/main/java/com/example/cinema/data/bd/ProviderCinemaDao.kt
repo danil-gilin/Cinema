@@ -16,6 +16,13 @@ class ProviderCinemaDao {
     fun providerCinemaDao(appDatabase: AppDataBase): CinemaDao {
         return appDatabase.cinemaDao()
     }
+
+    @Provides
+    fun providerMovieCollectionDao(appDatabase: AppDataBase): MovieCollectionDao {
+        return appDatabase.movieCollectionDao()
+    }
+
+
     @Provides
     @Singleton
     fun providerAppDatabase(@ApplicationContext appContext: Context): AppDataBase {

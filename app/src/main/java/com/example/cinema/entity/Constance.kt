@@ -1,6 +1,7 @@
 package com.example.cinema.entity
 
 object Constance {
+    const val FILM_BOTTOM_SHEET="film bottom sheet"
     const val YearFilterFrom="year filter from"
     const val YearFilter="year filter"
     const val YearFilterTo="year filter to"

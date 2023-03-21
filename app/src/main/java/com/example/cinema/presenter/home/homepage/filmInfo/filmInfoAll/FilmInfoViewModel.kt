@@ -7,6 +7,7 @@ import com.example.cinema.domain.GetFilmFullInfo
 import com.example.cinema.domain.LikeFilmUseCase
 import com.example.cinema.domain.WantToWatchFilmUseCase
 import com.example.cinema.domain.WatchFilmUseCase
+import com.example.cinema.entity.dbCinema.FilmDBLocal
 import com.example.cinema.entity.dbCinema.LikeFilm
 import com.example.cinema.entity.dbCinema.WantToWatchFilm
 import com.example.cinema.entity.dbCinema.WatchFilm
@@ -30,6 +31,13 @@ class FilmInfoViewModel @Inject constructor(
 
     private val _watchsFilm = Channel<List<Int>> { }
     val watchsFilm = _watchsFilm.receiveAsFlow()
+
+    private val _filmBottom=Channel<FilmDBLocal>{}
+    val filmBottom=_filmBottom.receiveAsFlow()
+
+
+    private val _webUrl = Channel<String> { }
+    val webURL = _webUrl.receiveAsFlow()
 
     var localFilm: FilmInfo? = null
 
@@ -257,6 +265,43 @@ class FilmInfoViewModel @Inject constructor(
             } else {
                 wantToWatchFilmUseCase.delWantToWatchFilmFilm(localFilm!!.kinopoiskId)
             }
+        }
+    }
+
+    fun getUrlWeb() {
+        viewModelScope.launch {
+            try {
+                if (localFilm?.webUrl != null) {
+                    _webUrl.send(localFilm!!.webUrl)
+                } else {
+                    _webUrl.send("Нет ссылки")
+                }
+
+            } catch (e: Exception) {
+
+            }
+        }
+    }
+
+    fun getFilmToBottomSheet() {
+        try {
+            viewModelScope.launch {
+                val name =
+                    localFilm?.nameRu ?: localFilm?.nameEn ?: localFilm?.nameOriginal ?: ""
+                val film=FilmDBLocal(
+                    localFilm!!.kinopoiskId,
+                    name,
+                    localFilm!!.posterUrlPreview,
+                    localFilm!!.genres?.get(0)?.genre ?: "",
+                    localFilm!!.ratingKinopoisk,
+                    localFilm?.serial == true,
+                    watchFilmUseCase.getWatchFilm(localFilm!!.kinopoiskId) !=null,
+                    localFilm!!.year.toString()
+                )
+                _filmBottom.send(film)
+            }
+        }catch (e:Exception){
+
         }
     }
 
