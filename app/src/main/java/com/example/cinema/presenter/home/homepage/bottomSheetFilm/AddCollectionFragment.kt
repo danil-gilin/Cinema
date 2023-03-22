@@ -1,22 +1,23 @@
 package com.example.cinema.presenter.home.homepage.bottomSheetFilm
 
-import androidx.lifecycle.ViewModelProvider
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.bumptech.glide.Glide
 import com.example.cinema.R
 import com.example.cinema.databinding.FragmentAddCollectionBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.dbCinema.FilmDBLocal
 import com.example.cinema.presenter.home.homepage.bottomSheetFilm.newCollection.NewCollectionFragment
-import com.example.cinema.presenter.home.homepage.bottomSheetFilm.newCollection.StateAddCollection
 import com.example.cinema.service.collectionAdapter.AdapterCollection
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,6 +46,11 @@ class AddCollectionFragment : BottomSheetDialogFragment() {
     ): View? {
         binding = FragmentAddCollectionBinding.inflate(inflater)
         binding.rcCollection.adapter=adapter
+        val divider= DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+         divider.setDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.divider_linear_filter)!!)
+        binding.rcCollection.addItemDecoration(divider)
+
+
         viewModel.getCollection()
 
         arguments?.let {
@@ -52,10 +58,6 @@ class AddCollectionFragment : BottomSheetDialogFragment() {
             viewModel.getSelectCollection(film.id)
             init()
         }
-
-        viewModel.collection.onEach { collection->
-            adapter.submitList(collection)
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.collectionSelect.onEach { collectionSelect->
             adapter.selectCollection.addAll(collectionSelect)
@@ -76,8 +78,11 @@ class AddCollectionFragment : BottomSheetDialogFragment() {
                     StateAddCollection.Loading -> {
 
                     }
-                    StateAddCollection.Success -> {
-                        dismiss()
+                    StateAddCollection.SuccessSaveCollection -> {
+                       dismiss()
+                    }
+                   is StateAddCollection.SuccessGetCollection -> {
+                       adapter.submitList(it.collections)
                     }
                 }
             }
@@ -87,6 +92,9 @@ class AddCollectionFragment : BottomSheetDialogFragment() {
         binding.addCollectionLinear.setOnClickListener {
             val newCollectionFragment=NewCollectionFragment()
             newCollectionFragment.show(parentFragmentManager,"newCollectionFragment")
+            newCollectionFragment.setFragmentResultListener(Constance.NEW_COLLECTION){_,bundle->
+                viewModel.getCollection()
+            }
 
         }
 
@@ -118,13 +126,26 @@ class AddCollectionFragment : BottomSheetDialogFragment() {
 
     }
 
-    override fun onResume() {
-        viewModel.getCollection()
-        super.onResume()
-    }
-
-    override fun onDestroy() {
+    override fun onDismiss(dialog: DialogInterface) {
         viewModel.addFilmToCollection(film,adapter.selectCollection)
-        super.onDestroy()
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.state.collect{it->
+                when(it){
+                    is StateAddCollection.Error ->
+                    {
+                        super.onDismiss(dialog)
+                    }
+                    StateAddCollection.Loading -> {
+
+                    }
+                    StateAddCollection.SuccessSaveCollection -> {
+                        super.onDismiss(dialog)
+                    }
+                   is StateAddCollection.SuccessGetCollection -> {
+
+                    }
+                }
+            }
+        }
     }
 }

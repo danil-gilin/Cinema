@@ -23,7 +23,6 @@
         android:layout_marginBottom="48dp"
         android:divider="@drawable/divider_linear_filter"
         android:orientation="vertical"
-        android:showDividers="middle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -113,6 +112,12 @@
 
         </LinearLayout>
 
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="@drawable/divider_linear_filter" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -140,6 +145,11 @@
 
         </LinearLayout>
 
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="@drawable/divider_linear_filter" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -149,6 +159,7 @@
                 android:id="@+id/rc_collection"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_width="match_parent"
+                android:overScrollMode="never"
                 android:layout_height="match_parent"
                 tools:listitem="@layout/item_colllection" />
         </LinearLayout>
@@ -166,7 +177,8 @@
                 android:id="@+id/imageView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginStart="45dp"
+                android:layout_marginEnd="25dp"
                 android:src="@drawable/icon_plus" />
 
             <TextView
@@ -181,9 +193,9 @@
         </LinearLayout>
 
         <View
-            android:id="@+id/view3"
             android:layout_width="wrap_content"
-            android:layout_height="0dp" />
+            android:layout_height="1dp"
+            android:background="@drawable/divider_linear_filter" />
 
     </LinearLayout>
 

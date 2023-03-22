@@ -12,10 +12,13 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.cinema.R
 import com.example.cinema.databinding.FragmentNewCollectionBinding
+import com.example.cinema.entity.Constance
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 
@@ -40,18 +43,34 @@ class NewCollectionFragment : DialogFragment() {
         binding= FragmentNewCollectionBinding.inflate(inflater)
         binding.btnDone.setOnClickListener {
             viewModel.addCollection(binding.nameCollectionInput.text.toString())
-            this.dismiss()
         }
         binding.btnClose2.setOnClickListener {
             this.dismiss()
         }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.state.collect {
+                when (it) {
+                    is StateNewCollection.SuccessSaveCollection -> {
+                        val bundle=Bundle()
+                        bundle.putString("name",binding.nameCollectionInput.text.toString())
+                        parentFragmentManager.setFragmentResult(Constance.NEW_COLLECTION,bundle)
+                        this@NewCollectionFragment.dismiss()
+                    }
+                    is StateNewCollection.Error ->{
+
+                    }
+                    StateNewCollection.Loading ->{
+
+                    }
+                }
+            }
+        }
+
+
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE);
         return binding.root
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return super.onCreateDialog(savedInstanceState)
     }
 
 }
