@@ -3,14 +3,8 @@ package com.example.cinema.presenter.home.homepage.filmInfo.filmInfoAll
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cinema.domain.GetFilmFullInfo
-import com.example.cinema.domain.LikeFilmUseCase
-import com.example.cinema.domain.WantToWatchFilmUseCase
-import com.example.cinema.domain.WatchFilmUseCase
-import com.example.cinema.entity.dbCinema.FilmDBLocal
-import com.example.cinema.entity.dbCinema.LikeFilm
-import com.example.cinema.entity.dbCinema.WantToWatchFilm
-import com.example.cinema.entity.dbCinema.WatchFilm
+import com.example.cinema.domain.*
+import com.example.cinema.entity.dbCinema.*
 import com.example.cinema.entity.filmInfo.FilmInfo
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +17,8 @@ class FilmInfoViewModel @Inject constructor(
     private val getFilmFullInfo: GetFilmFullInfo,
     private val watchFilmUseCase: WatchFilmUseCase,
     private val likeFilmUseCase: LikeFilmUseCase,
-    private val wantToWatchFilmUseCase: WantToWatchFilmUseCase
+    private val wantToWatchFilmUseCase: WantToWatchFilmUseCase,
+    private val historyLocalFilmUseCase: HistoryLocalFilmUseCase
 ) :
     ViewModel() {
     private val _state = MutableStateFlow<FilmInfoState>(FilmInfoState.Loading)
@@ -32,8 +27,8 @@ class FilmInfoViewModel @Inject constructor(
     private val _watchsFilm = Channel<List<Int>> { }
     val watchsFilm = _watchsFilm.receiveAsFlow()
 
-    private val _filmBottom=Channel<FilmDBLocal>{}
-    val filmBottom=_filmBottom.receiveAsFlow()
+    private val _filmBottom = Channel<FilmDBLocal> {}
+    val filmBottom = _filmBottom.receiveAsFlow()
 
 
     private val _webUrl = Channel<String> { }
@@ -51,6 +46,8 @@ class FilmInfoViewModel @Inject constructor(
                 var short_info_3 = ""
                 val film = getFilmFullInfo.getFilmInfo(id)
                 localFilm = film
+
+
                 //short 1
                 if (film?.ratingKinopoisk != null) {
                     short_info_1 += film.ratingKinopoisk
@@ -157,10 +154,25 @@ class FilmInfoViewModel @Inject constructor(
 
                 val filmName = film?.nameRu ?: film?.nameEn ?: film?.nameOriginal ?: ""
 
-                val isWatchFilm= watchFilmUseCase.getWatchFilm(film!!.kinopoiskId) !=null
-                val filmsWatch=watchFilmUseCase.getWatchFilmId()
-                val isLike=likeFilmUseCase.getLikeFilm(film.kinopoiskId) !=null
-                val isWantToWatch=wantToWatchFilmUseCase.getWantToWatchFilmFilm(film.kinopoiskId)!=null
+                val isWatchFilm = watchFilmUseCase.getWatchFilm(film!!.kinopoiskId) != null
+                val filmsWatch = watchFilmUseCase.getWatchFilmId()
+                val isLike = likeFilmUseCase.getLikeFilm(film.kinopoiskId) != null
+                val isWantToWatch =
+                    wantToWatchFilmUseCase.getWantToWatchFilmFilm(film.kinopoiskId) != null
+
+
+                historyLocalFilmUseCase.addHistoryLocal(
+                    HistoryCollectionDB(
+                        0,
+                        film.kinopoiskId,
+                        filmName,
+                        film.genres?.get(0)?.genre ?: "",
+                        film.posterUrlPreview,
+                        film.ratingKinopoisk ?: 0.0,
+                        true,
+                        System.currentTimeMillis()
+                    )
+                )
 
 
                 _state.value = FilmInfoState.Success(
@@ -218,7 +230,7 @@ class FilmInfoViewModel @Inject constructor(
             viewModelScope.launch {
                 _watchsFilm.send(watchFilmUseCase.getWatchFilmId())
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
 
         }
 
@@ -246,7 +258,7 @@ class FilmInfoViewModel @Inject constructor(
         }
     }
 
-    fun addWantToWatchFilm(state: Boolean){
+    fun addWantToWatchFilm(state: Boolean) {
         viewModelScope.launch {
             if (state) {
                 if (localFilm != null) {
@@ -288,19 +300,19 @@ class FilmInfoViewModel @Inject constructor(
             viewModelScope.launch {
                 val name =
                     localFilm?.nameRu ?: localFilm?.nameEn ?: localFilm?.nameOriginal ?: ""
-                val film=FilmDBLocal(
+                val film = FilmDBLocal(
                     localFilm!!.kinopoiskId,
                     name,
                     localFilm!!.posterUrlPreview,
                     localFilm!!.genres?.get(0)?.genre ?: "",
                     localFilm!!.ratingKinopoisk,
                     localFilm?.serial == true,
-                    watchFilmUseCase.getWatchFilm(localFilm!!.kinopoiskId) !=null,
+                    watchFilmUseCase.getWatchFilm(localFilm!!.kinopoiskId) != null,
                     localFilm!!.year.toString()
                 )
                 _filmBottom.send(film)
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
 
         }
     }

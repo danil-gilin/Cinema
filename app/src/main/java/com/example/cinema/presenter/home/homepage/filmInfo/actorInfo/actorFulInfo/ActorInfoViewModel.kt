@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinema.domain.GetActorWorkerInfo
 import com.example.cinema.domain.GetFilmFullInfo
+import com.example.cinema.domain.HistoryLocalFilmUseCase
 import com.example.cinema.domain.WatchFilmUseCase
+import com.example.cinema.entity.dbCinema.HistoryCollectionDB
 import com.example.cinema.entity.fullInfoActor.Film
 import com.example.cinema.entity.fullInfoActor.FilmWithPosterAndActor
 import kotlinx.coroutines.channels.Channel
@@ -18,7 +20,8 @@ import javax.inject.Inject
 class ActorInfoViewModel @Inject constructor(
     private val getActorWorkerInfo: GetActorWorkerInfo,
     private val getFilmFullInfo: GetFilmFullInfo,
-    private val watchFilmUseCase: WatchFilmUseCase
+    private val watchFilmUseCase: WatchFilmUseCase,
+    private val historyLocalFilmUseCase: HistoryLocalFilmUseCase
 ) : ViewModel() {
     private val _stateActroInfo = MutableStateFlow<ActorInfoState>(ActorInfoState.Loading)
     val stateActorInfo = _stateActroInfo.asStateFlow()
@@ -74,6 +77,20 @@ class ActorInfoViewModel @Inject constructor(
 
                 val watchesFilms = watchFilmUseCase.getWatchFilmId()
 
+                val nameActor=info.nameRu ?: info.nameEn ?: ""
+
+                historyLocalFilmUseCase.addHistoryLocal(
+                    HistoryCollectionDB(
+                        0,
+                        info.personId,
+                        nameActor,
+                        info.profession ?: "",
+                        info.posterUrl ?: "",
+                         0.0,
+                        false,
+                       System.currentTimeMillis()
+                    )
+                )
                 Log.d("ActorInfoState", "view model good")
                 _stateActroInfo.value =
                     ActorInfoState.Success(info, listUrlFilmPreview, infoHistoryFilms, watchesFilms)

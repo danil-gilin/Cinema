@@ -1,6 +1,7 @@
 package com.example.cinema.data
 
 import com.example.cinema.data.bd.CinemaDao
+import com.example.cinema.entity.dbCinema.HistoryCollectionDB
 import com.example.cinema.entity.dbCinema.LikeFilm
 import com.example.cinema.entity.dbCinema.WantToWatchFilm
 import com.example.cinema.entity.dbCinema.WatchFilm
@@ -48,5 +49,12 @@ class CinemaLocalRepository @Inject constructor(
 
     suspend fun deleteWantToWatchFilmFilm(id: Int){
         cinemaDao.deleteWantToWatchFilm(id)
+    }
+
+   suspend fun addHistory(history: HistoryCollectionDB) {
+       if (cinemaDao.getTableHistorySize() >= 15){
+              cinemaDao.deleteOldestHistory()
+       }
+       cinemaDao.updateOrInsert(history)
     }
 }
