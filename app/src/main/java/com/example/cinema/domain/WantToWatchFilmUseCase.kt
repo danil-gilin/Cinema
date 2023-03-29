@@ -10,4 +10,7 @@ class WantToWatchFilmUseCase @Inject constructor (private val cinemaLocalReposit
     suspend fun addWantToWatchFilmFilm(watchFilm: WantToWatchFilm)=cinemaLocalRepository.addWantToWatchFilmFilm(watchFilm)
 
     suspend fun delWantToWatchFilmFilm(kinopoiskId: Int) { cinemaLocalRepository.deleteWantToWatchFilmFilm(kinopoiskId) }
+  suspend  fun getWantToWatchFilmSize(): Int {
+      return  cinemaLocalRepository.getWantToWatchFilmSize()
+    }
 }

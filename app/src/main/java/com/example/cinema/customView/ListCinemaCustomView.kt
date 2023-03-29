@@ -9,6 +9,7 @@ import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import com.example.cinema.R
 import com.example.cinema.databinding.ListCinemaCustomViewBinding
 import com.example.cinema.entity.actorAndWorker.ActorAndWorker
@@ -191,4 +192,17 @@ class ListCinemaCustomView @JvmOverloads constructor(
     fun updateListSemilarWatchesFilms(watchsFilm: List<Int>){
         adapterSimilar.updateWatchFilms(watchsFilm)
     }
+
+    fun updateAdapterCustom(adapter: ListAdapter<*, *>) {
+        binding.rcCinemaList.adapter = adapter
+    }
+
+    fun updateSizeCustom(size: Int) {
+        if(size<=0){
+            binding.txtAllFilm.visibility= View.GONE
+        }
+        binding.txtAllFilm.text="$size"
+        binding.txtAllFilm.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.film_all,0)
+    }
+
 }

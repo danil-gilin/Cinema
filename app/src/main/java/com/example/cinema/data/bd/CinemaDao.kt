@@ -23,12 +23,22 @@ interface CinemaDao {
     @Query("DELETE FROM WatchFilm WHERE id=:id")
     suspend fun deleteWatchFilm(id: Int)
 
+    @Query("SELECT * FROM WatchFilm")
+    suspend fun getAllWatchFilm(): List<WatchFilm>
+
+
+    @Query("DELETE FROM WatchFilm ")
+    suspend fun deleteAllWatchFilm()
+
 
     @Query("SELECT * FROM LikeFilm WHERE id=:id")
     suspend fun getLikeFilm(id: Int): LikeFilm?
 
     @Query("DELETE FROM LikeFilm WHERE id=:id")
     suspend fun deleteLikeFilm(id: Int)
+
+    @Query("SELECT COUNT(*) FROM LikeFilm")
+    suspend fun getLikeFilmSize(): Int
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -40,11 +50,15 @@ interface CinemaDao {
     @Query("DELETE FROM WantToWatchFilm WHERE id=:id")
     suspend fun deleteWantToWatchFilm(id: Int)
 
+    @Query("SELECT COUNT(*) FROM WantToWatchFilm")
+    suspend fun getWantToWatchFilmSize(): Int
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addHistory(history: HistoryCollectionDB)
 
-    @Query("SELECT * FROM History")
+
+    @Query("SELECT * FROM History ORDER BY date_time DESC LIMIT 15")
     suspend fun getHistory(): List<HistoryCollectionDB>
 
     @Query("SELECT COUNT(*) FROM History")
@@ -68,5 +82,6 @@ interface CinemaDao {
   @Delete
   suspend fun deleteHistoryItem(item: HistoryCollectionDB)
 
-
+  @Query("DELETE FROM History")
+  suspend fun deleteAllHistory()
 }

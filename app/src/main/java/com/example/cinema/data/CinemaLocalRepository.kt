@@ -57,4 +57,28 @@ class CinemaLocalRepository @Inject constructor(
        }
        cinemaDao.updateOrInsert(history)
     }
+
+   suspend fun getHistory(): List<HistoryCollectionDB> {
+        return cinemaDao.getHistory()
+    }
+
+  suspend  fun getAllWatchFilm(): List<WatchFilm> {
+            return cinemaDao.getAllWatchFilm()
+    }
+
+  suspend  fun dellAllWatchFilm(){
+        cinemaDao.deleteAllWatchFilm()
+    }
+
+  suspend  fun dellAllHistory() {
+        cinemaDao.deleteAllHistory()
+    }
+
+   suspend fun getLikeFilmSize(): Int {
+        return cinemaDao.getLikeFilmSize()
+    }
+
+   suspend fun getWantToWatchFilmSize(): Int {
+            return cinemaDao.getWantToWatchFilmSize()
+    }
 }

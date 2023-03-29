@@ -8,6 +8,6 @@
         android:icon="@drawable/homepage_icon"
         android:title="" />
     <item android:title="" android:icon="@drawable/search_icon" android:id="@+id/searchPage" />
-    <item android:title="" android:icon="@drawable/profile_icon" android:id="@+id/nowPlayingFragment" />
+    <item android:title="" android:icon="@drawable/profile_icon" android:id="@+id/profilePage" />
     <item android:id="@+id/page2" android:icon="@null" android:title="" android:enabled="false"  />
 </menu>

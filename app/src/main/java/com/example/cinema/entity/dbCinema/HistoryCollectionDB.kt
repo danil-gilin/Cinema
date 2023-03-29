@@ -13,5 +13,5 @@ data class HistoryCollectionDB(
     @ColumnInfo(name = "image") val image: String,
     @ColumnInfo(name = "rating") val rating:Double,
     @ColumnInfo(name = "filmFlag") val filmFlag:Boolean,
-    @ColumnInfo(name = "date_time") val dateTime: Long
+    @ColumnInfo(name = "date_time") val dateTime: Long,
 )

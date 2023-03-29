@@ -255,7 +255,14 @@
                 app:destination="@id/filmInfoFragment" />
         </fragment>
     </navigation>
-
+    <navigation android:id="@+id/profilePage"
+        app:startDestination="@id/profileFragment">
+        <fragment
+            android:id="@+id/profileFragment"
+            android:name="com.example.cinema.presenter.home.profile.ProfileFragment"
+            android:label="fragment_profile"
+            tools:layout="@layout/fragment_profile" />
+    </navigation>
 
 
 </navigation>

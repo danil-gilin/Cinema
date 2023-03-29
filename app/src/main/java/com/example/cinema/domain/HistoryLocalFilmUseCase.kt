@@ -8,4 +8,12 @@ class HistoryLocalFilmUseCase  @Inject constructor(private val cinemaLocalReposi
     suspend fun addHistoryLocal(history: HistoryCollectionDB) {
         cinemaLocalRepository.addHistory(history)
     }
+
+    suspend fun getHistoryLocal(): List<HistoryCollectionDB> {
+        return cinemaLocalRepository.getHistory()
+    }
+
+   suspend fun dellAllHistoryLocal() {
+        cinemaLocalRepository.dellAllHistory()
+    }
 }
