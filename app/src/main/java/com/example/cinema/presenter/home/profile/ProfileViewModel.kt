@@ -51,4 +51,10 @@ class ProfileViewModel @Inject constructor(
             historyLocalFilmUseCase.dellAllHistoryLocal()
         }
     }
+
+    fun deleteCollection(id: Int) {
+        viewModelScope.launch {
+            collectionUseCase.deleteCollection(id)
+        }
+    }
 }

@@ -50,11 +50,14 @@ class CinemaCollectionRepository @Inject constructor(
         return movieCollectionDao.getAllCollections()
     }
 
-   suspend fun addCollection(nameCollection: String) {
+   suspend fun addCollection(nameCollection: String):Int {
        if (nameCollection.isNotEmpty()){
            if(nameCollection !in  movieCollectionDao.getAllCollections().map { it.title }) {
                movieCollectionDao.insertCollection(CollectionFilms(title = nameCollection))
            }
+           return movieCollectionDao.findCollectionByTytle(nameCollection)
+       }else{
+          return 0
        }
     }
 
@@ -63,4 +66,7 @@ class CinemaCollectionRepository @Inject constructor(
     }
 
 
+    suspend fun deleteCollection(id: Int) {
+        movieCollectionDao.deleteCollectionById(id)
+    }
 }

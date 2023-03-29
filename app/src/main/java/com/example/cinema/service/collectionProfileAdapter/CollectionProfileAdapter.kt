@@ -10,7 +10,7 @@ import com.example.cinema.R
 import com.example.cinema.databinding.CollectionItemBinding
 import com.example.cinema.entity.dbCinema.CollectionFilms
 
-class CollectionProfileAdapter :ListAdapter<CollectionFilms,CollectionProfileViewHolder>(CollectionProfileDiffutil()) {
+class CollectionProfileAdapter(val delete:(CollectionFilms)->Unit) :ListAdapter<CollectionFilms,CollectionProfileViewHolder>(CollectionProfileDiffutil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionProfileViewHolder {
         return CollectionProfileViewHolder(CollectionItemBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
@@ -27,6 +27,10 @@ class CollectionProfileAdapter :ListAdapter<CollectionFilms,CollectionProfileVie
             if (item.id==-2){
               iconCollectionClose.visibility= View.INVISIBLE
                 iconCollectionProfile.setImageResource(R.drawable.icon_want_to_watch_collection)
+            }
+
+            iconCollectionClose.setOnClickListener {
+                delete(item)
             }
         }
     }

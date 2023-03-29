@@ -19,8 +19,8 @@ class NewCollectionViewModel @Inject constructor(
         try {
         viewModelScope.launch {
             _state.value = StateNewCollection.Loading
-            collectionUseCase.addCollection(nameCollection)
-            _state.value = StateNewCollection.SuccessSaveCollection
+            val id=collectionUseCase.addCollection(nameCollection)
+            _state.value = StateNewCollection.SuccessSaveCollection(id)
         }
         }catch (e:Exception){
             _state.value = StateNewCollection.Error(e.message.toString())

@@ -55,4 +55,25 @@ interface MovieCollectionDao {
     @Query("DELETE FROM collections")
     suspend fun deleteAllCollections()
 
+    @Query("SELECT id FROM collections WHERE title = :nameCollection")
+    suspend fun findCollectionByTytle(nameCollection: String):Int
+
+    //dell collection by id and all film in this collection
+    @Transaction
+    suspend fun deleteCollectionById(id: Int) {
+        // Удаляем все связи фильмов с коллекцией
+        val joins = getCollectionsJoinById(id)
+        joins.forEach {
+            removeFromCollection(it)
+        }
+        // Удаляем коллекцию
+        deleteCollection(id)
+    }
+
+    @Query("SELECT * FROM movie_collection_join WHERE collectionId = :id")
+    suspend fun getCollectionsJoinById(id: Int): List<MovieCollectionJoin>
+
+    @Query("DELETE FROM collections WHERE id = :id")
+    suspend fun deleteCollection(id: Int)
+
 }

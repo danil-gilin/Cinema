@@ -54,6 +54,7 @@ class NewCollectionFragment : DialogFragment() {
                     is StateNewCollection.SuccessSaveCollection -> {
                         val bundle=Bundle()
                         bundle.putString("name",binding.nameCollectionInput.text.toString())
+                        bundle.putInt("id",it.id)
                         parentFragmentManager.setFragmentResult(Constance.NEW_COLLECTION,bundle)
                         this@NewCollectionFragment.dismiss()
                     }

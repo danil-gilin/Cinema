@@ -6,10 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.cinema.databinding.FragmentProfileBinding
+import com.example.cinema.entity.Constance
+import com.example.cinema.entity.dbCinema.CollectionFilms
+import com.example.cinema.presenter.home.homepage.bottomSheetFilm.newCollection.NewCollectionFragment
 import com.example.cinema.service.adapterHistory.AdapterHistory
 import com.example.cinema.service.adapterWatch.AdapterWatchFilm
 import com.example.cinema.service.collectionProfileAdapter.CollectionProfileAdapter
@@ -31,7 +35,8 @@ class ProfileFragment : Fragment() {
     lateinit var binding: FragmentProfileBinding
     private val adapterHistory=AdapterHistory({idFilm,filmFlag->onClickHistoryItem(idFilm,filmFlag)},{deleteHistory()})
     private val adapterWatch=AdapterWatchFilm({idFilm->onClickWatchItem(idFilm)},{deleteWatch()})
-    private val adapterCollection=CollectionProfileAdapter()
+    private val adapterCollection=CollectionProfileAdapter(){it->deleteCollection(it)}
+    private var listCollection= emptyList<CollectionFilms>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,8 +64,24 @@ class ProfileFragment : Fragment() {
                         binding.rcWatch.updateSizeCustom(it.listWatch.size-1)
 
                         adapterCollection.submitList(it.listCollection)
+                        listCollection=it.listCollection
                     }
                 }
+            }
+        }
+
+        binding.creatCollectionProfile.setOnClickListener {
+            val newCollectionFragment= NewCollectionFragment()
+            newCollectionFragment.show(parentFragmentManager,"newCollectionFragment")
+            newCollectionFragment.setFragmentResultListener(Constance.NEW_COLLECTION){ _, bundle->
+               val name= bundle.getString("name","")
+                val id=bundle.getInt("id", 0)
+                if(id!=0){
+                listCollection=listCollection.plus(CollectionFilms(id,name,0))
+                    Log.d("CollProfile","$listCollection")
+                }
+                Log.d("CollProfile","$id")
+                adapterCollection.submitList(listCollection)
             }
         }
 
@@ -86,6 +107,12 @@ class ProfileFragment : Fragment() {
         viewModel.deleteWatch()
         binding.rcWatch.updateSizeCustom(0)
         adapterWatch.submitList(emptyList())
+    }
+
+    fun deleteCollection(collection:CollectionFilms){
+        viewModel.deleteCollection(collection.id)
+      listCollection= listCollection.minus(collection)
+        adapterCollection.submitList(listCollection)
     }
 
     fun init(){
