@@ -152,6 +152,10 @@ class FilmGallery : Fragment() {
             }
         }
 
+        binding.backGallery.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         return binding.root
     }
 

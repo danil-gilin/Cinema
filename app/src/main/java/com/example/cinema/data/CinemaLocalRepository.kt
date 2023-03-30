@@ -52,9 +52,9 @@ class CinemaLocalRepository @Inject constructor(
     }
 
    suspend fun addHistory(history: HistoryCollectionDB) {
-       if (cinemaDao.getTableHistorySize() >= 15){
+     /*  if (cinemaDao.getTableHistorySize() >= 15){
               cinemaDao.deleteOldestHistory()
-       }
+       }*/
        cinemaDao.updateOrInsert(history)
     }
 
@@ -81,4 +81,7 @@ class CinemaLocalRepository @Inject constructor(
    suspend fun getWantToWatchFilmSize(): Int {
             return cinemaDao.getWantToWatchFilmSize()
     }
+
+   suspend fun getAllLikeFilm() =cinemaDao.getAllLikeFilm()
+  suspend  fun getAllWantToWatchFilm()=cinemaDao.getAllWantToWatchFilm()
 }

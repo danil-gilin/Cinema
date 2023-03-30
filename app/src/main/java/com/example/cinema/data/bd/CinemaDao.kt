@@ -40,6 +40,9 @@ interface CinemaDao {
     @Query("SELECT COUNT(*) FROM LikeFilm")
     suspend fun getLikeFilmSize(): Int
 
+    @Query("SELECT * FROM LikeFilm")
+    suspend fun getAllLikeFilm(): List<LikeFilm>
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addWantToWatchFilm(watchFilm: WantToWatchFilm)
@@ -52,6 +55,9 @@ interface CinemaDao {
 
     @Query("SELECT COUNT(*) FROM WantToWatchFilm")
     suspend fun getWantToWatchFilmSize(): Int
+
+    @Query("SELECT * FROM WantToWatchFilm")
+    suspend fun getAllWantToWatchFilm():List<WantToWatchFilm>
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -84,4 +90,6 @@ interface CinemaDao {
 
   @Query("DELETE FROM History")
   suspend fun deleteAllHistory()
+
+
 }

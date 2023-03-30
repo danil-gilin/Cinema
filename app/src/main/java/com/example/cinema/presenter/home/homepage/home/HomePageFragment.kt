@@ -60,6 +60,7 @@ class HomePageFragment : Fragment() {
         }
 
         viewModel.watchsFilm.onEach {
+            Log.d("WatchFilmPageHome", "onCreateView: ${it}")
             binding.cinemaList1.updateListCinemaWatchsFilm(it)
             binding.cinemaList2.updateListCinemaWatchsFilm(it)
             binding.cinemaList3.updateListCinemaWatchsFilm(it)

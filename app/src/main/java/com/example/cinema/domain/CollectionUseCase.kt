@@ -11,8 +11,8 @@ class CollectionUseCase @Inject constructor(
     }
 
     suspend fun getAllCollection() = cinemaCollectionRepository.getAllCollection()
-    suspend fun deleteCollection(id: Int) {
-        cinemaCollectionRepository.deleteCollection(id)
-    }
+    suspend fun deleteCollection(id: Int) { cinemaCollectionRepository.deleteCollection(id) }
+
+    suspend fun getCollectionNameById(id: Int)=cinemaCollectionRepository.getCollectionNameById(id)
 
 }

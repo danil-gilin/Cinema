@@ -13,4 +13,6 @@ class LikeFilmUseCase @Inject constructor (private val cinemaLocalRepository: Ci
     suspend fun delLikeFilm(kinopoiskId: Int) { cinemaLocalRepository.deleteLikeFilm(kinopoiskId) }
 
     suspend fun getLikeFilmSize()=cinemaLocalRepository.getLikeFilmSize()
+
+    suspend fun getAllLikeFilm()=cinemaLocalRepository.getAllLikeFilm()
 }

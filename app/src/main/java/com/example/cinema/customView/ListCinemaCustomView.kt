@@ -198,11 +198,17 @@ class ListCinemaCustomView @JvmOverloads constructor(
     }
 
     fun updateSizeCustom(size: Int) {
-        if(size<=0){
+        if(size<=10){
             binding.txtAllFilm.visibility= View.GONE
         }
         binding.txtAllFilm.text="$size"
         binding.txtAllFilm.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.film_all,0)
+    }
+
+    fun updateClickAllCustom(onClickCustom :()->Unit){
+        binding.txtAllFilm.setOnClickListener {
+            onClickCustom()
+        }
     }
 
 }

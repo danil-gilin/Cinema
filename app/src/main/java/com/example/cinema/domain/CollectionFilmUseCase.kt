@@ -14,4 +14,6 @@ class CollectionFilmUseCase @Inject constructor(
   suspend  fun getSelectCollection(id:Int): List<Int> {
         return cinemaCollectionRepository.getSelectCollection(id)
     }
+
+    suspend fun getCollectionAllFilm(id: Int)=cinemaCollectionRepository.getCollectionAllFilm(id)
 }

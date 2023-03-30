@@ -69,4 +69,7 @@ class CinemaCollectionRepository @Inject constructor(
     suspend fun deleteCollection(id: Int) {
         movieCollectionDao.deleteCollectionById(id)
     }
+
+    suspend fun getCollectionAllFilm(id: Int)=movieCollectionDao.getMoviesForCollection(id)
+   suspend fun getCollectionNameById(id: Int)=movieCollectionDao.getCollectionNameById(id)
 }

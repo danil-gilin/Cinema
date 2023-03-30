@@ -10,7 +10,7 @@ import com.example.cinema.R
 import com.example.cinema.databinding.CollectionItemBinding
 import com.example.cinema.entity.dbCinema.CollectionFilms
 
-class CollectionProfileAdapter(val delete:(CollectionFilms)->Unit) :ListAdapter<CollectionFilms,CollectionProfileViewHolder>(CollectionProfileDiffutil()) {
+class CollectionProfileAdapter(val delete:(CollectionFilms)->Unit,val clickCollection: (Int)->Unit) :ListAdapter<CollectionFilms,CollectionProfileViewHolder>(CollectionProfileDiffutil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionProfileViewHolder {
         return CollectionProfileViewHolder(CollectionItemBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
@@ -32,7 +32,15 @@ class CollectionProfileAdapter(val delete:(CollectionFilms)->Unit) :ListAdapter<
             iconCollectionClose.setOnClickListener {
                 delete(item)
             }
+
+            root.setOnClickListener {
+                clickCollection(item.id)
+            }
         }
+    }
+
+    companion object {
+        val idNameList = arrayListOf<Pair<Int,String>>(-1 to "Любимые", -2 to "Хочу посмотреть", -3 to "Просмотрено", -4 to "История просмотра")
     }
 }
 

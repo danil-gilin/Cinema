@@ -76,4 +76,7 @@ interface MovieCollectionDao {
     @Query("DELETE FROM collections WHERE id = :id")
     suspend fun deleteCollection(id: Int)
 
+    @Query("SELECT title FROM collections WHERE id = :id")
+    suspend fun getCollectionNameById(id: Int): String
+
 }

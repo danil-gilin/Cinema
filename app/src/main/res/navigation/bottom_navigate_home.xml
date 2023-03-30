@@ -258,10 +258,120 @@
     <navigation android:id="@+id/profilePage"
         app:startDestination="@id/profileFragment">
         <fragment
+            android:id="@+id/filmInfoFragment"
+            android:name="com.example.cinema.presenter.home.homepage.filmInfo.filmInfoAll.FilmInfoFragment"
+            android:label="fragment_film_info"
+            tools:layout="@layout/fragment_film_info">
+            <action
+                android:id="@+id/action_filmInfoFragment_self"
+                app:destination="@id/filmInfoFragment" />
+            <action
+                android:id="@+id/action_filmInfoFragment_to_allFilmFragment"
+                app:destination="@id/allFilmFragment" />
+            <action
+                android:id="@+id/action_filmInfoFragment_to_filmGallery"
+                app:destination="@id/filmGallery" />
+            <action
+                android:id="@+id/action_filmInfoFragment_to_fullScreenImgFragment"
+                app:destination="@id/fullScreenImgFragment" />
+            <action
+                android:id="@+id/action_filmInfoFragment_to_allActorFragment"
+                app:destination="@id/allActorFragment" />
+            <action
+                android:id="@+id/action_filmInfoFragment_to_actorInfoFragment"
+                app:destination="@id/actorInfoFragment" />
+            <action
+                android:id="@+id/action_filmInfoFragment_to_filmSerialInfoFragment"
+                app:destination="@id/filmSerialInfoFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/fullScreenImgFragment"
+            android:name="com.example.cinema.presenter.home.homepage.filmInfo.fullScreenImg.FullScreenImgFragment"
+            android:label="FullScreenImgFragment"
+            tools:layout="@layout/fragment_full_screen_img" />
+        <fragment
+            android:id="@+id/filmGallery"
+            android:name="com.example.cinema.presenter.home.homepage.filmInfo.filmGallery.FilmGallery"
+            android:label="fragment_film_gallery"
+            tools:layout="@layout/fragment_film_gallery">
+            <action
+                android:id="@+id/action_filmGallery_to_fullScreenImgFragment"
+                app:destination="@id/fullScreenImgFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/actorFilmHistoryFragment"
+            android:name="com.example.cinema.presenter.home.homepage.filmInfo.actorInfo.actorFilmHistory.ActorFilmHistoryFragment"
+            android:label="ActorFilmHistoryFragment"
+            tools:layout="@layout/fragment_actor_film_history">
+            <action
+                android:id="@+id/action_actorFilmHistoryFragment_to_filmInfoFragment"
+                app:destination="@id/filmInfoFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/actorInfoFragment"
+            android:name="com.example.cinema.presenter.home.homepage.filmInfo.actorInfo.actorFulInfo.ActorInfoFragment"
+            android:label="fragment_actor_info"
+            tools:layout="@layout/fragment_actor_info">
+            <action
+                android:id="@+id/action_actorInfoFragment_to_filmInfoFragment"
+                app:destination="@id/filmInfoFragment" />
+            <action
+                android:id="@+id/action_actorInfoFragment_to_allFilmFragment"
+                app:destination="@id/allFilmFragment" />
+            <action
+                android:id="@+id/action_actorInfoFragment_to_actorFilmHistoryFragment"
+                app:destination="@id/actorFilmHistoryFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/allActorFragment"
+            android:name="com.example.cinema.presenter.home.homepage.filmInfo.filmAllActor.AllActorFragment"
+            android:label="AllActorFragment"
+            tools:layout="@layout/fragment_all_actor">
+            <action
+                android:id="@+id/action_allActorFragment_to_actorInfoFragment"
+                app:destination="@id/actorInfoFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/allFilmFragment"
+            android:name="com.example.cinema.presenter.home.homepage.allFilm.AllFilmFragment"
+            android:label="fragment_all_film"
+            tools:layout="@layout/fragment_all_film">
+            <action
+                android:id="@+id/action_allFilmFragment_to_filmInfoFragment"
+                app:destination="@id/filmInfoFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/filmSerialInfoFragment"
+            android:name="com.example.cinema.presenter.home.homepage.filmInfo.filmSerialInfo.FilmSerialInfoFragment"
+            android:label="FilmSerialInfoFragment"
+            tools:layout="@layout/fragment_film_serial_info" />
+        <fragment
             android:id="@+id/profileFragment"
             android:name="com.example.cinema.presenter.home.profile.ProfileFragment"
             android:label="fragment_profile"
-            tools:layout="@layout/fragment_profile" />
+            tools:layout="@layout/fragment_profile" >
+            <action
+                android:id="@+id/action_profileFragment_to_filmInfoFragment"
+                app:destination="@id/filmInfoFragment" />
+            <action
+                android:id="@+id/action_profileFragment_to_actorInfoFragment"
+                app:destination="@id/actorInfoFragment" />
+            <action
+                android:id="@+id/action_profileFragment_to_allFilmProfileFragment"
+                app:destination="@id/allFilmProfileFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/allFilmProfileFragment"
+            android:name="com.example.cinema.presenter.home.profile.allFilmProfile.AllFilmProfileFragment"
+            android:label="AllFilmProfileFragment" >
+            <action
+                android:id="@+id/action_allFilmProfileFragment_to_filmInfoFragment"
+                app:destination="@id/filmInfoFragment" />
+            <action
+                android:id="@+id/action_allFilmProfileFragment_to_actorInfoFragment"
+                app:destination="@id/actorInfoFragment" />
+        </fragment>
+
     </navigation>
 
 

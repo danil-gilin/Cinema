@@ -6,6 +6,7 @@ import com.example.cinema.domain.*
 import com.example.cinema.entity.dbCinema.CollectionFilms
 import com.example.cinema.entity.dbCinema.HistoryCollectionDB
 import com.example.cinema.entity.dbCinema.WatchFilm
+import com.example.cinema.presenter.home.profile.allFilmProfile.AllFilmProfileFragment
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -28,8 +29,10 @@ class ProfileViewModel @Inject constructor(
             val listWatch=watchFilmUseCase.getAllWatchFilm().plus(WatchFilm(-1,"","","",1.0,false))
 
             val listCollection= arrayListOf<CollectionFilms>()
-            val likeCollection=CollectionFilms(-1,"Любимые",likeFilmUseCase.getLikeFilmSize())
-            val wantToWatchCollection=CollectionFilms(-2,"Хочу посмотреть",wantToWatchFilmUseCase.getWantToWatchFilmSize())
+            val likeCollection=CollectionFilms(idNameList[0].first,
+                idNameList[0].second,likeFilmUseCase.getLikeFilmSize())
+            val wantToWatchCollection=CollectionFilms(idNameList[1].first,
+                idNameList[1].second,wantToWatchFilmUseCase.getWantToWatchFilmSize())
             listCollection.add(likeCollection)
             listCollection.add(wantToWatchCollection)
             listCollection.addAll(collectionUseCase.getAllCollection())
@@ -56,5 +59,9 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             collectionUseCase.deleteCollection(id)
         }
+    }
+
+    companion object {
+        val idNameList = arrayListOf(-1 to "Любимые", -2 to "Хочу посмотреть", -3 to "Просмотрено", -4 to "История просмотра")
     }
 }
