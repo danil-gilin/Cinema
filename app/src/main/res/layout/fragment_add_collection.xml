@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".presenter.home.homepage.bottomSheetFilm.AddCollectionFragment">
+    tools:context=".customView.bottomSheetFilm.AddCollectionFragment">
 
     <ImageView
         android:id="@+id/btn_close"

@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.cinema.R
+import com.example.cinema.customView.ErrorBottomSheet
 import com.example.cinema.databinding.FragmentAllActorBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.service.adapterActorWorkerAll.AdapterActorWorkerAll
@@ -57,6 +58,28 @@ class AllActorFragment : Fragment() {
             adapterActor.submitList(it)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.state.collect { state ->
+                when (state) {
+                    is AllActorState.Loading -> {
+                        binding.progressLoad6.visibility=View.VISIBLE
+                    }
+                    is AllActorState.Success -> {
+                        binding.progressLoad6.visibility=View.GONE
+                    }
+                    is AllActorState.Error -> {
+                        binding.progressLoad6.visibility=View.GONE
+                        val errorBottomSheet= ErrorBottomSheet(state.error)
+                        errorBottomSheet.show(childFragmentManager,"error")
+                    }
+                }
+            }
+        }
+
+
+        binding.allActorBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         return binding.root
     }

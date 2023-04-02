@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.cinema.R
+import com.example.cinema.customView.ErrorBottomSheet
 import com.example.cinema.databinding.FragmentFilterBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.filterEntity.SortFilter
@@ -46,6 +47,24 @@ class FilterFragment : Fragment() {
         binding = FragmentFilterBinding.inflate(inflater)
         viewModel.getFilter()
 
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.state.collect { state ->
+                when (state) {
+                    is FilterState.Loading -> {
+                        binding.progressLoad10.visibility = View.VISIBLE
+                    }
+                    is FilterState.Success -> {
+                        binding.progressLoad10.visibility = View.GONE
+                    }
+                    is FilterState.Error -> {
+                        binding.progressLoad10.visibility = View.GONE
+                        var erroDialog= ErrorBottomSheet(state.error)
+                        erroDialog.show(childFragmentManager,"error")
+                    }
+                }
+            }
+        }
 
 
 

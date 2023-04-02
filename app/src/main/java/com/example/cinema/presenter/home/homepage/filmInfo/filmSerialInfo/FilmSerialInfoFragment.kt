@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.cinema.R
+import com.example.cinema.customView.ErrorBottomSheet
 import com.example.cinema.databinding.FragmentFilmSerialInfoBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.serialInfo.Episode
@@ -62,10 +63,12 @@ class FilmSerialInfoFragment : Fragment() {
             viewModel.state.collect { state ->
                 when (state) {
                     is SerialInfoState.Loading -> {
-
+                        binding.progressLoad3.visibility=View.VISIBLE
                     }
                     is SerialInfoState.Error -> {
-
+                        binding.progressLoad3.visibility=View.GONE
+                        val error= ErrorBottomSheet(state.error)
+                        error.show(childFragmentManager,"error")
                     }
                     is SerialInfoState.Success -> {
                         binding.previewSerial.text = nameSerial

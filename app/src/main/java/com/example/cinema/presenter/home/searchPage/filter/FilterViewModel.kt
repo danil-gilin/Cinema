@@ -6,6 +6,8 @@ import com.example.cinema.domain.FilterLocalUseCase
 import com.example.cinema.domain.GetFilterCountryAndGenre
 import com.example.cinema.entity.filterEntity.*
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,16 +19,27 @@ class FilterViewModel @Inject constructor(
     private val _filterChannel = Channel<Filter> { }
     val filterChannel = _filterChannel.receiveAsFlow()
 
+    private val _state = MutableStateFlow<FilterState>(FilterState.Loading)
+    val state = _state.asStateFlow()
+
     fun getFilter() {
-        viewModelScope.launch {
-            val filter = filterLocalUseCase.getFilterLocal()
-            _filterChannel.send(filter)
+        try {
+            viewModelScope.launch {
+                _state.value = FilterState.Loading
+                val filter = filterLocalUseCase.getFilterLocal()
+                _filterChannel.send(filter)
+                _state.value = FilterState.Success
+            }
+        }catch (e:Throwable){
+           _state.value = FilterState.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 
     fun setFilter(type: TypeFilter, date: Any) {
+        try {
         val filterTemp = filterLocalUseCase.getFilterLocal()
         viewModelScope.launch {
+            _state.value = FilterState.Loading
             when (type) {
                 TypeFilter.TYPE -> filterTemp.type = date as TypeFilmFilter
                 TypeFilter.COUNTRY -> filterTemp.country = date as String
@@ -48,6 +61,10 @@ class FilterViewModel @Inject constructor(
             }
             filterLocalUseCase.setFilterLocal(filterTemp)
             _filterChannel.send(filterTemp)
+            _state.value = FilterState.Success
+        }
+        }catch (e:Throwable){
+            _state.value = FilterState.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 }

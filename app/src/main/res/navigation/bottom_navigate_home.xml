@@ -347,7 +347,7 @@
             tools:layout="@layout/fragment_film_serial_info" />
         <fragment
             android:id="@+id/profileFragment"
-            android:name="com.example.cinema.presenter.home.profile.ProfileFragment"
+            android:name="com.example.cinema.presenter.home.profilePage.profile.ProfileFragment"
             android:label="fragment_profile"
             tools:layout="@layout/fragment_profile" >
             <action
@@ -362,7 +362,7 @@
         </fragment>
         <fragment
             android:id="@+id/allFilmProfileFragment"
-            android:name="com.example.cinema.presenter.home.profile.allFilmProfile.AllFilmProfileFragment"
+            android:name="com.example.cinema.presenter.home.profilePage.allFilmProfile.AllFilmProfileFragment"
             android:label="AllFilmProfileFragment" >
             <action
                 android:id="@+id/action_allFilmProfileFragment_to_filmInfoFragment"

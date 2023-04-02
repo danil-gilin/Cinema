@@ -1,4 +1,4 @@
-package com.example.cinema.presenter.home.homepage.bottomSheetFilm
+package com.example.cinema.customView.bottomSheetFilm
 
 import android.content.Context
 import android.content.DialogInterface
@@ -17,7 +17,7 @@ import com.example.cinema.R
 import com.example.cinema.databinding.FragmentAddCollectionBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.dbCinema.FilmDBLocal
-import com.example.cinema.presenter.home.homepage.bottomSheetFilm.newCollection.NewCollectionFragment
+import com.example.cinema.customView.newCollection.NewCollectionFragment
 import com.example.cinema.service.collectionAdapter.AdapterCollection
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -90,7 +90,7 @@ class AddCollectionFragment : BottomSheetDialogFragment() {
 
 
         binding.addCollectionLinear.setOnClickListener {
-            val newCollectionFragment=NewCollectionFragment()
+            val newCollectionFragment= NewCollectionFragment()
             newCollectionFragment.show(parentFragmentManager,"newCollectionFragment")
             newCollectionFragment.setFragmentResultListener(Constance.NEW_COLLECTION){_,bundle->
                 viewModel.getCollection()

@@ -19,6 +19,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.cinema.R
+import com.example.cinema.customView.ErrorBottomSheet
 import com.example.cinema.databinding.FragmentActorFilmHistoryBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.allGallery.GalleryAllFilm
@@ -69,9 +70,11 @@ class ActorFilmHistoryFragment : Fragment() {
             viewModel.stateActorFilmHistory.collect{
                 when(it){
                     is ActorFilmHistoryState.Loading ->{
+                        binding.progressLoad8.visibility=View.VISIBLE
 
                     }
                     is ActorFilmHistoryState.Success ->{
+                        binding.progressLoad8.visibility=View.GONE
                         selectedChip= proffesionalKey.indexOf(it.filterFilms[0].first)
                         viewModel.filterEnabled.value=proffesionalKey[selectedChip]
                         binding.actorNameHistoryFilm.text=it.nameActorWorker
@@ -159,7 +162,9 @@ class ActorFilmHistoryFragment : Fragment() {
                         }
                     }
                     is ActorFilmHistoryState.Error ->{
-
+                        binding.progressLoad8.visibility=View.GONE
+                        val errorDialog=ErrorBottomSheet(it.error)
+                        errorDialog.show(childFragmentManager,"errorDialog")
                     }
                 }
             }

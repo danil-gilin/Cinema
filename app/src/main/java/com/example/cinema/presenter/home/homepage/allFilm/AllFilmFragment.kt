@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.cinema.R
+import com.example.cinema.customView.ErrorBottomSheet
 import com.example.cinema.databinding.FragmentAllFilmBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
@@ -71,21 +72,25 @@ class AllFilmFragment : Fragment() {
             viewModel.state.collect{state->
                 when(state){
                     is AllFilmState.Loading->{
-
+                        binding.progressLoad2.visibility=View.VISIBLE
                     }
                     is AllFilmState.Error->{
-
+                        binding.progressLoad2.visibility=View.GONE
+                        val error= ErrorBottomSheet(state.error)
+                        error.show(childFragmentManager,"error")
                     }
                     is AllFilmState.Success->{
                         viewModel.pagedCinema?.onEach {
                             Log.d("pagedCinema",it.toString())
                             adapter.updateWatchFilms(state.watchFilms)
                             adapter.submitData(it)
+                            binding.progressLoad2.visibility=View.GONE
                         }?.launchIn(viewLifecycleOwner.lifecycleScope)
 
                         viewModel.typeListTop?.onEach {
                             adapterTop.updateWatchFilms(state.watchFilms)
                             adapterTop.submitData(it)
+                            binding.progressLoad2.visibility=View.GONE
                         }?.launchIn(viewLifecycleOwner.lifecycleScope)
 
                         viewModel.semilarFilm.onEach {
@@ -93,6 +98,7 @@ class AllFilmFragment : Fragment() {
                             adapterSemillarFilm.submitList(it.second)
                             adapterSemillarFilm.updateWatchFilms(state.watchFilms)
                             binding.rcAllFilm.adapter=adapterSemillarFilm
+                            binding.progressLoad2.visibility=View.GONE
                         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
                         viewModel.actorFilm.onEach {
@@ -100,6 +106,7 @@ class AllFilmFragment : Fragment() {
                             adapter.submitList(it)
                             adapter.updateWatchFilms(state.watchFilms)
                             binding.rcAllFilm.adapter=adapter
+                            binding.progressLoad2.visibility=View.GONE
                         }.launchIn(viewLifecycleOwner.lifecycleScope)
                     }
                 }

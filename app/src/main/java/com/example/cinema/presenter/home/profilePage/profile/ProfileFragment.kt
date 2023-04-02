@@ -1,4 +1,4 @@
-package com.example.cinema.presenter.home.profile
+package com.example.cinema.presenter.home.profilePage.profile
 
 import android.os.Bundle
 import android.util.Log
@@ -12,12 +12,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.cinema.R
+import com.example.cinema.customView.ErrorBottomSheet
 import com.example.cinema.databinding.FragmentProfileBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.dbCinema.CollectionFilms
 import com.example.cinema.entity.dbCinema.HistoryCollectionDB
 import com.example.cinema.entity.dbCinema.WatchFilm
-import com.example.cinema.presenter.home.homepage.bottomSheetFilm.newCollection.NewCollectionFragment
+import com.example.cinema.customView.newCollection.NewCollectionFragment
 import com.example.cinema.service.adapterHistory.AdapterHistory
 import com.example.cinema.service.adapterWatch.AdapterWatchFilm
 import com.example.cinema.service.collectionProfileAdapter.CollectionProfileAdapter
@@ -36,7 +37,7 @@ class ProfileFragment : Fragment() {
     }
 
     @Inject
-    lateinit var factory:ProfileFactory
+    lateinit var factory: ProfileFactory
 
     private val viewModel: ProfileViewModel by viewModels { factory }
     lateinit var binding: FragmentProfileBinding
@@ -60,13 +61,16 @@ class ProfileFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.state.collect{
                 when(it){
-                    ProfileState.Error ->{
-
+                   is ProfileState.Error ->{
+                        val errorDialog= ErrorBottomSheet(it.error)
+                        errorDialog.show(childFragmentManager,"error")
+                        binding.progressLoad14.visibility=View.GONE
                     }
                     ProfileState.Loading ->{
-
+                        binding.progressLoad14.visibility=View.VISIBLE
                     }
                     is ProfileState.Success ->{
+                        binding.progressLoad14.visibility=View.GONE
                         binding.rcHistory.updateSizeCustom(it.listHisotry.size-1)
                         adapterHistory.submitList(it.listHisotry)
 
@@ -157,7 +161,7 @@ class ProfileFragment : Fragment() {
 
     private fun clickAllHistory(){
         val bundle=Bundle()
-        bundle.putInt(Constance.CollectionId,idNameList[3].first)
+        bundle.putInt(Constance.CollectionId, idNameList[3].first)
         findNavController().navigate(R.id.action_profileFragment_to_allFilmProfileFragment,bundle)
     }
 

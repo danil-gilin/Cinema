@@ -18,10 +18,11 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.cinema.R
+import com.example.cinema.customView.ErrorBottomSheet
 import com.example.cinema.databinding.FragmentFilmInfoBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
-import com.example.cinema.presenter.home.homepage.bottomSheetFilm.AddCollectionFragment
+import com.example.cinema.customView.bottomSheetFilm.AddCollectionFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -68,9 +69,12 @@ class FilmInfoFragment : Fragment() {
             viewModel.state.collect { state ->
                 when (state) {
                     is FilmInfoState.Loading -> {
-
+                        binding.infoLinear.visibility=View.GONE
+                        binding.progressLoad4.visibility=View.VISIBLE
                     }
                     is FilmInfoState.Success -> {
+                        binding.infoLinear.visibility=View.VISIBLE
+                        binding.progressLoad4.visibility=View.GONE
                         if(state.imgLogo!=null){
                             binding.posterImg.visibility=View.VISIBLE
                             Glide.with(binding.posterImg).load(state.imgLogo).centerInside().into(binding.posterImg)
@@ -219,7 +223,10 @@ class FilmInfoFragment : Fragment() {
 
                     }
                     is FilmInfoState.Error -> {
-
+                        binding.infoLinear.visibility=View.VISIBLE
+                        binding.progressLoad4.visibility=View.GONE
+                        val error= ErrorBottomSheet(state.error)
+                        error.show(childFragmentManager,"error")
                     }
                 }
             }

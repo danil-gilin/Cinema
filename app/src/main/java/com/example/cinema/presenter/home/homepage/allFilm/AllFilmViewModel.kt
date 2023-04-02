@@ -73,33 +73,39 @@ class AllFilmViewModel @Inject constructor(
                     }
                 }
 
-            } catch (e: Exception) {
-                Log.d("ClickAllFilm", "getCinema: ${e.message}")
+            } catch (e: Throwable) {
+                _state.value = AllFilmState.Error("Во время обработки запроса \nпроизошла ошибка")
             }
         }
     }
 
     fun getCinemaForActor(typeListFilm: TypeListFilm) {
         viewModelScope.launch {
-            val actorFilm = getActorWorkerInfo.getActorWorkerInfo(typeListFilm.actorId!!).films
-            val listUrlFilmPreview = arrayListOf<FilmWithPosterAndActor>()
-            val exclusive = actorFilm?.sortedByDescending { it.rating }?.distinctBy { it.filmId }
-            exclusive?.forEach {
-                val infoFilm = getFilmFullInfo.getFilmInfo(it.filmId!!)
-                listUrlFilmPreview.add(
-                    FilmWithPosterAndActor(
-                        it.description,
-                        it.filmId,
-                        it.general,
-                        it.nameEn,
-                        it.nameRu,
-                        it.professionKey,
-                        it.rating,
-                        infoFilm?.posterUrlPreview
+            try {
+                val actorFilm = getActorWorkerInfo.getActorWorkerInfo(typeListFilm.actorId!!).films
+                val listUrlFilmPreview = arrayListOf<FilmWithPosterAndActor>()
+                val exclusive =
+                    actorFilm?.sortedByDescending { it.rating }?.distinctBy { it.filmId }
+                exclusive?.forEach {
+                    val infoFilm = getFilmFullInfo.getFilmInfo(it.filmId!!)
+                    listUrlFilmPreview.add(
+                        FilmWithPosterAndActor(
+                            it.description,
+                            it.filmId,
+                            it.general,
+                            it.nameEn,
+                            it.nameRu,
+                            it.professionKey,
+                            it.rating,
+                            infoFilm?.posterUrlPreview
+                        )
                     )
-                )
+                }
+                _actorFilm.send(listUrlFilmPreview)
             }
-            _actorFilm.send(listUrlFilmPreview)
+            catch (e:Throwable){
+                _state.value = AllFilmState.Error("Во время обработки запроса \nпроизошла ошибка")
+            }
         }
     }
 
@@ -109,8 +115,8 @@ class AllFilmViewModel @Inject constructor(
             try {
                 val watchFilms = watchFilmUseCase.getWatchFilmId()
                 _state.value = AllFilmState.Success(watchFilms)
-            } catch (e: Exception) {
-                _state.value = AllFilmState.Error(e.message ?: "Error")
+            } catch (e: Throwable) {
+                _state.value = AllFilmState.Error("Во время обработки запроса \nпроизошла ошибка")
             }
         }
     }

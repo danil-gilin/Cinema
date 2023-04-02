@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/dialog_fragment_back"
     android:orientation="vertical"
-    tools:context=".presenter.home.homepage.bottomSheetFilm.newCollection.NewCollectionFragment">
+    tools:context=".customView.newCollection.NewCollectionFragment">
 
     <ImageView
         android:id="@+id/btn_close_2"

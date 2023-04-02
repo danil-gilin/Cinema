@@ -1,4 +1,4 @@
-package com.example.cinema.presenter.home.homepage.bottomSheetFilm
+package com.example.cinema.customView.bottomSheetFilm
 
 import com.example.cinema.entity.dbCinema.CollectionFilms
 

@@ -94,16 +94,20 @@ class ActorInfoViewModel @Inject constructor(
                 Log.d("ActorInfoState", "view model good")
                 _stateActroInfo.value =
                     ActorInfoState.Success(info, listUrlFilmPreview, infoHistoryFilms, watchesFilms)
-            } catch (e: Exception) {
-                _stateActroInfo.value = ActorInfoState.Error("Ошибка подключения")
+            } catch (e: Throwable) {
+                _stateActroInfo.value = ActorInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
             }
         }
     }
 
 
     fun getWatchesFilm() {
+        try {
         viewModelScope.launch {
             _watchsFilm.send(watchFilmUseCase.getWatchFilmId())
+        }
+        }catch (e:Throwable){
+            Log.d("ActorInfoState", "view model error")
         }
     }
 

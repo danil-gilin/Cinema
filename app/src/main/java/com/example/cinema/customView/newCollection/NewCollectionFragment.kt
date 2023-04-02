@@ -1,4 +1,4 @@
-package com.example.cinema.presenter.home.homepage.bottomSheetFilm.newCollection
+package com.example.cinema.customView.newCollection
 
 import android.app.Dialog
 import android.graphics.Color
@@ -30,7 +30,7 @@ class NewCollectionFragment : DialogFragment() {
     }
 
     @Inject
-    lateinit var factory:NewCollectionFactory
+    lateinit var factory: NewCollectionFactory
 
 
     private val viewModel: NewCollectionViewModel by viewModels { factory }

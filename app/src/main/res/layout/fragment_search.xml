@@ -13,6 +13,16 @@
     tools:context=".presenter.home.searchPage.search.SearchFragment">
 
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_load12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:indeterminateTint="#3D3BFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recycler_search" />
+
     <LinearLayout
         android:id="@+id/linearLayout5"
         android:layout_width="0dp"

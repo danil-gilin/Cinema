@@ -47,4 +47,15 @@
         app:layout_constraintTop_toBottomOf="@+id/genre_name_all_film"
         tools:listitem="@layout/cinema_item" />
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_load2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:indeterminateTint="#3D3BFF"
+        app:layout_constraintBottom_toBottomOf="@+id/rc_all_film"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,7 +20,8 @@ class ActorFilmHistoryViewModel @Inject constructor(
 
     val filterEnabled = MutableStateFlow("ACTOR")
 
-    private val _stateActorFilmHistory = MutableStateFlow<ActorFilmHistoryState>(ActorFilmHistoryState.Loading)
+    private val _stateActorFilmHistory =
+        MutableStateFlow<ActorFilmHistoryState>(ActorFilmHistoryState.Loading)
     val stateActorFilmHistory = _stateActorFilmHistory.asStateFlow()
 
     private val _watchsFilm = Channel<List<Int>> { }
@@ -29,7 +30,6 @@ class ActorFilmHistoryViewModel @Inject constructor(
     private val _films = MutableStateFlow<List<FilmWithPosterAndActor>>(emptyList())
     val films: StateFlow<List<FilmWithPosterAndActor>> =
         combine(_films, filterEnabled) { films, filterEnabled ->
-            Log.d("ActorFilmHistoryViewModelList", "filterEnabled: $filterEnabled")
             when (filterEnabled) {
                 proffesionalKey[0] -> films.filter { it.professionKey == proffesionalKey[0] }
                 proffesionalKey[1] -> films.filter { it.professionKey == proffesionalKey[1] }
@@ -58,15 +58,17 @@ class ActorFilmHistoryViewModel @Inject constructor(
 
     fun getActorFilmHistory(idActor: Int) {
         viewModelScope.launch {
+            try {
                 val info = getActorWorkerInfo.getActorWorkerInfo(idActor)
                 var nameActorWorker = ""
                 var listUrlFilmPreview = arrayListOf<FilmWithPosterAndActor>()
                 var filterString = arrayListOf<String>()
-                val reatingFilm = info.films?.sortedByDescending { it.rating }?.distinctBy { it.filmId }
+                val reatingFilm =
+                    info.films?.sortedByDescending { it.rating }?.distinctBy { it.filmId }
 
                 reatingFilm?.forEach {
                     val infoFilm = getFilmFullInfo.getFilmInfo(it.filmId!!)
-                    val genre = if(infoFilm?.genres?.size!! >0) infoFilm.genres[0].genre else ""
+                    val genre = if (infoFilm?.genres?.size!! > 0) infoFilm.genres[0].genre else ""
                     listUrlFilmPreview.add(
                         FilmWithPosterAndActor(
                             it.description,
@@ -82,7 +84,10 @@ class ActorFilmHistoryViewModel @Inject constructor(
                         )
                     )
                     if (!filterString.contains(it.professionKey) && it.professionKey != null) {
-                        Log.d("ActorFilmHistoryFragment", "getActorFilmHistory: ${it.professionKey}")
+                        Log.d(
+                            "ActorFilmHistoryFragment",
+                            "getActorFilmHistory: ${it.professionKey}"
+                        )
                         filterString.add(it.professionKey)
                     }
                 }
@@ -100,7 +105,7 @@ class ActorFilmHistoryViewModel @Inject constructor(
                 else if (info.nameEn != null) nameActorWorker = info.nameEn
                 val famel = info.sex != "MALE"
 
-                val watchesFilms=watchFilmUseCase.getWatchFilmId()
+                val watchesFilms = watchFilmUseCase.getWatchFilmId()
 
                 _stateActorFilmHistory.value = ActorFilmHistoryState.Success(
                     filterStringWithSize.sortedByDescending { it.second },
@@ -108,12 +113,23 @@ class ActorFilmHistoryViewModel @Inject constructor(
                     famel,
                     watchesFilms,
                 )
+            } catch (e: Throwable) {
+                _stateActorFilmHistory.value = ActorFilmHistoryState.Error(
+                    "Во время обработки запроса \n" + "произошла ошибка"
+                )
+            }
         }
     }
 
     fun getWatchesFilm() {
-        viewModelScope.launch {
-            _watchsFilm.send(watchFilmUseCase.getWatchFilmId())
+        try {
+            viewModelScope.launch {
+                _watchsFilm.send(watchFilmUseCase.getWatchFilmId())
+            }
+        } catch (e: Throwable) {
+            _stateActorFilmHistory.value = ActorFilmHistoryState.Error(
+                "Во время обработки запроса \n" + "произошла ошибка"
+            )
         }
     }
 

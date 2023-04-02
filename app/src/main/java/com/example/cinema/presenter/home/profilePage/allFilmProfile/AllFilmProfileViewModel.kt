@@ -1,4 +1,4 @@
-package com.example.cinema.presenter.home.profile.allFilmProfile
+package com.example.cinema.presenter.home.profilePage.allFilmProfile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -30,15 +30,15 @@ class AllFilmProfileViewModel @Inject constructor(
                         throw Exception("Error")
                     }
                     -1 -> {
-                        name=idNameList[0].second
+                        name= idNameList[0].second
                         likeFilmUseCase.getAllLikeFilm()
                     }
                     -2 -> {
-                        name=idNameList[1].second
+                        name= idNameList[1].second
                         wantToWatchFilmUseCase.getAllWantToWatchFilm()
                     }
                     -3 -> {
-                        name=idNameList[2].second
+                        name= idNameList[2].second
                         watchFilmUseCase.getAllWatchFilm()
                     }
                     -4 -> {
@@ -51,16 +51,20 @@ class AllFilmProfileViewModel @Inject constructor(
                 }
 
                 if (listFilm.isEmpty()) {
-                    name=idNameList[3].second
+                    name= idNameList[3].second
                     val watchsFilmId=watchFilmUseCase.getWatchFilmId()
-                    _state.value = AllFilmProfileState.SuccessHistory(historyLocalFilmUseCase.getHistoryLocal(), name,watchsFilmId)
+                    _state.value = AllFilmProfileState.SuccessHistory(
+                        historyLocalFilmUseCase.getHistoryLocal(),
+                        name,
+                        watchsFilmId
+                    )
                 } else {
                     val watchsFilmId=watchFilmUseCase.getWatchFilmId()
-                    _state.value = AllFilmProfileState.Success(listFilm, name,watchsFilmId)
+                    _state.value = AllFilmProfileState.Success(listFilm, name, watchsFilmId)
                 }
             }
-        } catch (e: Exception) {
-            _state.value = AllFilmProfileState.Error(e.message.toString())
+        } catch (e: Throwable) {
+            _state.value = AllFilmProfileState.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 

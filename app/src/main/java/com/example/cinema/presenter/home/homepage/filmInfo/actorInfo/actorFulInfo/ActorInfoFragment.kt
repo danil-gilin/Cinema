@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.cinema.R
+import com.example.cinema.customView.ErrorBottomSheet
 import com.example.cinema.databinding.FragmentActorInfoBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
@@ -61,9 +62,10 @@ class ActorInfoFragment : Fragment() {
             viewModel.stateActorInfo.collect{
                 when(it){
                     is ActorInfoState.Loading ->{
-
+                        binding.progressLoad7.visibility=View.VISIBLE
                     }
                     is ActorInfoState.Success ->{
+                        binding.progressLoad7.visibility=View.GONE
                         Log.d("ActorInfoState","good")
                         Glide.with(binding.imgFullInfoActor).load(it.actorInfo.posterUrl).centerCrop().into(binding.imgFullInfoActor)
                         if (it.actorInfo.nameRu !=null){
@@ -93,7 +95,9 @@ class ActorInfoFragment : Fragment() {
 
                     }
                     is ActorInfoState.Error ->{
-
+                        binding.progressLoad7.visibility=View.GONE
+                        val errorDialog=ErrorBottomSheet(it.error)
+                        errorDialog.show(childFragmentManager,"error")
                     }
                 }
             }

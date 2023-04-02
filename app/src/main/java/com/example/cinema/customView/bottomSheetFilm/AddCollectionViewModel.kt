@@ -1,4 +1,4 @@
-package com.example.cinema.presenter.home.homepage.bottomSheetFilm
+package com.example.cinema.customView.bottomSheetFilm
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -27,10 +27,11 @@ class AddCollectionViewModel @Inject constructor(private val collectionUseCase: 
         try {
         viewModelScope.launch {
             _state.value = StateAddCollection.Loading
-            _state.value = StateAddCollection.SuccessGetCollection(collectionUseCase.getAllCollection())
+            _state.value =
+                StateAddCollection.SuccessGetCollection(collectionUseCase.getAllCollection())
         }
         }catch (e:Exception){
-            _state.value=StateAddCollection.Error(e.message.toString())
+            _state.value= StateAddCollection.Error(e.message.toString())
         }
     }
 
@@ -40,7 +41,7 @@ class AddCollectionViewModel @Inject constructor(private val collectionUseCase: 
             _collectionSelect.send(collectionFilmUseCase.getSelectCollection(id))
         }
         }catch (e:Exception){
-            _state.value=StateAddCollection.Error(e.message.toString())
+            _state.value= StateAddCollection.Error(e.message.toString())
         }
     }
 
@@ -70,7 +71,7 @@ class AddCollectionViewModel @Inject constructor(private val collectionUseCase: 
                 _state.value = StateAddCollection.SuccessSaveCollection
             }
         } catch (e: Exception) {
-          _state.value=StateAddCollection.Error(e.message.toString())
+          _state.value= StateAddCollection.Error(e.message.toString())
         }
     }
 }

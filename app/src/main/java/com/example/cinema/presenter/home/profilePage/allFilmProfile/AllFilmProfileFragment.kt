@@ -1,4 +1,4 @@
-package com.example.cinema.presenter.home.profile.allFilmProfile
+package com.example.cinema.presenter.home.profilePage.allFilmProfile
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.cinema.R
+import com.example.cinema.customView.ErrorBottomSheet
 import com.example.cinema.databinding.FragmentAllFilmProfileBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.service.adapterAllFilmProfile.AdapterAllFilmProfile
@@ -59,21 +60,30 @@ class AllFilmProfileFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.state.collect { state->
                 when(state){
-                    is AllFilmProfileState.Success->{
+                    is AllFilmProfileState.Success ->{
                         adapter.submitList(state.list)
                         binding.genreNameAllFilmProfile.text=state.name
                         adapter.listIdWarchFilm=state.watchFilmId
+                        binding.progressLoad13.visibility=View.GONE
                     }
-                    is AllFilmProfileState.Error->{
+                    is AllFilmProfileState.Error ->{
+
+                        binding.progressLoad13.visibility=View.GONE
+
+
+                        val errorDialog=ErrorBottomSheet(state.error)
+                        errorDialog.show(childFragmentManager,"error")
+                    }
+                    is AllFilmProfileState.Loading ->{
+                        binding.progressLoad13.visibility=View.VISIBLE
 
                     }
-                    is AllFilmProfileState.Loading->{
+                    is AllFilmProfileState.Empty ->{
+                        binding.progressLoad13.visibility=View.GONE
 
                     }
-                    is AllFilmProfileState.Empty->{
-
-                    }
-                    is AllFilmProfileState.SuccessHistory->{
+                    is AllFilmProfileState.SuccessHistory ->{
+                        binding.progressLoad13.visibility=View.GONE
                         adapterHistory.submitList(state.list)
                         binding.rcAllFilmProfile.adapter=adapterHistory
                         binding.genreNameAllFilmProfile.text=state.name

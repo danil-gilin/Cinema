@@ -1,4 +1,4 @@
-package com.example.cinema.presenter.home.homepage.bottomSheetFilm.newCollection
+package com.example.cinema.customView.newCollection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

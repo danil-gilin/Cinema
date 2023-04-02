@@ -24,6 +24,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import com.example.cinema.R
+import com.example.cinema.customView.ErrorBottomSheet
 import com.example.cinema.databinding.FragmentFilmGalleryBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.allGallery.GalleryAllFilm
@@ -85,9 +86,12 @@ class FilmGallery : Fragment() {
             viewModel.state.collect{ state ->
                 when(state) {
                     is StateFilmGallery.Loading -> {
-
+                        binding.progressLoad5.visibility=View.VISIBLE
+                        binding.rcAllGallery.visibility=View.GONE
                     }
                     is StateFilmGallery.Success -> {
+                        binding.progressLoad5.visibility=View.GONE
+                        binding.rcAllGallery.visibility=View.VISIBLE
                         if(galleryAllFilm==null) {
                             viewModel.getGallery(idFilm!!,nameTypeGalleryEng[0])
                             setFlowGallery()
@@ -146,7 +150,10 @@ class FilmGallery : Fragment() {
                         }
                     }
                     is StateFilmGallery.Error -> {
-                        Log.d("GalleryAll", state.error)
+                        binding.progressLoad5.visibility=View.GONE
+                        binding.rcAllGallery.visibility=View.GONE
+                        val error= ErrorBottomSheet(state.error)
+                        error.show(childFragmentManager,"error")
                     }
                 }
             }

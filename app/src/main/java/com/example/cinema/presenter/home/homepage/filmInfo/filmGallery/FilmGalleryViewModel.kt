@@ -27,8 +27,8 @@ class FilmGalleryViewModel @Inject constructor(private val getfilmFallery: GetFi
                 _state.value = StateFilmGallery.Loading
                 _state.value = StateFilmGallery.Success(getfilmFallery.getFilmGallery(idFilm))
             }
-        }catch (e:Exception){
-            _state.value=StateFilmGallery.Error("Ошибка с интернетом")
+        }catch (e:Throwable){
+            _state.value=StateFilmGallery.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 
@@ -39,8 +39,8 @@ class FilmGalleryViewModel @Inject constructor(private val getfilmFallery: GetFi
                 pagingSourceFactory = { AlllGalleryPaggingSource(idFilm, type) }
             ).flow.cachedIn(viewModelScope)
         Log.d("PaggeGallery","$listGalleryType")
-        }catch (e:Exception){
-            _state.value=StateFilmGallery.Error("Ошибка с интернетом")
+        }catch (e:Throwable){
+            _state.value=StateFilmGallery.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 }

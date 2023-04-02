@@ -46,7 +46,7 @@ class HomePageViewModel @Inject constructor(
                 _state.value = HomePageState.Success(genreCinema1,genreCinema2,premiers,serial,popular,popular1,watchesFilm)
             } catch (e: Exception) {
                 _state.value =
-                    HomePageState.Error("Придумайте название \n для вашей новой коллекции |")
+                    HomePageState.Error("Во время обработки запроса \nпроизошла ошибка")
             }
         }
     }
@@ -126,6 +126,8 @@ class HomePageViewModel @Inject constructor(
                 }
             }
         } catch (e: Exception) {
+            _state.value =
+                HomePageState.Error("Во время обработки запроса \nпроизошла ошибка")
             return null
         }
     }
@@ -140,6 +142,8 @@ class HomePageViewModel @Inject constructor(
             return Pair(typeListFilm, cinema)
             // _cinemaPremiers.send(Pair(typeListFilm, cinema))
         } catch (e: Exception) {
+            _state.value =
+                HomePageState.Error("Во время обработки запроса \nпроизошла ошибка")
             return null
         }
     }
@@ -166,6 +170,8 @@ class HomePageViewModel @Inject constructor(
                 }
             }
         } catch (e: Exception) {
+            _state.value =
+                HomePageState.Error("Во время обработки запроса \nпроизошла ошибка")
             return null
         }
 
@@ -189,13 +195,20 @@ class HomePageViewModel @Inject constructor(
                 }
             }
         } catch (e: Exception) {
+            _state.value =
+                HomePageState.Error("Во время обработки запроса \nпроизошла ошибка")
             return null
         }
     }
 
     fun getWatchesFilm() {
-        viewModelScope.launch {
-            _watchsFilm.send(watchFilmUseCase.getWatchFilmId())
+        try {
+            viewModelScope.launch {
+                _watchsFilm.send(watchFilmUseCase.getWatchFilmId())
+            }
+        }catch (e: Exception){
+            _state.value =
+                HomePageState.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.cinema.presenter.home.homepage.bottomSheetFilm.newCollection
+package com.example.cinema.customView.newCollection
 
 sealed class StateNewCollection{
     object Loading: StateNewCollection()

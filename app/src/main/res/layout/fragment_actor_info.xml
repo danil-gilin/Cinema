@@ -13,6 +13,16 @@
         android:layout_height="match_parent"
         tools:context=".presenter.home.homepage.filmInfo.actorInfo.actorFulInfo.ActorInfoFragment">
 
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progress_load7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:indeterminateTint="#3D3BFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
         <ImageView
             android:id="@+id/back_btn_full_info_actor"
             android:layout_width="wrap_content"
@@ -59,7 +69,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/graphik_medium"
-                    android:text="Кристина Асмус"
                     android:textColor="#272727"
                     android:textSize="16sp" />
 
@@ -69,7 +78,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/graphik_regular"
-                    android:text="Актриса"
                     android:textColor="#838390"
                     android:textSize="12sp" />
             </LinearLayout>

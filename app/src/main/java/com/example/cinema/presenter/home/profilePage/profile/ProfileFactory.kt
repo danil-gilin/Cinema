@@ -1,4 +1,4 @@
-package com.example.cinema.presenter.home.profile
+package com.example.cinema.presenter.home.profilePage.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

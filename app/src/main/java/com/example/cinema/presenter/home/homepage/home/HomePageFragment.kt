@@ -10,6 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.cinema.R
+import com.example.cinema.customView.ErrorBottomSheet
+import com.example.cinema.customView.LoaderFragment
 import com.example.cinema.databinding.FragmentHomePageBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
@@ -30,7 +32,13 @@ class HomePageFragment : Fragment() {
 
     private val viewModel: HomePageViewModel by viewModels { viewModelFactory }
     private var flagGetFilm=true
+    val loader=LoaderFragment()
     private lateinit var binding: FragmentHomePageBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loader.show(childFragmentManager,"loader")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,13 +55,15 @@ class HomePageFragment : Fragment() {
             viewModel.state.collect { state ->
                 when (state) {
                     is HomePageState.Loading -> {
-
                     }
                     is HomePageState.Success -> {
-                            updateListsFilm(state)
+                        updateListsFilm(state)
+                        loader.dismiss()
                     }
                     is HomePageState.Error -> {
-
+                        loader.dismiss()
+                        val error=ErrorBottomSheet(state.error)
+                        error.show(childFragmentManager,"error")
                     }
                 }
             }
@@ -115,7 +125,6 @@ class HomePageFragment : Fragment() {
                 binding.cinemaList6.updategenre(state.serial!!.first)
                 binding.cinemaList6.setClickAllFilm { typeList -> onClickAllFilm(typeList) }
                 binding.cinemaList6.setClickInfoFilm{id->onClickInfoFilm(id)}
-
     }
 
     fun onClickAllFilm(typeListFilm: TypeListFilm) {

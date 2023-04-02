@@ -198,30 +198,34 @@ class FilmInfoViewModel @Inject constructor(
                     isWantToWatch
                 )
             }
-        } catch (e: Exception) {
-            _state.value = FilmInfoState.Error(e.message.toString())
+        } catch (e: Throwable) {
+            _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 
     fun addWatchFilm(stateWatch: Boolean) {
-        viewModelScope.launch {
-            if (stateWatch) {
-                if (localFilm != null) {
-                    val name =
-                        localFilm?.nameRu ?: localFilm?.nameEn ?: localFilm?.nameOriginal ?: ""
-                    val filmToDb = WatchFilm(
-                        localFilm!!.kinopoiskId,
-                        name,
-                        localFilm!!.posterUrl,
-                        localFilm!!.genres?.get(0)?.genre ?: "",
-                        localFilm!!.ratingKinopoisk,
-                        localFilm?.serial == true
-                    )
-                    watchFilmUseCase.addWatchFilm(filmToDb)
+        try {
+            viewModelScope.launch {
+                if (stateWatch) {
+                    if (localFilm != null) {
+                        val name =
+                            localFilm?.nameRu ?: localFilm?.nameEn ?: localFilm?.nameOriginal ?: ""
+                        val filmToDb = WatchFilm(
+                            localFilm!!.kinopoiskId,
+                            name,
+                            localFilm!!.posterUrl,
+                            localFilm!!.genres?.get(0)?.genre ?: "",
+                            localFilm!!.ratingKinopoisk,
+                            localFilm?.serial == true
+                        )
+                        watchFilmUseCase.addWatchFilm(filmToDb)
+                    }
+                } else {
+                    watchFilmUseCase.delWatchFilm(localFilm!!.kinopoiskId)
                 }
-            } else {
-                watchFilmUseCase.delWatchFilm(localFilm!!.kinopoiskId)
             }
+        }catch (e:Throwable){
+            _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 
@@ -230,53 +234,61 @@ class FilmInfoViewModel @Inject constructor(
             viewModelScope.launch {
                 _watchsFilm.send(watchFilmUseCase.getWatchFilmId())
             }
-        } catch (e: Exception) {
-
+        } catch (e: Throwable) {
+            _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
         }
 
     }
 
     fun addLikeFilm(stateLike: Boolean) {
-        viewModelScope.launch {
-            if (stateLike) {
-                if (localFilm != null) {
-                    val name =
-                        localFilm?.nameRu ?: localFilm?.nameEn ?: localFilm?.nameOriginal ?: ""
-                    val filmToDb = LikeFilm(
-                        localFilm!!.kinopoiskId,
-                        name,
-                        localFilm!!.posterUrl,
-                        localFilm!!.genres?.get(0)?.genre ?: "",
-                        localFilm!!.ratingKinopoisk,
-                        localFilm?.serial == true
-                    )
-                    likeFilmUseCase.addLikeFilm(filmToDb)
+        try {
+            viewModelScope.launch {
+                if (stateLike) {
+                    if (localFilm != null) {
+                        val name =
+                            localFilm?.nameRu ?: localFilm?.nameEn ?: localFilm?.nameOriginal ?: ""
+                        val filmToDb = LikeFilm(
+                            localFilm!!.kinopoiskId,
+                            name,
+                            localFilm!!.posterUrl,
+                            localFilm!!.genres?.get(0)?.genre ?: "",
+                            localFilm!!.ratingKinopoisk,
+                            localFilm?.serial == true
+                        )
+                        likeFilmUseCase.addLikeFilm(filmToDb)
+                    }
+                } else {
+                    likeFilmUseCase.delLikeFilm(localFilm!!.kinopoiskId)
                 }
-            } else {
-                likeFilmUseCase.delLikeFilm(localFilm!!.kinopoiskId)
             }
+        }catch (e:Throwable){
+            _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 
     fun addWantToWatchFilm(state: Boolean) {
-        viewModelScope.launch {
-            if (state) {
-                if (localFilm != null) {
-                    val name =
-                        localFilm?.nameRu ?: localFilm?.nameEn ?: localFilm?.nameOriginal ?: ""
-                    val filmToDb = WantToWatchFilm(
-                        localFilm!!.kinopoiskId,
-                        name,
-                        localFilm!!.posterUrl,
-                        localFilm!!.genres?.get(0)?.genre ?: "",
-                        localFilm!!.ratingKinopoisk,
-                        localFilm?.serial == true
-                    )
-                    wantToWatchFilmUseCase.addWantToWatchFilmFilm(filmToDb)
+        try {
+            viewModelScope.launch {
+                if (state) {
+                    if (localFilm != null) {
+                        val name =
+                            localFilm?.nameRu ?: localFilm?.nameEn ?: localFilm?.nameOriginal ?: ""
+                        val filmToDb = WantToWatchFilm(
+                            localFilm!!.kinopoiskId,
+                            name,
+                            localFilm!!.posterUrl,
+                            localFilm!!.genres?.get(0)?.genre ?: "",
+                            localFilm!!.ratingKinopoisk,
+                            localFilm?.serial == true
+                        )
+                        wantToWatchFilmUseCase.addWantToWatchFilmFilm(filmToDb)
+                    }
+                } else {
+                    wantToWatchFilmUseCase.delWantToWatchFilmFilm(localFilm!!.kinopoiskId)
                 }
-            } else {
-                wantToWatchFilmUseCase.delWantToWatchFilmFilm(localFilm!!.kinopoiskId)
             }
+        }catch (e:Throwable){
+            _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 
@@ -289,8 +301,8 @@ class FilmInfoViewModel @Inject constructor(
                     _webUrl.send("Нет ссылки")
                 }
 
-            } catch (e: Exception) {
-
+            } catch (e: Throwable) {
+                _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
             }
         }
     }
@@ -312,8 +324,8 @@ class FilmInfoViewModel @Inject constructor(
                 )
                 _filmBottom.send(film)
             }
-        } catch (e: Exception) {
-
+        } catch (e: Throwable) {
+            _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 

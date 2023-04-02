@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.example.cinema.R
+import com.example.cinema.customView.ErrorBottomSheet
 import com.example.cinema.databinding.FragmentSearchBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.service.adapterSearchFilms.AdapterSearchFilms
@@ -68,20 +69,26 @@ class SearchFragment : Fragment() {
             viewModel.state.collect {
                 when (it) {
                     is SearchState.Success -> {
+                        binding.progressLoad12.visibility=View.GONE
                         it.flowList.onEach {film->
+                            binding.recyclerSearch.adapter=adapter
                             adapter.submitData(film)
                         }.launchIn(viewLifecycleOwner.lifecycleScope)
                         binding.notFoundTxt.visibility=View.GONE
                     }
                     is SearchState.Error -> {
-                        Log.d("SearchFragment",  it.error)
+                        binding.progressLoad12.visibility=View.GONE
+
                         binding.notFoundTxt.visibility=View.GONE
+                        val errorDialog=ErrorBottomSheet(it.error)
+                        errorDialog.show(childFragmentManager,"error")
                     }
                     is SearchState.Loading -> {
-                        Log.d("SearchFragment", "Loading")
+                        binding.progressLoad12.visibility=View.VISIBLE
                     }
                     is SearchState.Empty -> {
                         adapter.submitData(PagingData.empty())
+                        binding.progressLoad12.visibility=View.GONE
                         binding.notFoundTxt.visibility=View.VISIBLE
                     }
                 }

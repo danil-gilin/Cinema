@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.cinema.R
+import com.example.cinema.customView.ErrorBottomSheet
 import com.example.cinema.databinding.FragmentCountryBinding
 import com.example.cinema.entity.Constance
 import com.example.cinema.service.adapter_filter.AdapterCountry
@@ -64,6 +65,25 @@ class CountryFragment : Fragment() {
         binding.clearCountry.setOnClickListener {
             adapter.selectCountry=""
             adapter.notifyDataSetChanged()
+        }
+
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.state.collect { state ->
+                when (state) {
+                    is CountryState.Loading -> {
+                        binding.progressLoad9.visibility=View.VISIBLE
+                    }
+                    is CountryState.Success -> {
+                        binding.progressLoad9.visibility=View.GONE
+                    }
+                    is CountryState.Error -> {
+                        binding.progressLoad9.visibility=View.GONE
+                        val errorBottomSheet= ErrorBottomSheet(state.error)
+                        errorBottomSheet.show(childFragmentManager,"error")
+                    }
+                }
+            }
         }
 
         return binding.root

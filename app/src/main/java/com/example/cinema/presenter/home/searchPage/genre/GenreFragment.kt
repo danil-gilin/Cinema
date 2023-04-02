@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.cinema.R
+import com.example.cinema.customView.ErrorBottomSheet
 import com.example.cinema.databinding.FragmentCountryBinding
 import com.example.cinema.databinding.FragmentGenreBinding
 import com.example.cinema.entity.Constance
@@ -71,6 +72,24 @@ class GenreFragment : Fragment() {
             adapter.notifyDataSetChanged()
         }
 
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.state.collect { state ->
+                when (state) {
+                    is GenreState.Loading -> {
+                        binding.progressLoad11.visibility=View.VISIBLE
+                    }
+                    is GenreState.Success -> {
+                        binding.progressLoad11.visibility=View.GONE
+                    }
+                    is GenreState.Error -> {
+                        binding.progressLoad11.visibility=View.GONE
+                        val erroDialog= ErrorBottomSheet(state.error)
+                        erroDialog.show(childFragmentManager,"error")
+                    }
+                }
+            }
+        }
 
         return binding.root
     }

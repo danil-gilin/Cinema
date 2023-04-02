@@ -8,6 +8,7 @@ import com.example.cinema.entity.galleryFilm.GalleryFilm
 import com.example.cinema.entity.galleryFilm.GalleryItem
 import com.example.cinema.entity.serialInfo.InfoSeasons
 import com.example.cinema.entity.similarFilm.SimilarFilm
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class CinemaFullInfoRepostory @Inject constructor() {
@@ -17,7 +18,6 @@ class CinemaFullInfoRepostory @Inject constructor() {
        }catch (e:Exception){
            return null
        }
-
     }
 
     suspend fun getInfoForSerial(id:Int): InfoSeasons? {

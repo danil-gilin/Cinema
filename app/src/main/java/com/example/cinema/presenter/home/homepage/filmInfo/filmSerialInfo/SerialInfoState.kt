@@ -4,6 +4,6 @@ import com.example.cinema.entity.serialInfo.InfoSeasons
 
 sealed class SerialInfoState{
     object Loading:SerialInfoState()
-    object Error:SerialInfoState()
+    data class Error(val error:String):SerialInfoState()
     data class Success(val serialInfo:InfoSeasons):SerialInfoState()
 }
