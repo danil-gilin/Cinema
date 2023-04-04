@@ -259,6 +259,10 @@ class FilmInfoFragment : Fragment() {
     }
 
     private fun initBtn(){
+        binding.backFilmFullInfo.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding.watchBtn.setOnClickListener {
             if (stateWatch){
                 stateWatch=false

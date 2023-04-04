@@ -6,9 +6,9 @@
     android:layout_height="wrap_content"
     app:textEndPadding="16dp"
     app:chipCornerRadius="56dp"
-    android:text="2"
+    android:text=""
     app:textStartPadding="18dp"
     android:fontFamily="@font/graphik_regular"
     android:textSize="18sp"
 
-    app:rippleColor="#143D3BFF" />
+    app:rippleColor="@color/rippleColorChip" />

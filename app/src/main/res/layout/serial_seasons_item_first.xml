@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/graphik_regular"
-        android:text="1 сезон, 16 серий"
-        android:textColor="#838390"
+        android:text=""
+        android:textColor="@color/Grey_text_color"
         android:textSize="14sp" />
 </LinearLayout>

@@ -67,22 +67,26 @@ class ActorFilmHistoryViewModel @Inject constructor(
                     info.films?.sortedByDescending { it.rating }?.distinctBy { it.filmId }
 
                 reatingFilm?.forEach {
-                    val infoFilm = getFilmFullInfo.getFilmInfo(it.filmId!!)
-                    val genre = if (infoFilm?.genres?.size!! > 0) infoFilm.genres[0].genre else ""
-                    listUrlFilmPreview.add(
-                        FilmWithPosterAndActor(
-                            it.description,
-                            it.filmId,
-                            it.general,
-                            it.nameEn,
-                            it.nameRu,
-                            it.professionKey,
-                            it.rating,
-                            infoFilm?.posterUrlPreview,
-                            infoFilm?.year.toString() ?: null,
-                            genre
+                    try {
+                        val infoFilm = getFilmFullInfo.getFilmInfo(it.filmId!!)
+                        val genre = if (infoFilm?.genres?.size!! > 0) infoFilm.genres[0].genre else ""
+                        listUrlFilmPreview.add(
+                            FilmWithPosterAndActor(
+                                it.description,
+                                it.filmId,
+                                it.general,
+                                it.nameEn,
+                                it.nameRu,
+                                it.professionKey,
+                                it.rating,
+                                infoFilm?.posterUrlPreview,
+                                infoFilm?.year.toString() ?: null,
+                                genre
+                            )
                         )
-                    )
+                    }catch (e:Throwable){
+                        _stateActorFilmHistory.value = ActorFilmHistoryState.Error("Во время обработки запроса \n" + "произошла ошибка")
+                    }
                     if (!filterString.contains(it.professionKey) && it.professionKey != null) {
                         Log.d(
                             "ActorFilmHistoryFragment",

@@ -10,4 +10,4 @@
     android:fontFamily="@font/graphik_medium"
     android:textSize="18sp"
 
-    app:rippleColor="#143D3BFF" />
+    app:rippleColor="@color/rippleColorChip" />

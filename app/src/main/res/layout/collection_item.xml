@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="#000000"
+        app:strokeColor="@color/black"
         app:strokeWidth="1dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -61,7 +61,7 @@
                     android:layout_gravity="center"
                     android:layout_marginBottom="8dp"
                     android:text="Русское кино"
-                    android:textColor="#272727"
+                    android:textColor="@color/balck_text_color"
                     android:textSize="12sp" />
 
                 <TextView

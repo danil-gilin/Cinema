@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/graphik_regular"
-                    android:textColor="#838390"
+                    android:textColor="@color/Grey_text_color"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
@@ -129,7 +129,7 @@
                     android:fontFamily="@font/graphik"
                     android:gravity="end"
                     android:text="К списку  "
-                    android:textColor="#3D3BFF"
+                    android:textColor="@color/blue_text_color"
                     android:textSize="14sp"
                     app:drawableRightCompat="@drawable/actor_film_all" />
             </LinearLayout>
@@ -141,7 +141,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/graphik_regular"
                 android:text="44 фильма"
-                android:textColor="#838391"
+                android:textColor="@color/Grey_text_color"
                 android:textSize="12sp" />
 
         </LinearLayout>

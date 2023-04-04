@@ -87,19 +87,23 @@ class AllFilmViewModel @Inject constructor(
                 val exclusive =
                     actorFilm?.sortedByDescending { it.rating }?.distinctBy { it.filmId }
                 exclusive?.forEach {
-                    val infoFilm = getFilmFullInfo.getFilmInfo(it.filmId!!)
-                    listUrlFilmPreview.add(
-                        FilmWithPosterAndActor(
-                            it.description,
-                            it.filmId,
-                            it.general,
-                            it.nameEn,
-                            it.nameRu,
-                            it.professionKey,
-                            it.rating,
-                            infoFilm?.posterUrlPreview
+                    try {
+                        val infoFilm = getFilmFullInfo.getFilmInfo(it.filmId!!)
+                        listUrlFilmPreview.add(
+                            FilmWithPosterAndActor(
+                                it.description,
+                                it.filmId,
+                                it.general,
+                                it.nameEn,
+                                it.nameRu,
+                                it.professionKey,
+                                it.rating,
+                                infoFilm?.posterUrlPreview
+                            )
                         )
-                    )
+                    }catch (e: Throwable){
+                        _state.value = AllFilmState.Error("Во время обработки запроса \nпроизошла ошибка")
+                    }
                 }
                 _actorFilm.send(listUrlFilmPreview)
             }

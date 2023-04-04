@@ -34,8 +34,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/graphik_medium"
-        android:text="1998 - 2009"
-        android:textColor="#3D3BFF"
+        android:text="@string/year_picker_prebiew"
+        android:textColor="@color/blue_text_color"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -13,8 +13,8 @@
         android:layout_marginTop="21dp"
         android:layout_weight="1"
         android:fontFamily="sans-serif-black"
-        android:text="Сериалы"
-        android:textColor="#272727"
+        android:text="@string/serial_preview"
+        android:textColor="@color/balck_text_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

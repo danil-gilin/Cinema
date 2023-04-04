@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
-            android:text="Показать все" />
+            android:textColor="@color/Grey_text_color"
+            android:text="@string/all_item_in_list_preview" />
     </LinearLayout>
 </LinearLayout>

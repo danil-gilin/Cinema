@@ -24,9 +24,9 @@ import retrofit2.http.Query
 //6a2d7029-a0b8-4c64-8469-25bf56208176
 //543764a7-ddaa-498c-9bbb-a6d2393a6c88
 //02313c45-a6f6-47aa-9eb8-ea784b9b67f0
-const val apiKey = "518a1c18-031a-423c-92ea-dbdb897c776b"
-const val apiKeyForActor = "518a1c18-031a-423c-92ea-dbdb897c776b"
-const val apiKeySearch = "518a1c18-031a-423c-92ea-dbdb897c776b"
+const val apiKey = "543764a7-ddaa-498c-9bbb-a6d2393a6c88"
+const val apiKeyForActor = "543764a7-ddaa-498c-9bbb-a6d2393a6c88"
+const val apiKeySearch = "543764a7-ddaa-498c-9bbb-a6d2393a6c88"
 const val baseUrl = "https://kinopoiskapiunofficial.tech/api/"
 
 object CinemaRetrofitObject {

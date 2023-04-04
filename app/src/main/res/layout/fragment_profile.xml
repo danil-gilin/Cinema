@@ -37,8 +37,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
         android:layout_marginTop="36dp"
-        android:text="Коллекции"
-        android:textColor="#272727"
+        android:text="@string/preview_collection_profile"
+        android:textColor="@color/balck_text_color"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,8 +68,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Создать свою коллекцию"
-            android:textColor="#272727"
+            android:text="@string/preview_creater_Collection"
+            android:textColor="@color/balck_text_color"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -93,7 +93,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminate="true"
-        android:indeterminateTint="#3D3BFF"
+        android:indeterminateTint="@color/blue_text_color"
         app:layout_constraintBottom_toTopOf="@+id/rc_collection_profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

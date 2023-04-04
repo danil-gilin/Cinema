@@ -21,7 +21,7 @@
                 android:id="@+id/cinema_img"
                 android:layout_width="100dp"
                 android:layout_height="150dp"
-                app:srcCompat="@drawable/debug_cinema" />
+                app:srcCompat="@drawable/gradient_film_info" />
 
             <ImageView
                 android:id="@+id/gradient_img"
@@ -50,16 +50,16 @@
             android:ellipsize="end"
             android:fontFamily="@font/graphik_regular"
             android:maxLines="1"
-            android:text="Близкие"
-            android:textColor="#272727" />
+            android:text="@string/film_item_name"
+            android:textColor="@color/balck_text_color" />
 
         <TextView
             android:id="@+id/cinema_genre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="драма"
-            android:textColor="#838390" />
+            android:text="@string/genre_film_item"
+            android:textColor="@color/Grey_text_color" />
     </LinearLayout>
 
     <TextView

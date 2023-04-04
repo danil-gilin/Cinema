@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminate="true"
-        android:indeterminateTint="#3D3BFF"
+        android:indeterminateTint="@color/loader_color_blue"
         app:layout_constraintBottom_toTopOf="@+id/materialCardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,8 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:fontFamily="@font/graphik_medium"
-        android:text="Настройки поиска"
-        android:textColor="#272727"
+        android:text="@string/filter_fragment_preview"
+        android:textColor="@color/balck_text_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -53,8 +53,8 @@
         android:textSize="12sp"
         android:layout_marginTop="38dp"
         android:fontFamily="@font/graphik_regular"
-        android:text="Показывать"
-        android:textColor="#838390"
+        android:text="@string/preview_filter_fragmet_watch"
+        android:textColor="@color/Grey_text_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/preview_filter" />
 
@@ -154,8 +154,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/graphik_regular"
-                android:text="Страна"
-                android:textColor="#272727"
+                android:text="@string/country_filter"
+                android:textColor="@color/balck_text_color"
                 android:textSize="16sp" />
 
             <TextView
@@ -165,8 +165,8 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/graphik_regular"
                 android:gravity="end"
-                android:text="Россия"
-                android:textColor="#838390"
+                android:text="@string/country_filte_rezult_preview"
+                android:textColor="@color/Grey_text_color"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -188,8 +188,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/graphik_regular"
-                android:text="Жанр"
-                android:textColor="#272727"
+                android:text="@string/genre_filter"
+                android:textColor="@color/balck_text_color"
                 android:textSize="16sp" />
 
             <TextView
@@ -199,8 +199,8 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/graphik_regular"
                 android:gravity="end"
-                android:text="Комедия"
-                android:textColor="#838390"
+                android:text="@string/genre_filter_rezult_preview"
+                android:textColor="@color/Grey_text_color"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -222,8 +222,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/graphik_regular"
-                android:text="Год"
-                android:textColor="#272727"
+                android:text="@string/year_filter"
+                android:textColor="@color/balck_text_color"
                 android:textSize="16sp" />
 
             <TextView
@@ -233,8 +233,8 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/graphik_regular"
                 android:gravity="end"
-                android:text="с 1998 до 2017"
-                android:textColor="#838390"
+                android:text="@string/year_filter_rezult_preview"
+                android:textColor="@color/Grey_text_color"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -265,7 +265,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/graphik_regular"
                         android:text="Рейтинг"
-                        android:textColor="#272727"
+                        android:textColor="@color/balck_text_color"
                         android:textSize="16sp" />
 
                     <TextView
@@ -276,7 +276,7 @@
                         android:fontFamily="@font/graphik_regular"
                         android:gravity="end"
                         android:text="любой"
-                        android:textColor="#838390"
+                        android:textColor="@color/Grey_text_color"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -296,7 +296,7 @@
                     app:thumbStrokeColor="@color/black"
                     app:thumbStrokeWidth="1dp"
                     app:tickVisible="false"
-                    app:trackColorInactive="#838390"
+                    app:trackColorInactive="@color/Grey_text_color"
                     app:trackHeight="4dp"
                     app:values="@array/default_values" />
 
@@ -313,8 +313,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/graphik_regular"
-                        android:text="1"
-                        android:textColor="#838390"
+                        android:text="@string/rating_min_preview"
+                        android:textColor="@color/Grey_text_color"
                         android:textSize="14sp" />
 
                     <TextView
@@ -324,8 +324,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/graphik_regular"
                         android:gravity="end"
-                        android:text="10"
-                        android:textColor="#838390"
+                        android:text="@string/rating_max_preview"
+                        android:textColor="@color/Grey_text_color"
                         android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -347,8 +347,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/graphik_regular"
-                android:text="Сортировать"
-                android:textColor="#838390"
+                android:text="@string/sort_preview"
+                android:textColor="@color/Grey_text_color"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/preview_filter" />
@@ -442,8 +442,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="34dp"
                 android:fontFamily="@font/graphik_regular"
-                android:text="Не просмотрен"
-                android:textColor="#272727"
+                android:text="@string/not_watch_filter_preview"
+                android:textColor="@color/balck_text_color"
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>

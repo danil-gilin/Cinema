@@ -17,7 +17,7 @@
             android:id="@+id/imm_actor_all"
             android:layout_width="100dp"
             android:layout_height="150dp"
-            app:srcCompat="@drawable/debug_cinema" />
+            app:srcCompat="@drawable/gradient_film_info" />
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
@@ -31,8 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/graphik_regular"
-            android:text="Владимир Онохов"
-            android:textColor="#272727" />
+            android:text="@string/actor_name"
+            android:textColor="@color/balck_text_color" />
 
         <TextView
             android:id="@+id/name_actor_in_film_txt_all"
@@ -40,8 +40,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/graphik_regular"
-            android:text="Лешка"
-            android:textColor="#838390"
+            android:text="@string/actor_proffesion"
+            android:textColor="@color/Grey_text_color"
             android:textSize="12sp" />
     </LinearLayout>
 </LinearLayout>

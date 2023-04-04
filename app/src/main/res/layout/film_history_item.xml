@@ -23,7 +23,7 @@
                 android:id="@+id/cinema_img_film_history"
                 android:layout_width="100dp"
                 android:layout_height="150dp"
-                app:srcCompat="@drawable/debug_cinema" />
+                app:srcCompat="@drawable/gradient_film_info" />
 
             <ImageView
                 android:id="@+id/gradient_img_film_history"
@@ -58,8 +58,8 @@
                 android:ellipsize="end"
                 android:fontFamily="sans-serif-medium"
                 android:maxLines="1"
-                android:text="Близкие"
-                android:textColor="#272727" />
+                android:text="@string/film_item_name"
+                android:textColor="@color/balck_text_color" />
 
             <TextView
                 android:id="@+id/cinema_genre_film_history"
@@ -67,8 +67,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:fontFamily="@font/graphik_regular"
-                android:text="2021, триллер"
-                android:textColor="#838390" />
+                android:text="@string/film_item_date"
+                android:textColor="@color/Grey_text_color" />
         </LinearLayout>
 
     </LinearLayout>

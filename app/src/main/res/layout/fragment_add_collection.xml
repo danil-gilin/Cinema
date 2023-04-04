@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     tools:context=".customView.bottomSheetFilm.AddCollectionFragment">
 
     <ImageView
@@ -12,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="26dp"
+        android:background="@color/white"
         android:src="@drawable/icon_close"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,6 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="26dp"
+            android:background="@color/white"
             android:layout_marginBottom="26dp"
             android:orientation="horizontal">
 
@@ -45,7 +48,7 @@
                     android:id="@+id/cinema_img_film_collection"
                     android:layout_width="100dp"
                     android:layout_height="150dp"
-                    app:srcCompat="@drawable/debug_cinema" />
+                    app:srcCompat="@drawable/gradient_film_info" />
 
                 <ImageView
                     android:id="@+id/gradient_img_film_collection"
@@ -77,7 +80,7 @@
                     android:paddingEnd="4dp"
                     android:paddingBottom="2dp"
                     android:text="7.8"
-                    android:textColor="#272727"
+                    android:textColor="@color/balck_text_color"
                     android:textSize="6sp"
                     android:textStyle="bold" />
 
@@ -107,7 +110,7 @@
                     android:layout_marginTop="2dp"
                     android:fontFamily="@font/graphik_regular"
                     android:text="2021, триллер"
-                    android:textColor="#838390" />
+                    android:textColor="@color/Grey_text_color" />
             </LinearLayout>
 
         </LinearLayout>
@@ -121,7 +124,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
+            android:background="@color/white"
             android:orientation="horizontal"
             android:paddingTop="11dp"
             android:paddingBottom="11dp">
@@ -169,6 +172,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="32dp"
+            android:background="@color/white"
             android:orientation="horizontal"
             android:paddingTop="11dp"
             android:paddingBottom="11dp">

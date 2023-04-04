@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/graphik_regular"
-        android:text="1 серия. Введение"
+        android:text="@string/preview_serial_seria"
         android:textColor="#272727"
         android:textSize="14sp" />
 
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:fontFamily="@font/graphik_regular"
-        android:text="26 марта 2020"
-        android:textColor="#838390"
+        android:text="@string/preview_serial_date"
+        android:textColor="@color/Grey_text_color"
         android:textSize="10sp" />
 </LinearLayout>

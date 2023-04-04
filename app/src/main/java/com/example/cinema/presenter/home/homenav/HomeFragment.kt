@@ -1,11 +1,14 @@
 package com.example.cinema.presenter.home.homenav
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavGraph
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.cinema.R
@@ -34,6 +37,20 @@ class HomeFragment : Fragment() {
         val navHost=childFragmentManager.findFragmentById(R.id.fragmentContainerView2) as NavHostFragment
         val navController=navHost.navController
         binding.bottomNav.setupWithNavController(navController)
+
+        binding.bottomNav.setOnItemReselectedListener {
+            if (it.itemId==R.id.homePage){
+                navController.popBackStack(R.id.homePageFragment, inclusive = false)
+            }
+            if(it.itemId==R.id.searchPage){
+                navController.popBackStack(R.id.searchFragment, inclusive = false)
+            }
+            if(it.itemId==R.id.profilePage){
+                navController.popBackStack(R.id.profileFragment, inclusive = false)
+            }
+        }
+
+
 
         return binding.root
     }

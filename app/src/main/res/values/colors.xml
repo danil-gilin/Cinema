@@ -11,5 +11,12 @@
     <color name="chip_ripple">#272727</color>
     <color name="blue_radio_btn">#3D3BFF</color>
     <color name="select_item_back_ground">#4DB5B5C9</color>
+    <color name="rippleColorChip">#143D3BFF</color>
+    <color name="Grey_text_color">#838390</color>
+    <color name="balck_text_color">#272727</color>
+    <color name="blue_text_color">#3D3BFF</color>
+    <color name="btn_blue_background">#3D3BFF</color>
+    <color name="ligth_grey_text">#B5B5C9</color>
+    <color name="loader_color_blue">#3D3BFF</color>
 </resources>
 

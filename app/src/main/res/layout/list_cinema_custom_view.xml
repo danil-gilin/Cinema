@@ -18,8 +18,8 @@
             android:layout_marginStart="26dp"
             android:layout_weight="1"
             android:fontFamily="@font/graphik_bold"
-            android:text="Популярное"
-            android:textColor="#272727"
+            android:text="@string/preview_name_list"
+            android:textColor="@color/balck_text_color"
             android:textSize="18sp" />
 
         <TextView
@@ -34,7 +34,7 @@
             android:fontFamily="@font/graphik_medium"
             android:gravity="end"
             android:text="Все"
-            android:textColor="#3D3BFF"
+            android:textColor="@color/blue_text_color"
             android:visibility="visible" />
 
     </LinearLayout>

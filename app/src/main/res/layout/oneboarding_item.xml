@@ -21,8 +21,8 @@
         android:layout_marginStart="26dp"
         android:fontFamily="@font/graphik"
         android:maxLines="2"
-        android:text="Создавай \nколлекции"
-        android:textColor="#272727"
+        android:text="@string/preview_onBoarding"
+        android:textColor="@color/balck_text_color"
         android:textSize="32sp"
         android:layout_gravity="bottom"
  />

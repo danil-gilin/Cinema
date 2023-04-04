@@ -1,24 +1,16 @@
 package com.example.cinema.customView.newCollection
 
-import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
+import android.view.*
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.cinema.R
 import com.example.cinema.databinding.FragmentNewCollectionBinding
 import com.example.cinema.entity.Constance
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 
@@ -68,10 +60,18 @@ class NewCollectionFragment : DialogFragment() {
             }
         }
 
+        binding.backDialog.setOnClickListener {
+            this.dismiss()
+        }
 
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
-        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE);
         return binding.root
     }
+
+    override fun getTheme(): Int {
+        return R.style.DialogThemeNewCollection
+    }
+
+
+
 
 }

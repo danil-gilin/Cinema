@@ -15,8 +15,8 @@
         android:paddingStart="26dp"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        android:text="Россия"
-        android:textColor="#272727"
+        android:text="@string/preview_country"
+        android:textColor="@color/balck_text_color"
         android:textSize="16sp" />
 
     <View

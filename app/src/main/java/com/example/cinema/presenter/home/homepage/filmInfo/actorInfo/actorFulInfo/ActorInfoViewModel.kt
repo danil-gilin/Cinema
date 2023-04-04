@@ -10,6 +10,7 @@ import com.example.cinema.domain.WatchFilmUseCase
 import com.example.cinema.entity.dbCinema.HistoryCollectionDB
 import com.example.cinema.entity.fullInfoActor.Film
 import com.example.cinema.entity.fullInfoActor.FilmWithPosterAndActor
+import com.example.cinema.presenter.home.homepage.allFilm.AllFilmState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -46,19 +47,23 @@ class ActorInfoViewModel @Inject constructor(
                             ?.subList(0, 11)
                 }
                 reatingFilm?.forEach {
-                    val infoFilm = getFilmFullInfo.getFilmInfo(it.filmId!!)
-                    listUrlFilmPreview.add(
-                        FilmWithPosterAndActor(
-                            it.description,
-                            it.filmId,
-                            it.general,
-                            it.nameEn,
-                            it.nameRu,
-                            it.professionKey,
-                            it.rating,
-                            infoFilm?.posterUrlPreview
+                    try {
+                        val infoFilm = getFilmFullInfo.getFilmInfo(it.filmId!!)
+                        listUrlFilmPreview.add(
+                            FilmWithPosterAndActor(
+                                it.description,
+                                it.filmId,
+                                it.general,
+                                it.nameEn,
+                                it.nameRu,
+                                it.professionKey,
+                                it.rating,
+                                infoFilm?.posterUrlPreview
+                            )
                         )
-                    )
+                    }catch (e: Throwable){
+                        _stateActroInfo.value = ActorInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
+                    }
                 }
 
                 var infoHistoryFilms = ""

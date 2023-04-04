@@ -24,8 +24,8 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="26dp"
         android:fontFamily="@font/graphik"
-        android:text="Пропустить"
-        android:textColor="#B5B5C9"
+        android:text="@string/preview_skip_onboarding"
+        android:textColor="@color/ligth_grey_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
