@@ -54,13 +54,11 @@ class AllFilmFragment : Fragment() {
         arguments.let {
             typeListFilm = it?.getParcelable<TypeListFilm>(Constance.NAME_GENRE_ALL_FILM)
             if (typeListFilm != null) {
-                Log.d("bag","typeListFilm.toString() 1")
                 binding.genreNameAllFilm.text = typeListFilm?.name
                 viewModel.getCinema(typeListFilm!!)
             }
            var typeListFilm2= it?.getParcelable<TypeListFilm>(Constance.ACTOR_LIST_FILM_FOR_ALL_FILM)
             if (typeListFilm2?.actorId != null) {
-                Log.d("bag","typeListFilm.toString()")
                 binding.genreNameAllFilm.text = typeListFilm2?.name
                 viewModel.getCinemaForActor(typeListFilm2!!)
             }
@@ -80,17 +78,16 @@ class AllFilmFragment : Fragment() {
                         error.show(childFragmentManager,"error")
                     }
                     is AllFilmState.Success->{
+                        binding.progressLoad2.visibility=View.GONE
                         viewModel.pagedCinema?.onEach {
                             Log.d("pagedCinema",it.toString())
                             adapter.updateWatchFilms(state.watchFilms)
                             adapter.submitData(it)
-                            binding.progressLoad2.visibility=View.GONE
                         }?.launchIn(viewLifecycleOwner.lifecycleScope)
 
                         viewModel.typeListTop?.onEach {
                             adapterTop.updateWatchFilms(state.watchFilms)
                             adapterTop.submitData(it)
-                            binding.progressLoad2.visibility=View.GONE
                         }?.launchIn(viewLifecycleOwner.lifecycleScope)
 
                         viewModel.semilarFilm.onEach {
@@ -98,7 +95,6 @@ class AllFilmFragment : Fragment() {
                             adapterSemillarFilm.submitList(it.second)
                             adapterSemillarFilm.updateWatchFilms(state.watchFilms)
                             binding.rcAllFilm.adapter=adapterSemillarFilm
-                            binding.progressLoad2.visibility=View.GONE
                         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
                         viewModel.actorFilm.onEach {
@@ -106,7 +102,6 @@ class AllFilmFragment : Fragment() {
                             adapter.submitList(it)
                             adapter.updateWatchFilms(state.watchFilms)
                             binding.rcAllFilm.adapter=adapter
-                            binding.progressLoad2.visibility=View.GONE
                         }.launchIn(viewLifecycleOwner.lifecycleScope)
                     }
                 }

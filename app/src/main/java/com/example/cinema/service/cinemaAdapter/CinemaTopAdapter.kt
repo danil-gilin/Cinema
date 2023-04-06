@@ -10,11 +10,13 @@ import com.bumptech.glide.Glide
 import com.example.cinema.databinding.AllCinemaItemBinding
 import com.example.cinema.databinding.CinemaItemBinding
 import com.example.cinema.entity.cinemaTop.Film
+import com.example.cinema.entity.fullInfoActor.typeListFilm.TypeListFilm
 
-class CinemaTopAdapter(val onClickAllFilm: () -> Unit,val clickFilm:(Int)->Unit): ListAdapter<Film, RecyclerView.ViewHolder>(
+class CinemaTopAdapter(val onClickAllFilm: (TypeListFilm) -> Unit, val clickFilm:(Int)->Unit): ListAdapter<Film, RecyclerView.ViewHolder>(
     CinemaTopDiffCallback()
 ) {
     private var watchFilms= emptyList<Int>()
+    lateinit var typeFilmList: TypeListFilm
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType== 0) {
@@ -76,7 +78,7 @@ class CinemaTopAdapter(val onClickAllFilm: () -> Unit,val clickFilm:(Int)->Unit)
         }else  if (holder is AllCinemaTopViewHolder){
             with(holder) {
                 holder.binding.root.setOnClickListener {
-                    onClickAllFilm()
+                    onClickAllFilm(typeFilmList)
                 }
             }
         }

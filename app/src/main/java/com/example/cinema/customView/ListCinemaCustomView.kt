@@ -37,8 +37,6 @@ class ListCinemaCustomView @JvmOverloads constructor(
     var typeListFunction: ((TypeListFilm) -> Unit)?=null
     var filmInfoFunction: ((Int) -> Unit)?=null
     var itemCount=0
-    val adapterCinemaTop= CinemaTopAdapter({onClick()}, {onClickFilm(it)})
-    val adapterCinema= CinemaAdapter({onClick()}, {onClickFilm(it)})
     val adapterSimilar=SimilarAdapter( { it->onClickFilm(it) })
 
 
@@ -48,17 +46,6 @@ class ListCinemaCustomView @JvmOverloads constructor(
         binding.rcCinemaList.layoutManager=LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
     }
 
-    fun updateListCinema(list: List<Cinema>,watchFilms:List<Int>){
-        binding.rcCinemaList.adapter=adapterCinema
-        if(list.size>=20){
-            binding.txtAllFilm.visibility= View.VISIBLE
-            adapterCinema.submitList(list.subList(0,20))
-        }else{
-            adapterCinema.submitList(list)
-        }
-        adapterCinema.updateWatchFilms(watchFilms)
-    }
-
     fun updategenre(typeListFilm: TypeListFilm) {
         typeListFilmLocal=typeListFilm
         if(typeListFilm.name==""){
@@ -66,17 +53,6 @@ class ListCinemaCustomView @JvmOverloads constructor(
         }else {
             binding.genreName.text = typeListFilm.name[0].uppercase() + typeListFilm.name.substring(1)
         }
-    }
-
-    fun updateListCinemaTop(films: List<Film>,watchFilms:List<Int>) {
-        binding.rcCinemaList.adapter=adapterCinemaTop
-        if(films.size>=20){
-            binding.txtAllFilm.visibility= View.VISIBLE
-            adapterCinemaTop.submitList(films.subList(0,20))
-        }else {
-            adapterCinemaTop.submitList(films)
-        }
-        adapterCinemaTop.updateWatchFilms(watchFilms)
     }
 
     fun updateNameList(name:String){
@@ -146,10 +122,6 @@ class ListCinemaCustomView @JvmOverloads constructor(
         binding.rcCinemaList.adapter=adapter
     }
 
-    fun onClick(){
-        typeListFunction?.let { it(typeListFilmLocal) }
-    }
-
     private fun onClickFilm(id:Int){
         filmInfoFunction?.let { it(id) }
     }
@@ -181,14 +153,6 @@ class ListCinemaCustomView @JvmOverloads constructor(
         actorFunction=actorfun
     }
 
-    fun updateListCinemaWatchsFilm(watchsFilm: List<Int>) {
-            adapterCinema.updateWatchFilms(watchsFilm)
-    }
-
-    fun updateListCinemaTopWatchsFilm(watchsFilm: List<Int>) {
-        adapterCinemaTop.updateWatchFilms(watchsFilm)
-    }
-
     fun updateListSemilarWatchesFilms(watchsFilm: List<Int>){
         adapterSimilar.updateWatchFilms(watchsFilm)
     }
@@ -197,12 +161,19 @@ class ListCinemaCustomView @JvmOverloads constructor(
         binding.rcCinemaList.adapter = adapter
     }
 
-    fun updateSizeCustom(size: Int) {
-        if(size<=10){
+    fun updateSizeCustom(size: Int,spanCount:Int=10) {
+        if(size<spanCount){
+            binding.txtAllFilm.visibility= View.GONE
+        }else{
+            binding.txtAllFilm.text="$size"
+            binding.txtAllFilm.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.film_all,0)
+        }
+    }
+
+    fun updateSizeCustom2(size: Int,spanCount:Int=20) {
+        if(size<spanCount){
             binding.txtAllFilm.visibility= View.GONE
         }
-        binding.txtAllFilm.text="$size"
-        binding.txtAllFilm.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,R.drawable.film_all,0)
     }
 
     fun updateClickAllCustom(onClickCustom :()->Unit){
