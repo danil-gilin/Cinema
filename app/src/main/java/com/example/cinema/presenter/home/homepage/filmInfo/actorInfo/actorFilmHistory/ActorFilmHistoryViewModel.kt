@@ -69,7 +69,8 @@ class ActorFilmHistoryViewModel @Inject constructor(
                 reatingFilm?.forEach {
                     try {
                         val infoFilm = getFilmFullInfo.getFilmInfo(it.filmId!!)
-                        val genre = if (infoFilm?.genres?.size!! > 0) infoFilm.genres[0].genre else ""
+                        val genre =
+                            if (infoFilm?.genres?.size!! > 0) infoFilm.genres[0].genre else ""
                         listUrlFilmPreview.add(
                             FilmWithPosterAndActor(
                                 it.description,
@@ -84,8 +85,9 @@ class ActorFilmHistoryViewModel @Inject constructor(
                                 genre
                             )
                         )
-                    }catch (e:Throwable){
-                        _stateActorFilmHistory.value = ActorFilmHistoryState.Error("Во время обработки запроса \n" + "произошла ошибка")
+                    } catch (e: Throwable) {
+                        _stateActorFilmHistory.value =
+                            ActorFilmHistoryState.Error("Во время обработки запроса \n" + "произошла ошибка")
                     }
                     if (!filterString.contains(it.professionKey) && it.professionKey != null) {
                         Log.d(
@@ -126,15 +128,18 @@ class ActorFilmHistoryViewModel @Inject constructor(
     }
 
     fun getWatchesFilm() {
-        try {
-            viewModelScope.launch {
+
+        viewModelScope.launch {
+            try {
                 _watchsFilm.send(watchFilmUseCase.getWatchFilmId())
+
+            } catch (e: Throwable) {
+                _stateActorFilmHistory.value = ActorFilmHistoryState.Error(
+                    "Во время обработки запроса \n" + "произошла ошибка"
+                )
             }
-        } catch (e: Throwable) {
-            _stateActorFilmHistory.value = ActorFilmHistoryState.Error(
-                "Во время обработки запроса \n" + "произошла ошибка"
-            )
         }
+
     }
 
     companion object {

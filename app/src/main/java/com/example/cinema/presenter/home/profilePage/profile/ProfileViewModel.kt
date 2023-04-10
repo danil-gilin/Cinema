@@ -23,8 +23,8 @@ class ProfileViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     fun getProfile() {
-        try {
             viewModelScope.launch {
+                try {
                 val listHistory = historyLocalFilmUseCase.getHistoryLocal()
                     .plus(HistoryCollectionDB(-1, -1, "", "", "", 1.0, false, -1))
                 val listWatch =
@@ -44,40 +44,44 @@ class ProfileViewModel @Inject constructor(
                 listCollection.addAll(collectionUseCase.getAllCollection())
 
                 _state.value = ProfileState.Success(listHistory, listWatch, listCollection)
+                } catch (e: Throwable) {
+                    _state.value = ProfileState.Error("Во время обработки запроса \nпроизошла ошибка")
+                }
             }
-        } catch (e: Throwable) {
-            _state.value = ProfileState.Error("Во время обработки запроса \nпроизошла ошибка")
-        }
+
     }
 
     fun deleteWatch() {
-        try {
             viewModelScope.launch {
+                try {
                 watchFilmUseCase.dellAllWatchFilm()
+                } catch (e: Throwable) {
+                    _state.value = ProfileState.Error("Во время обработки запроса \nпроизошла ошибка")
+                }
             }
-        } catch (e: Throwable) {
-            _state.value = ProfileState.Error("Во время обработки запроса \nпроизошла ошибка")
-        }
+
     }
 
     fun deleteHistory() {
-        try {
+
             viewModelScope.launch {
+                try {
                 historyLocalFilmUseCase.dellAllHistoryLocal()
+                } catch (e:Throwable) {
+                    _state.value = ProfileState.Error("Во время обработки запроса \nпроизошла ошибка")
+                }
             }
-        } catch (e:Throwable) {
-            _state.value = ProfileState.Error("Во время обработки запроса \nпроизошла ошибка")
-        }
+
     }
 
     fun deleteCollection(id: Int) {
-        try {
             viewModelScope.launch {
+                try {
                 collectionUseCase.deleteCollection(id)
+                } catch (e: Exception) {
+                    _state.value = ProfileState.Error("Во время обработки запроса \nпроизошла ошибка")
+                }
             }
-        } catch (e: Exception) {
-            _state.value = ProfileState.Error("Во время обработки запроса \nпроизошла ошибка")
-        }
     }
 
     companion object {

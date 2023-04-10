@@ -56,14 +56,15 @@ class SearchViewModel @Inject constructor(
 
 
     fun getWatchesFilm() {
-        try {
+
             viewModelScope.launch {
+                try {
                 val listWatchesFilm = watchFilmUseCase.getWatchFilmId()
                 _listwatchesFilm.send(listWatchesFilm)
+                } catch (e: Throwable) {
+                    _state.value = SearchState.Error("Во время обработки запроса \nпроизошла ошибка")
+                }
             }
-        } catch (e: Throwable) {
-            _state.value = SearchState.Error("Во время обработки запроса \nпроизошла ошибка")
-        }
     }
 
     fun getSearchListPagging(keyWord: String) {

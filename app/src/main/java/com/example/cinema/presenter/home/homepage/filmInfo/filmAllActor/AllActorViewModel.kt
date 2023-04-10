@@ -21,8 +21,8 @@ class AllActorViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
 
 
     fun getActors(idFilm: Int,type:String){
-        try {
             viewModelScope.launch {
+                try {
                 _state.value=AllActorState.Loading
                 var listActorAndWorker = getFilmFullInfo.getActorAndWorker(idFilm)
                 if (type == "ACTOR") {
@@ -38,10 +38,10 @@ class AllActorViewModel @Inject constructor(private val getFilmFullInfo: GetFilm
                     listActorChannel.send(listWorker)
                 }
                 _state.value=AllActorState.Success
+                }catch (e:Throwable){
+                    _state.value=AllActorState.Error("Во время обработки запроса \nпроизошла ошибка")
+                }
             }
-        }catch (e:Throwable){
-            _state.value=AllActorState.Error("Во время обработки запроса \nпроизошла ошибка")
-        }
     }
 
 }

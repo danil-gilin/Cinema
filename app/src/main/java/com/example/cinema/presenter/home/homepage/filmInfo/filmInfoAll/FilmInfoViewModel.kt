@@ -38,36 +38,40 @@ class FilmInfoViewModel @Inject constructor(
 
 
     fun getFilm(id: Int) {
-        try {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
                 _state.value = FilmInfoState.Loading
                 var short_info_1 = ""
                 var short_info_2 = ""
                 var short_info_3 = ""
-                val film = getFilmFullInfo.getFilmInfo(id)
+                var film = getFilmFullInfo.getFilmInfo(id)
                 localFilm = film
 
-
+                if (film == null) {
+                    _state.value =
+                        FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
+                    return@launch
+                }
                 //short 1
-                if (film?.ratingKinopoisk != null) {
+                if (film.ratingKinopoisk != null) {
                     short_info_1 += film.ratingKinopoisk
-                } else if (film?.ratingImdb != null) {
+                } else if (film.ratingImdb != null) {
                     short_info_1 += film.ratingImdb
-                } else if (film?.ratingFilmCritics != null) {
+                } else if (film.ratingFilmCritics != null) {
                     short_info_1 += film.ratingFilmCritics
                 }
-                if (film?.nameRu != null) {
+                if (film.nameRu != null) {
                     short_info_1 += " ${film.nameRu}"
-                } else if (film?.nameEn != null) {
+                } else if (film.nameEn != null) {
                     short_info_1 += " ${film.nameEn}"
-                } else if (film?.nameOriginal != null) {
+                } else if (film.nameOriginal != null) {
                     short_info_1 += " ${film.nameOriginal}"
                 }
 
                 //short 2
-                short_info_2 += "${film?.year},"
+                short_info_2 += "${film.year},"
                 var infoSerial: String? = null
-                if (film?.serial == true) {
+                if (film.serial == true) {
                     val infoSerialItem = getFilmFullInfo.getSerialInfo(id)
                     infoSerialItem?.items?.size.let {
                         if (it != null && it.toString() in TenNumber || it.toString()
@@ -94,7 +98,7 @@ class FilmInfoViewModel @Inject constructor(
                     infoSerialItem?.items?.forEach {
                         sumEpisod += it.episodes.size
                     }
-                    if (sumEpisod != null && sumEpisod.toString() in TenNumber || sumEpisod.toString()
+                    if (sumEpisod.toString() in TenNumber || sumEpisod.toString()
                             .last() == '0'
                     ) {
                         infoSerial += " ${sumEpisod} серий"
@@ -106,12 +110,12 @@ class FilmInfoViewModel @Inject constructor(
                         infoSerial += " ${sumEpisod} серий"
                     }
                 }
-                if (film?.genres != null) {
-                    film.genres.forEachIndexed { index, genre ->
+                if (film.genres != null) {
+                    film.genres!!.forEachIndexed { index, genre ->
                         if (index == 2) {
                             short_info_2 += " ${genre.genre}"
                         } else if (index < 1) {
-                            if (film.genres.size == 1) {
+                            if (film.genres!!.size == 1) {
                                 short_info_2 += " ${genre.genre}"
                             } else {
                                 short_info_2 += " ${genre.genre},"
@@ -122,12 +126,12 @@ class FilmInfoViewModel @Inject constructor(
 
 
                 //short 3
-                if (film?.countries != null) {
-                    short_info_3 += " ${film.countries[0].country},"
+                if (film.countries != null) {
+                    short_info_3 += " ${film.countries!![0].country},"
                 }
-                if (film?.filmLength != null) {
-                    val hours = film.filmLength / 60
-                    val minutes = film.filmLength % 60
+                if (film.filmLength != null) {
+                    val hours = film.filmLength!! / 60
+                    val minutes = film.filmLength!! % 60
                     if (film.ratingAgeLimits == null) {
                         if (hours == 0) {
                             short_info_3 += " ${minutes} минут"
@@ -142,19 +146,19 @@ class FilmInfoViewModel @Inject constructor(
                         }
                     }
                 }
-                if (film?.ratingAgeLimits != null) {
-                    short_info_3 += " ${film.ratingAgeLimits.filter { it.isDigit() }}+"
+                if (film.ratingAgeLimits != null) {
+                    short_info_3 += " ${film.ratingAgeLimits!!.filter { it.isDigit() }}+"
                 }
                 val listActorAndWorker = getFilmFullInfo.getActorAndWorker(id)
                 val listGallery = getFilmFullInfo.getGalerryFilm(id)
                 val listSimilar = getFilmFullInfo.getSimilarFilms(id)
 
-                val filmDescription: String = film?.description ?: ""
-                val filmShortDescription: String = film?.shortDescription ?: ""
+                val filmDescription: String = film.description ?: ""
+                val filmShortDescription: String = film.shortDescription ?: ""
 
-                val filmName = film?.nameRu ?: film?.nameEn ?: film?.nameOriginal ?: ""
+                val filmName = film.nameRu ?: film.nameEn ?: film.nameOriginal ?: ""
 
-                val isWatchFilm = watchFilmUseCase.getWatchFilm(film!!.kinopoiskId) != null
+                val isWatchFilm = watchFilmUseCase.getWatchFilm(film.kinopoiskId) != null
                 val filmsWatch = watchFilmUseCase.getWatchFilmId()
                 val isLike = likeFilmUseCase.getLikeFilm(film.kinopoiskId) != null
                 val isWantToWatch =
@@ -180,15 +184,15 @@ class FilmInfoViewModel @Inject constructor(
                     short_info_2,
                     short_info_3,
                     filmName,
-                    film?.posterUrlPreview ?: "",
-                    film?.logoUrl,
+                    film.posterUrlPreview ?: "",
+                    film.logoUrl,
                     ("В фильме снимались" to (listActorAndWorker?.filter { it.professionKey == "ACTOR" && (it.nameRu != "" || it.nameEn != "") }
                         ?: emptyList())),
                     ("Над фильмом работали" to (listActorAndWorker?.filter { it.professionKey != "ACTOR" && (it.nameRu != "" || it.nameEn != "") }
                         ?: emptyList())),
                     ("Галерея" to (listGallery?.items ?: emptyList())),
                     ("Похожие фильмы" to (listSimilar?.items ?: emptyList())),
-                    film?.genres?.get(0)?.genre ?: "",
+                    film.genres?.get(0)?.genre ?: "",
                     infoSerial,
                     filmDescription,
                     filmShortDescription,
@@ -197,15 +201,15 @@ class FilmInfoViewModel @Inject constructor(
                     isLike,
                     isWantToWatch
                 )
+            } catch (e: Throwable) {
+                _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
             }
-        } catch (e: Throwable) {
-            _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 
     fun addWatchFilm(stateWatch: Boolean) {
-        try {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
                 if (stateWatch) {
                     if (localFilm != null) {
                         val name =
@@ -223,26 +227,26 @@ class FilmInfoViewModel @Inject constructor(
                 } else {
                     watchFilmUseCase.delWatchFilm(localFilm!!.kinopoiskId)
                 }
+            } catch (e: Throwable) {
+                _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
             }
-        }catch (e:Throwable){
-            _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 
     fun getWatchesFilm() {
-        try {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
                 _watchsFilm.send(watchFilmUseCase.getWatchFilmId())
+            } catch (e: Throwable) {
+                _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
             }
-        } catch (e: Throwable) {
-            _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
         }
 
     }
 
     fun addLikeFilm(stateLike: Boolean) {
-        try {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
                 if (stateLike) {
                     if (localFilm != null) {
                         val name =
@@ -260,15 +264,15 @@ class FilmInfoViewModel @Inject constructor(
                 } else {
                     likeFilmUseCase.delLikeFilm(localFilm!!.kinopoiskId)
                 }
+            } catch (e: Throwable) {
+                _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
             }
-        }catch (e:Throwable){
-            _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 
     fun addWantToWatchFilm(state: Boolean) {
-        try {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
                 if (state) {
                     if (localFilm != null) {
                         val name =
@@ -286,9 +290,9 @@ class FilmInfoViewModel @Inject constructor(
                 } else {
                     wantToWatchFilmUseCase.delWantToWatchFilmFilm(localFilm!!.kinopoiskId)
                 }
+            } catch (e: Throwable) {
+                _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
             }
-        }catch (e:Throwable){
-            _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 
@@ -308,8 +312,8 @@ class FilmInfoViewModel @Inject constructor(
     }
 
     fun getFilmToBottomSheet() {
-        try {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
                 val name =
                     localFilm?.nameRu ?: localFilm?.nameEn ?: localFilm?.nameOriginal ?: ""
                 val film = FilmDBLocal(
@@ -323,9 +327,9 @@ class FilmInfoViewModel @Inject constructor(
                     localFilm!!.year.toString()
                 )
                 _filmBottom.send(film)
+            } catch (e: Throwable) {
+                _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
             }
-        } catch (e: Throwable) {
-            _state.value = FilmInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 

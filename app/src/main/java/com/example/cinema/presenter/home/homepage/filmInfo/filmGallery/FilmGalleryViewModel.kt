@@ -16,31 +16,33 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class FilmGalleryViewModel @Inject constructor(private val getfilmFallery: GetFilmGalleryUseCase) : ViewModel() {
-   private val _state= MutableStateFlow<StateFilmGallery>(StateFilmGallery.Loading)
-    var listGalleryType: Flow<PagingData<GalleryItem>>?=null
-    val state=_state.asStateFlow()
+class FilmGalleryViewModel @Inject constructor(private val getfilmFallery: GetFilmGalleryUseCase) :
+    ViewModel() {
+    private val _state = MutableStateFlow<StateFilmGallery>(StateFilmGallery.Loading)
+    var listGalleryType: Flow<PagingData<GalleryItem>>? = null
+    val state = _state.asStateFlow()
 
     fun getFilterGalery(idFilm: Int) {
-        try {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
                 _state.value = StateFilmGallery.Loading
                 _state.value = StateFilmGallery.Success(getfilmFallery.getFilmGallery(idFilm))
+            } catch (e: Throwable) {
+                _state.value =
+                    StateFilmGallery.Error("Во время обработки запроса \nпроизошла ошибка")
             }
-        }catch (e:Throwable){
-            _state.value=StateFilmGallery.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 
-    fun getGallery(idFilm: Int,type: String){
+    fun getGallery(idFilm: Int, type: String) {
         try {
             listGalleryType = Pager(
                 config = PagingConfig(pageSize = 20),
                 pagingSourceFactory = { AlllGalleryPaggingSource(idFilm, type) }
             ).flow.cachedIn(viewModelScope)
-        Log.d("PaggeGallery","$listGalleryType")
-        }catch (e:Throwable){
-            _state.value=StateFilmGallery.Error("Во время обработки запроса \nпроизошла ошибка")
+            Log.d("PaggeGallery", "$listGalleryType")
+        } catch (e: Throwable) {
+            _state.value = StateFilmGallery.Error("Во время обработки запроса \nпроизошла ошибка")
         }
     }
 }

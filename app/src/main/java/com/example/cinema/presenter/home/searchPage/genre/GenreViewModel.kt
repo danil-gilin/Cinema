@@ -20,8 +20,8 @@ class GenreViewModel @Inject constructor(private val getFilterCountryAndGenre: G
     val state=_state.asStateFlow()
 
     fun getGenreList(selectGenre: String) {
-        try {
         viewModelScope.launch {
+            try {
             _state.value=GenreState.Loading
             var listGenre= getFilterCountryAndGenre.getFilterGenre()
             val id=listGenre.find { it.genre==selectGenre.lowercase() }?.id ?:0
@@ -30,23 +30,25 @@ class GenreViewModel @Inject constructor(private val getFilterCountryAndGenre: G
             list.addAll(listGenre)
             _listGenreChannel.send(list)
             _state.value=GenreState.Success
-        }
-        }catch (e:Throwable){
-            _state.value=GenreState.Error("Во время обработки запроса \nпроизошла ошибка")
+            }catch (e:Throwable){
+                _state.value=GenreState.Error("Во время обработки запроса \nпроизошла ошибка")
+            }
         }
     }
 
     fun getGenreListSearch(countrySbstr: String) {
-        try {
+
         viewModelScope.launch {
+            try {
             _state.value=GenreState.Loading
             var listGenre= getFilterCountryAndGenre.getFilterGenre()
             listGenre=listGenre.filter { it.genre.contains(countrySbstr,true) }
             _listGenreChannel.send(listGenre)
             _state.value=GenreState.Success
+            }catch (e:Throwable){
+                _state.value=GenreState.Error("Во время обработки запроса \nпроизошла ошибка")
+            }
         }
-        }catch (e:Throwable){
-            _state.value=GenreState.Error("Во время обработки запроса \nпроизошла ошибка")
-        }
+
     }
 }

@@ -20,8 +20,8 @@ class CountryViewModel @Inject constructor(private val getFilterCountryAndGenre:
     val state=_state.asStateFlow()
 
     fun getCountryList(selectCountry: String) {
-        try {
         viewModelScope.launch {
+            try {
             _state.value= CountryState.Loading
            var listCountry= getFilterCountryAndGenre.getFilterCountry()
             val id=listCountry.find { it.country==selectCountry }?.id ?:0
@@ -30,23 +30,25 @@ class CountryViewModel @Inject constructor(private val getFilterCountryAndGenre:
             list.addAll(listCountry)
             _listCountryChannel.send(list)
             _state.value= CountryState.Success
+            }catch (e:Throwable){
+                _state.value= CountryState.Error("Во время обработки запроса \nпроизошла ошибка")
+            }
         }
-        }catch (e:Throwable){
-            _state.value= CountryState.Error("Во время обработки запроса \nпроизошла ошибка")
-        }
+
    }
 
     fun getCountryListSearch(countrySbstr: String) {
-        try {
-            _state.value= CountryState.Loading
+
         viewModelScope.launch {
+            try {
+                _state.value= CountryState.Loading
             var listCountry= getFilterCountryAndGenre.getFilterCountry()
             listCountry=listCountry.filter { it.country.contains(countrySbstr,true) }
             _listCountryChannel.send(listCountry)
             _state.value= CountryState.Success
-        }
-        }catch (e:Throwable){
-           _state.value= CountryState.Error("Во время обработки запроса \nпроизошла ошибка")
+            }catch (e:Throwable){
+                _state.value= CountryState.Error("Во время обработки запроса \nпроизошла ошибка")
+            }
         }
     }
 }

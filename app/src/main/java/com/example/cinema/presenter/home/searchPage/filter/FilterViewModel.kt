@@ -23,22 +23,22 @@ class FilterViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     fun getFilter() {
-        try {
             viewModelScope.launch {
+                try {
                 _state.value = FilterState.Loading
                 val filter = filterLocalUseCase.getFilterLocal()
                 _filterChannel.send(filter)
                 _state.value = FilterState.Success
+                }catch (e:Throwable){
+                    _state.value = FilterState.Error("Во время обработки запроса \nпроизошла ошибка")
+                }
             }
-        }catch (e:Throwable){
-           _state.value = FilterState.Error("Во время обработки запроса \nпроизошла ошибка")
-        }
     }
 
     fun setFilter(type: TypeFilter, date: Any) {
-        try {
-        val filterTemp = filterLocalUseCase.getFilterLocal()
         viewModelScope.launch {
+            try {
+                val filterTemp = filterLocalUseCase.getFilterLocal()
             _state.value = FilterState.Loading
             when (type) {
                 TypeFilter.TYPE -> filterTemp.type = date as TypeFilmFilter
@@ -62,9 +62,9 @@ class FilterViewModel @Inject constructor(
             filterLocalUseCase.setFilterLocal(filterTemp)
             _filterChannel.send(filterTemp)
             _state.value = FilterState.Success
-        }
-        }catch (e:Throwable){
-            _state.value = FilterState.Error("Во время обработки запроса \nпроизошла ошибка")
+            }catch (e:Throwable){
+                _state.value = FilterState.Error("Во время обработки запроса \nпроизошла ошибка")
+            }
         }
     }
 }

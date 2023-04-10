@@ -15,15 +15,15 @@ class FilmSerialInfoViewModel @Inject constructor(private val getSerialSeasonUse
 
 
     fun getSerialInfo(idSerial: Int) {
-        try {
             viewModelScope.launch {
+                try {
                 _state.value = SerialInfoState.Loading
                 val info = getSerialSeasonUseCase.getSerials(idSerial)
                 _state.value = SerialInfoState.Success(info)
+            }catch (e:Throwable){
+                _state.value=SerialInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
             }
-        }catch (e:Throwable){
-            _state.value=SerialInfoState.Error("Во время обработки запроса \nпроизошла ошибка")
-        }
+            }
     }
 
 }
